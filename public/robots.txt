@@ -1,0 +1,10 @@
+User-agent: *
+Allow:
+
+Disallow: /admin/
+Disallow: /horizon/
+Disallow: /translations/
+
+
+Sitemap : https://a307554.sitemaphosting6.com/4361865/sitemap_4361865.xml
+

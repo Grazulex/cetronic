@@ -1,0 +1,1 @@
+<td>@money($totalPrice)</td>

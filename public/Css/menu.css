@@ -1,0 +1,114 @@
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.navbar {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.navbar-brand {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+a.nav-link.dropdown-toggle,
+a.nav-link {
+    position: relative;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #4d4d4d;
+    text-align: center;
+    margin-right: 10px; 
+}
+a.nav-link.dropdown-toggle.dropdown-toggle-nav-menu:after {
+    margin-right: 10px;
+}
+a.dropdown-item {
+    font-size: 12px;
+}
+a.nav-link:focus,
+a.nav-link:hover {
+    color: #fbece2;
+}
+a.nav-link.dropdown-toggle.dropdown-toggle-nav-menu:hover {
+    color: #fbece2;
+}
+
+.cetronic-menu-mobile {
+    display: none;
+}
+.circle_panier {
+    height: 13px;
+    width: 13px;
+    background-color: #fbece2;
+    color: #4d4d4d;
+    position: absolute;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 9px;
+    left: 17px;
+    top: 0px;
+}
+.panier {
+    padding: 0px;
+    margin: 0px;
+}
+.nav-item.panier-count {
+    position: relative;
+}
+.section-menu {
+    box-shadow: 5.9px 6.8px 15.5px rgb(190 205 226 / 28%),
+        -2.8px -2.8px 8px rgb(255 255 255 / 0%),
+        inset 3.5px 3.5px 6px rgb(255 255 255 / 15%);
+}
+.section-menu {
+    background: #fff;
+}
+
+@media screen and (min-width: 320px) and (max-width: 991px) {
+    .cetronic-menu-mobile {
+        display: flex;
+    }
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+    .panier-count {
+        margin-left: auto;
+        padding-right: 15px;
+        position: inherit;
+    }
+
+    .navbarDropdownMenuLink {
+        text-align:center !important;
+    }
+    .navbarDropdownMenuLink a {
+        text-decoration:none !important;
+        font-size:1rem !important;
+        color:#4d4d4d !important;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    #navbarSupportedContent {
+        position: relative;
+        overflow: auto;
+        max-height: calc(100vh - 100px);
+    }
+    
+    a.nav-link.dropdown-toggle,
+    a.nav-link {
+        display: block;
+        margin-right: 25px;
+    }
+}

@@ -1,0 +1,19 @@
+.footer-title {
+    font-family: "CHAMAN ELEGANT FONT";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    letter-spacing: 2px;
+    color: #4d4d4d;
+    margin-bottom: 20px;
+}
+footer p a {
+    letter-spacing: 1px;
+    color: #4d4d4d;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+}
+footer {
+    margin-bottom: 40px;
+}

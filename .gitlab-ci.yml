@@ -1,0 +1,57 @@
+image: lorisleiva/laravel-docker:latest
+#include:
+#  - template: Security/SAST.gitlab-ci.yml
+#  - template: Security/Dependency-Scanning.gitlab-ci.yml
+
+variables:
+  XDEBUG_MODE: coverage
+composer:
+  stage: build
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}-composer"
+    paths:
+      - vendor/
+  script:
+    - export COMPOSER_NO_DEV=0
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - cp .env.gitlab .env
+    - php artisan key:generate
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - vendor/
+      - ".env"
+pint:
+  stage: test
+  dependencies:
+    - composer
+  script:
+    - php ./vendor/bin/pint
+test:
+  stage: test
+  dependencies:
+    - composer
+  script:
+    #- php ./vendor/bin/pest --coverage-cobertura=coverage.xml --coverage-text --colors=never
+    - php -d memory_limit=4G ./vendor/bin/pest
+  #artifacts:
+  #  expire_in: 1 month
+  #  paths:
+  #    - coverage.xml
+  #  reports:
+  #      coverage_report:
+  #        coverage_format: cobertura
+  #        path: coverage.xml
+  #coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?)%/'
+deploy_prod:
+  when: manual
+  stage: deploy
+  script:
+    - curl https://forge.laravel.com/servers/546923/sites/1752268/deploy/http?token=c33P72yHmiO3d2GbGcW0yTMudpFvZDjg1ALkgvPO
+    - exit 0
+  only:
+    - master
+  environment:
+    name: production
+    url: https://www.cetronicbenelux.com/
+

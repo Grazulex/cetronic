@@ -1,0 +1,81 @@
+.table > tbody {
+    vertical-align: middle !important;
+}
+.btn-delete {
+    border: none;
+    background: none;
+}
+.page-title {
+    margin-top: 40px;
+    font-family: 'CHAMAN ELEGANT FONT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 27px;
+    letter-spacing: 0.333333px;
+    text-transform: uppercase;
+    color: #4d4d4d;
+}
+.items-panier {
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+.table.panier th {
+    font-family: 'CHAMAN ELEGANT FONT';
+    font-style: normal;
+    font-size: 14px;
+    letter-spacing: 0.28px;
+    text-transform: uppercase;
+    color: #4d4d4d;
+}
+.total-a-payer {
+    padding: 0.5rem 0.5rem;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+    border-bottom: 1px solid black;
+    font-family: 'CHAMAN ELEGANT FONT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 27px;
+}
+
+.details-total {
+    padding: 5px 0px;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+    /*border-bottom: 1px solid #eeeeee;*/
+}
+
+.quantity {
+    width: 25%;
+}
+.step-down-upp-cart {
+    /* width: 50%; */
+    border-radius: 5px;
+    width: 113px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #4d4d4d;
+}
+
+.img-panier .cetronic-card-img {
+    width: 158.71px !important;
+    height: 158.28px !important;
+}
+
+.panier td:nth-child(2) {
+    width: 14%;
+}
+.cart-info {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12.5208px;
+    line-height: 25px;
+}
+.cart-total {
+    margin-top: 61px;
+}

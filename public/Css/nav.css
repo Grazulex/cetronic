@@ -1,0 +1,147 @@
+* {
+    text-decoration:none !important;
+
+}
+.head {
+    background: #fbece2;
+}
+.col-xl-6.justify-content-start span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    text-transform: first-letter;
+}
+.login-register-link, .login-register-link + span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #4d4d4d;
+}
+.login-register-link:hover {
+    color: #fdb080;
+    text-decoration: underline;
+    text-underline-offset: 3px ;
+}
+a.login-register-link:hover {
+    text-decoration: underline !important;
+}
+.dropdown-languages-link {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #000000;
+}
+button#dropdownMenuButton1 {
+    padding-right: 0;
+    padding-left: 0;
+    font-size: 14px;
+}
+ul.dropdown-menu.dropdown-menu-L.show,
+ul.dropdown-menu.show {
+    min-width: 96px !important;
+    text-align: center;
+    font-size: 12px;
+}
+a#navbarDropdownMenuLink {
+    padding: 0 !important;
+    text-transform: capitalize;
+    color: #4d4d4d;
+    text-decoration:none !important;
+}
+.navbarDropdownMenuLink {
+    text-align:center !important;
+}
+.navbarDropdownMenuLink a {
+    text-decoration:none !important;
+    font-size:1rem !important;
+    color:#4d4d4d !important;
+
+}
+button#dropdownMenuButton1 {
+    text-transform: capitalize;
+    color: #4d4d4d;
+    font-size: 12px;
+}
+button#dropdownMenuButton1:hover,
+button#dropdownMenuButton1:active
+{ 
+    color: #fdb080;
+}
+svg.user-svg {
+    height: 14px;
+    margin-bottom: 3px;
+    margin-right: 3px;
+    fill: currentColor;
+}
+.nav-item--strong {
+    font-weight: 500;
+}
+.btn-check:focus + .btn,
+.btn:focus {
+    outline: 0;
+    box-shadow: none;
+}
+.dropdown-item li {
+    text-align: center;
+    font-size: 12px;
+}
+ul.dropdown-menu.show {
+    background: #fbece2;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+a.dropdown-menu {
+    color: #4d4d4d !important;
+}
+a.dropdown-item.dropdown-languages-link {
+    text-transform: capitalize;
+    color: #4d4d4d;
+    font-size: 12px;
+    text-align: left;
+}
+.dropdown-item:focus,
+.dropdown-item:hover {
+    background-color: #fff4ec;
+}
+.btn-nav {
+    padding: 0;
+    color: #4d4d4d;
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+.btn-dropdown-menu {
+    padding: 0px 6px;
+}
+.dropdown-toggle::after {
+    border: none !important;
+    vertical-align: 0 !important;
+}
+button.dropdown-toggle::after {
+    content: url("https://i.goopics.net/ibohg3.png") !important;
+}
+.btn-dropdown-menu:focus {
+    box-shadow: none !important;
+}
+
+a + .nav-caret {
+    position: absolute;
+    cursor: pointer;
+    top: 0.2rem;
+    right: 0px;
+    transform: translate(0,0);
+    padding: 10px 10px;
+    z-index: 1;
+}
+.nav-caret + a:hover  {
+    color: #fdb080;
+}
+.nav-caret--down {
+    content: url("https://i.goopics.net/ibohg3.png");
+}
+
+@media screen and (min-width: 320px) and (max-width: 467px) {
+}
+

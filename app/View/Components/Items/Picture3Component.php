@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\View\Components\Items;
+
+use App\Models\Item;
+use App\Services\ItemService;
+use Illuminate\View\Component;
+use Closure;
+
+final class Picture3Component extends Component
+{
+    /**
+     * Create a new component instance. (bootstrap carousel  with picture thumbnail)
+     *
+     * @param item Displayed item
+     * @param itemCarouselId Displayed html id for the product carousel.
+     * @param showThumb Show or hide thumbnail for the current carousel.
+     *
+     * @return void
+     */
+    public function __construct(
+        public Item $item,
+        public string $slug='',
+        public string $itemCarouselId='myCarousel',
+        public bool $showThumb=true
+    ) {
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     *
+     * @return \Illuminate\Contracts\View\View|Closure|string
+     */
+    public function render()
+    {
+        $itemService = new ItemService($this->item);
+        $pictures = $itemService->getPictures();
+        $isNew = $itemService->isNew();
+        $slug = $this->slug;
+
+        return view('components.items.picture3-component', ['pictures' => $pictures, 'isNew' => $isNew, 'slug' => $slug]);
+    }
+}
