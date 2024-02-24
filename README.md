@@ -2,10 +2,7 @@
 
 [![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2F851146cb-8792-4524-bcfb-af34e8f1e8e6%3Fdate%3D1&style=for-the-badge)](https://forge.laravel.com)
 
-[![pipeline status](https://gitlab.com/jnkconsultbv/cetronic/badges/master/pipeline.svg)](https://gitlab.com/jnkconsultbv/cetronic/-/commits/master)
-
-[![Latest Release](https://gitlab.com/jnkconsultbv/cetronic/-/badges/release.svg)](https://gitlab.com/jnkconsultbv/cetronic/-/releases)
-
+![Latest workflow](https://github.com/Grazulex/cetronic/actions/workflows/laravel.yml/badge.svg)
 
 ## Déploiement local du projet Laravel
 ### Outils globaux
