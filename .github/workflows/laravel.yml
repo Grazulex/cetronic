@@ -1,23 +1,43 @@
-name: Run tests
+name: Run tests & deploy
 
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
 
 jobs:
   tests:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.2'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
-          coverage: none
+          coverage: xdebug
+
+      - name: Cache multiple paths
+        uses: actions/cache@v2
+        with:
+          path: |
+            vendor
+          key: ${{ runner.os }}-${{ hashFiles('composer.lock') }}
 
       - name: Run composer install
-        run: composer install -n --prefer-dist
+        run: composer install --no-interaction --no-progress
 
       - name: Install vite
         run: npm install --save-dev vite laravel-vite-plugin
@@ -31,4 +51,31 @@ jobs:
           php artisan key:generate
 
       - name: Run tests
-        run: php artisan test
+        run: php -d memory_limit=4G artisan test --coverage --coverage-cobertura=coverage.cobertura.xml --colors=never
+
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage.cobertura.xml
+          badge: true
+          format: markdown
+          output: both
+
+      - name: Add Coverage Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
+  deploy:
+    needs: tests
+    if: contains(fromJson('["refs/heads/master", "refs/heads/main"]'), github.ref)
+    name: Laravel Forge Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: PropFuel/laravel-forge-deploy-action@v1.0.1
+        with:
+          forge-api-token: ${{ secrets.FORGE_API_TOKEN }}
+          forge-server-id: ${{ secrets.FORGE_SERVER_ID }}
+          forge-site-id: ${{ secrets.FORGE_SITE_ID }}
