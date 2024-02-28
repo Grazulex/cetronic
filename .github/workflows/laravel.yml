@@ -2,10 +2,12 @@ name: Run tests & deploy
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
-  pull_request:
 
 permissions:
   contents: read
@@ -25,7 +27,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: xdebug
 
@@ -69,7 +71,7 @@ jobs:
           path: code-coverage-results.md
   deploy:
     needs: tests
-    if: contains(fromJson('["refs/heads/master", "refs/heads/main"]'), github.ref)
+    if: contains(fromJson('["refs/heads/main"]'), github.ref)
     name: Laravel Forge Deploy
     runs-on: ubuntu-latest
     steps:
