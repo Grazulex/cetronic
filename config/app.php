@@ -206,7 +206,7 @@ return [
         App\Providers\TranslationsServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        App\Providers\CookiesServiceProvider::class,
     ],
 
     /*

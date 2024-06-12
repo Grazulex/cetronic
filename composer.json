@@ -54,7 +54,8 @@
         "mcamara/laravel-localization": "^1.7",
         "meilisearch/meilisearch-php": "^1.0",
         "moneyphp/money": "^4.0",
-        "outhebox/laravel-translations": "^0.0.6"
+        "outhebox/laravel-translations": "^0.0.6",
+        "whitecube/laravel-cookie-consent": "^1.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",
