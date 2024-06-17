@@ -1,0 +1,11 @@
+img {
+    width: 100%;
+}
+.page-break {
+    page-break-after: always;
+}
+
+.item {
+    height: 300px;
+    font-size: 12px;
+}
