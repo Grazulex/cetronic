@@ -9,6 +9,7 @@ use App\Enum\PdfGeneratorStatusEnum;
 use App\Filament\Resources\PdfCatalogResource\RelationManagers\TranslationsRelationManager;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\ItemMeta;
 use App\Models\PdfCatalog;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -45,11 +46,15 @@ final class PdfCatalogResource extends Resource
                     ->searchable()
                     ->multiple(),
                 Select::make(name: PdfCatalog::CONDITION_GENDER)
-                    ->options(GenderEnum::toList('value', 'value'))
+                    ->options(ItemMeta::whereHas('meta',function ($q) {
+                        $q->where('name', PdfCatalog::META_GENDER);
+                    })->select('value')->groupBy('value')->pluck(column: 'value', key: 'value'))
                     ->multiple()
                     ->searchable(),
                 Select::make(name: PdfCatalog::CONDITION_TYPE)
-                    ->options(Category::pluck(column: 'name', key: 'id'))
+                    ->options(ItemMeta::whereHas('meta',function ($q) {
+                        $q->where('name', PdfCatalog::META_TYPE);
+                    })->select('value')->groupBy('value')->pluck(column: 'value', key: 'value'))
                     ->multiple()
                     ->searchable()
             ])
@@ -82,7 +87,8 @@ final class PdfCatalogResource extends Resource
                     ->action(fn (PdfCatalog $record) => $record->regenerate()),
                 Action::make('download')
                     ->disabled(fn (PdfCatalog $record): bool => !(bool)$record->url)
-                    ->url(fn (PdfCatalog $record): string => Storage::url($record->url)),
+                    ->url(fn (PdfCatalog $record): string => Storage::url($record->url))
+                    ->openUrlInNewTab(),
                 DeleteAction::make()
             ])
             ->bulkActions([DeleteBulkAction::make()])

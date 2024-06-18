@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ $title }}</title>
     <link rel="stylesheet" href="{{ base_path('public/Css/pdf.css') }}">
     <link rel="stylesheet" href="{{ base_path('public/Css/simple-grid.css') }}">
 </head>
 <body>
-    <h1>{{ $title }}</h1>
     <div class="container">
-        <div class="row">
+        <div class="row conditions">
             <div class="col-4">
                 <b>Marque:</b> {{$brandConditionNames ? implode(', ', $brandConditionNames) : 'any'}}
             </div>
@@ -29,15 +27,14 @@
         @foreach($products as $product)
             <div class="col-2 item">
                 <div>
-                    <div><img src="{{$product->getFirstMediaPath()}}"></div>
-                    <div>{{$product->slug}}</div>
-                    <div>{{$product->price}}€</div>
-                    <div>Genre: {{$product->gender ?: "Non spécifié"}}</div>
-                    <div>Taille de boîtier: </div>
-                    <div>Matière bracelet: </div>
-                    <div>Matière boîtier: </div>
-                    <div>Etanchéité: </div>
-                    <div>Mouvement: </div>
+                    <div class="image"><img src="{{$product->first_media_path}}"></div>
+                    <div class="product-data">
+                        <div class="sku"><b>{{$product->slug}}</b></div>
+                        <div><b>{{$product->price}}€</b></div>
+                        @foreach($product->metas as $meta)
+                            <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
             @php
@@ -51,6 +48,7 @@
                 </div>
                 @if ($nextPage == 2)
                     <div class="page-break"></div>
+                    <div class="page-header"></div>
                     @php
                         $nextPage = 0;
                     @endphp

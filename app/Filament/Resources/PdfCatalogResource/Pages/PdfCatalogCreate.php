@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\PdfCatalogResource\Pages;
 
+use App\Enum\PdfGeneratorStatusEnum;
 use App\Filament\Resources\PdfCatalogResource;
 use App\Models\PdfCatalog;
 use Filament\Resources\Pages\CreateRecord;
@@ -19,6 +20,7 @@ final class PdfCatalogCreate extends CreateRecord
             PdfCatalog::CONDITION_TYPE => $data[PdfCatalog::CONDITION_TYPE] ?? null,
             PdfCatalog::CONDITION_GENDER => $data[PdfCatalog::CONDITION_GENDER] ?? null
         ];
+        $data['status'] = PdfGeneratorStatusEnum::PENDING;
         return $data;
     }
 }

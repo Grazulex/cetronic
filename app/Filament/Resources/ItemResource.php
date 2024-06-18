@@ -55,11 +55,7 @@ final class ItemResource extends Resource
                                 ->required(),
                             Select::make('category_id')
                                 ->options(Category::pluck('name', 'id'))
-                                ->searchable(),
-                            Select::make('gender')
-                                ->options(Brand::pluck('name', 'id'))
                                 ->searchable()
-                                ->required(),
                         ]),
                     Tab::make('Master data')
                         ->schema([
