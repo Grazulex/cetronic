@@ -12,6 +12,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PdfGenerate implements ShouldQueue
 {
@@ -63,6 +65,10 @@ class PdfGenerate implements ShouldQueue
         $fileName = self::FILE_NAME_PREFIX
             . str_replace(' ', '_', trim($concatConditions))
             . self::FILE_NAME_POSTFIX;
+
+        if (!Storage::directories('public/pdf')) {
+            Storage::makeDirectory('public/pdf');
+        }
 
         $pdf->save(storage_path(self::STORAGE_PDF_DIR . $fileName));
         $pdfCatalog->url = 'pdf/' . $fileName;
