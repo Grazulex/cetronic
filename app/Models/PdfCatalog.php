@@ -26,6 +26,9 @@ class PdfCatalog extends Model
     const CONDITION_TYPE = 'type';
     const CONDITION_GENDER= 'gender';
 
+    const META_GENDER = 'genre';
+    const META_TYPE = 'type';
+
     protected $fillable = [
         'conditions',
         'status',
@@ -38,7 +41,7 @@ class PdfCatalog extends Model
 
     public function regenerate()
     {
-        $this->status = PdfGeneratorStatusEnum::PENDING;
+        $this->status = PdfGeneratorStatusEnum::GENERATING;
         $this->url = null;
         $this->save();
         return $this;
@@ -56,12 +59,7 @@ class PdfCatalog extends Model
 
     public function getConditionTypesAttribute()
     {
-        $types = $this->conditions[self::CONDITION_TYPE];
-        $typeNameValue = [];
-        foreach ($types as $categoryId) {
-            $typeNameValue[] = Category::find($categoryId)->name;
-        }
-        return $typeNameValue;
+        return $this->conditions[self::CONDITION_TYPE] ?? [];
     }
 
     public function getConditionGendersAttribute()
@@ -78,8 +76,8 @@ class PdfCatalog extends Model
     {
         parent::boot();
 
-        static::saving(function ($model) {
-            if ($model->status === PdfGeneratorStatusEnum::PENDING) {
+        static::saved(function ($model) {
+            if ($model->status != PdfGeneratorStatusEnum::GENERATED) {
                 PdfGenerate::dispatch($model);
             }
         });

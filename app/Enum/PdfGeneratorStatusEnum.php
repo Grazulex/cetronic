@@ -10,6 +10,6 @@ enum PdfGeneratorStatusEnum: string
 {
     use EnumFormat;
     case PENDING = 'pending';
-    case RUN = 'run';
+    case GENERATING = 'run';
     case GENERATED = 'generated';
 }

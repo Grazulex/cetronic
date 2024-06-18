@@ -41,35 +41,48 @@ class PdfGenerate implements ShouldQueue
         $typeConditionNames = $pdfCatalog->getConditionTypesAttribute();
         $genderConditionNames = $pdfCatalog->getConditionGendersAttribute();
         if (!empty($pdfConditions[PdfCatalog::CONDITION_BRAND])) {
-            $products->whereHas('brand', function ($query) use ($pdfConditions) {
-                $query->whereIn('name', $pdfConditions[PdfCatalog::CONDITION_BRAND]);
-            });
+            $products->whereIn('brand_id', $pdfConditions[PdfCatalog::CONDITION_BRAND]);
+            unset($pdfConditions[PdfCatalog::CONDITION_BRAND]);
         }
-        if (!empty($pdfConditions[PdfCatalog::CONDITION_TYPE])) {
-            $products->whereHas('category', function ($query) use ($pdfConditions) {
-                $query->whereIn('name', $pdfConditions[PdfCatalog::CONDITION_TYPE]);
-            });
-        }
-        if (!empty($pdfConditions[PdfCatalog::CONDITION_GENDER])) {
-            $products->whereIn('gender', $pdfConditions[PdfCatalog::CONDITION_GENDER]);
-        }
+        $this->applyMetaConditions($products, $pdfConditions);
+
         $products = $products->get();
 
         $pdf = Pdf::loadView(
             'pdf.catalog',
-            compact('brandConditionNames', 'typeConditionNames', 'genderConditionNames', 'products')
+            compact(
+                'brandConditionNames',
+                'typeConditionNames',
+                'genderConditionNames',
+                'products'
+            )
         )->setPaper('a4', 'landscape');
         $concatConditions = implode('_', $genderConditionNames) . ' '
             . implode('_', $brandConditionNames) . ' '
             . implode('_', $typeConditionNames);
-        $url = self::STORAGE_PDF_DIR
-            . self::FILE_NAME_PREFIX
+        $fileName = self::FILE_NAME_PREFIX
             . str_replace(' ', '_', trim($concatConditions))
             . self::FILE_NAME_POSTFIX;
 
-        $pdf->save(storage_path($url));
-        $pdfCatalog->url = $url;
+        $pdf->save(storage_path(self::STORAGE_PDF_DIR . $fileName));
+        $pdfCatalog->url = 'pdf/' . $fileName;
         $pdfCatalog->status = PdfGeneratorStatusEnum::GENERATED;
         $pdfCatalog->save();
+    }
+
+    public function applyMetaConditions($products, $pdfConditions)
+    {
+        foreach ($pdfConditions as $conditionName => $condition) {
+            if (!empty($condition)) {
+                $products->whereHas('metas', function ($query) use ($condition, $conditionName) {
+                    $query->whereIn('value', $condition);
+                    $query->whereHas('meta', function ($q) use ($conditionName) {
+                        $PdfCatalogClass = PdfCatalog::class;
+                        $q->where('name', constant($PdfCatalogClass . '::META_' . strtoupper($conditionName)));
+                    });
+                });
+            }
+        }
+        return $products;
     }
 }

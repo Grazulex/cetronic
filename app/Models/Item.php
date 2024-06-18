@@ -39,8 +39,7 @@ final class Item extends Model implements HasMedia
         'price_special3',
         'price_fix',
         'sale_price',
-        'multiple_quantity',
-        'gender'
+        'multiple_quantity'
     ];
 
     protected $casts = [
@@ -174,5 +173,13 @@ final class Item extends Model implements HasMedia
             get: fn ($value) => $value / 100,
             set: fn ($value) => $value * 100
         );
+    }
+
+    public function getFirstMediaPathAttribute()
+    {
+        return file_exists($this->getFirstMediaPath())
+            ? $this->getFirstMediaPath()
+            : public_path('emptyImage.jpg');
+
     }
 }
