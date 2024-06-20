@@ -170,7 +170,7 @@ return [
         'supervisor-1' => [
             'connection' => 'redis',
             'queue' => ['default'],
-            'balance' => 'auto',
+            'balance' => 'false',
             'maxProcesses' => 1,
             'maxTime' => 0,
             'maxJobs' => 0,
