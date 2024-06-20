@@ -6,18 +6,23 @@ use App\Enum\PdfGeneratorStatusEnum;
 use App\Models\PdfCatalog;
 use App\Models\Item;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class PdfGenerate implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 9000;
 
     const STORAGE_PDF_DIR = 'app/public/pdf/';
     const FILE_NAME_PREFIX = 'catalog_';
