@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PubFactory extends Factory
 {
-    protected $model = Pub::class;
-
     public function definition(): array
     {
         return [
