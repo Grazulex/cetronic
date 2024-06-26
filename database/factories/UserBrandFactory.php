@@ -28,8 +28,8 @@ final class UserBrandFactory extends Factory
             'coefficient' => $this->faker->randomFloat(2, 0, 3),
             'addition_price' => $this->faker->randomFloat(2, 0, 2),
             'price_type' => $this->faker->randomElement(PriceTypeEnum::cases()),
-            'not_show_promo' => $this->faker->boolean,
-            'is_excluded' => $this->faker->boolean,
+            'not_show_promo' => $this->faker->boolean(),
+            'is_excluded' => $this->faker->boolean(),
         ];
     }
 }
