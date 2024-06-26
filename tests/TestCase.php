@@ -9,7 +9,6 @@ use Mcamara\LaravelLocalization\LaravelLocalization;
 
 abstract class TestCase extends BaseTestCase
 {
-
     protected function tearDown(): void
     {
         putenv(LaravelLocalization::ENV_ROUTE_KEY);

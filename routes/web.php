@@ -82,7 +82,8 @@ Route::get('brands/download_zip/{brand}/{catSlug}', function (Brand $brand, stri
     );
 })->name('brand.download.zip');
 
-Route::prefix(LaravelLocalization::setLocale())->middleware(LocaleCookieRedirect::class, LaravelLocalizationRedirectFilter::class, LaravelLocalizationViewPath::class)->group(function (): void {
+Route::prefix(LaravelLocalization::setLocale())->middleware(LocaleCookieRedirect::class, LaravelLocalizationRedirectFilter::class, LaravelLocalizationViewPath::class)->group(
+    function (): void {
         Route::view('/', 'front.pages.home')->name('home');
         Route::view('about', 'front.pages.about')->name('about');
         Route::any('search', [ListingController::class, 'search'])->name('search')->methods('get', 'post');
@@ -94,7 +95,8 @@ Route::prefix(LaravelLocalization::setLocale())->middleware(LocaleCookieRedirect
         Route::get('cart', [CartController::class, 'index'])->name('cart');
         Route::get('item/{item:slug}', fn (Item $item) => view('front.pages.item', ['item' => $item]))->name('item');
 
-        Route::prefix('cart')->middleware(Authenticate::class)->group(function (): void {
+        Route::prefix('cart')->middleware(Authenticate::class)->group(
+            function (): void {
                 Route::get('{cart}/locations', fn (Cart $cart) => view('front.pages.cart.locations', ['cart' => $cart]))->name('cart.locations');
                 Route::controller(CartController::class)->group(function (): void {
                     Route::get('{cart}/confirm', 'confirm')->name('cart.confirm');
@@ -103,7 +105,8 @@ Route::prefix(LaravelLocalization::setLocale())->middleware(LocaleCookieRedirect
             }
         );
 
-        Route::prefix('user')->middleware(Authenticate::class)->group(function (): void {
+        Route::prefix('user')->middleware(Authenticate::class)->group(
+            function (): void {
                 Route::view('dashboard', 'front.users.dashboard')->name('user_dashboard');
                 Route::view('profile', 'front.users.profile')->name('user_profile');
                 Route::post('profile', UpdateUserController::class)->name('user_profile.update');
