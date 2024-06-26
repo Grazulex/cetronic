@@ -32,7 +32,7 @@ final class TransfertImages extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $directory = 'public/items';
         $this->info('find folder '.$directory);

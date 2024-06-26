@@ -18,7 +18,7 @@ final class ItemFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         $reference = fake()->unique()->randomNumber(6);
         $brand_id = Brand::all()->random()->id;

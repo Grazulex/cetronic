@@ -17,7 +17,7 @@ final class CartItemFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'item_id' => Item::all()->random()->id,
