@@ -9,7 +9,6 @@ use Mcamara\LaravelLocalization\LaravelLocalization;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication;
 
     protected function tearDown(): void
     {
