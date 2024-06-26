@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Traits;
 
-trait EnumFormat {
-
+trait EnumFormat
+{
     public static function toList($column = 'value', $key = 'name'): array
     {
         $list = [];
@@ -12,4 +15,3 @@ trait EnumFormat {
         return $list;
     }
 }
-

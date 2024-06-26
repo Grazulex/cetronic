@@ -66,7 +66,7 @@ final class UserSystemInfoHelper
 
     public static function get_browsers(): string
     {
-        $user_agent= self::get_user_agent();
+        $user_agent = self::get_user_agent();
 
         $browser = 'Unknown Browser';
 
@@ -109,7 +109,7 @@ final class UserSystemInfoHelper
         if ((mb_strpos(
             mb_strtolower($_SERVER['HTTP_ACCEPT']),
             'application/vnd.wap.xhtml+xml'
-        )> 0) ||
+        ) > 0) ||
             ((isset($_SERVER['HTTP_X_WAP_PROFILE']) ||
                 isset($_SERVER['HTTP_PROFILE'])))) {
             $mobile_browser++;

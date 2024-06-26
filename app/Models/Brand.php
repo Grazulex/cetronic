@@ -58,7 +58,7 @@ final class Brand extends Model
     }
 
 
-    public function scopeEnabled(Builder $query, ?User $user=null, ?Category $category=null): Builder
+    public function scopeEnabled(Builder $query, ?User $user = null, ?Category $category = null): Builder
     {
         if ( ! $user) {
             return $query->where('is_published', true);

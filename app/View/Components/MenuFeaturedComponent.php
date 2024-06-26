@@ -15,8 +15,8 @@ final class MenuFeaturedComponent extends Component
      * __construct
      *
      * @param  array<string>  $arrayCategory
-     * @param  \App\Models\Category  $category
-     * @param  \App\Services\BrandService  $brandService
+     * @param  Category  $category
+     * @param  BrandService  $brandService
      * @return void
      */
     public function __construct(public array $arrayCategory, private Category $category, private BrandService $brandService)

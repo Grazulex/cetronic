@@ -18,7 +18,7 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
 {
     use Exportable;
 
-    public function __construct(private readonly category $category, private readonly ?Brand $brand = null)
+    public function __construct(private readonly Category $category, private readonly ?Brand $brand = null)
     {
     }
 

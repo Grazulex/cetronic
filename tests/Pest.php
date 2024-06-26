@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 use function Pest\Laravel\actingAs;
 
-function loginAsUser(User $user=null): User
+function loginAsUser(User $user = null): User
 {
     $user = $user ?? User::factory()->create([
         'role' => UserRoleEnum::CUSTOMER,
@@ -26,7 +26,7 @@ function loginAsUser(User $user=null): User
     return $user;
 }
 
-function loginAsAdmin(User $user=null): User
+function loginAsAdmin(User $user = null): User
 {
     $user = $user ?? User::factory()->create([
         'role' => UserRoleEnum::ADMIN,
@@ -37,7 +37,7 @@ function loginAsAdmin(User $user=null): User
     return $user;
 }
 
-function loginAsAgent(User $user=null): User
+function loginAsAgent(User $user = null): User
 {
     $user = $user ?? User::factory()->create([
         'role' => UserRoleEnum::AGENT,
@@ -70,8 +70,8 @@ function createDefaultItems(): Illuminate\Support\Collection
     $categoryMeta = CategoryMeta::factory()->count(1)->create(['category_id' => $category->first()->id]);
     $i = 1;
     while ($i <= 10) {
-        $price = $i*10;
-        $items[] = Item::factory()->create(['brand_id' => Brand::first()->id, 'category_id' => $category->first()->id, 'is_published' => true, 'price' => $price, 'price_b2b' => $price-1, 'price_promo' => $price/2, 'price_special1' => $price-2, 'price_special2' => $price-3, 'price_special3' => $price-4, 'sale_price' => $price-5]);
+        $price = $i * 10;
+        $items[] = Item::factory()->create(['brand_id' => Brand::first()->id, 'category_id' => $category->first()->id, 'is_published' => true, 'price' => $price, 'price_b2b' => $price - 1, 'price_promo' => $price / 2, 'price_special1' => $price - 2, 'price_special2' => $price - 3, 'price_special3' => $price - 4, 'sale_price' => $price - 5]);
         $i++;
     }
 

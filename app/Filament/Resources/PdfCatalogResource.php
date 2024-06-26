@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
-use App\Enum\GenderEnum;
-use App\Enum\PdfGeneratorStatusEnum;
 use App\Filament\Resources\PdfCatalogResource\RelationManagers\TranslationsRelationManager;
 use App\Models\Brand;
 use App\Models\Category;
@@ -14,7 +12,6 @@ use App\Models\PdfCatalog;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Carbon\Carbon;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
@@ -27,7 +24,6 @@ use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogCreate;
 use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogRegenerate;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use phpDocumentor\Reflection\Types\Context;
 
 final class PdfCatalogResource extends Resource
 {
@@ -45,14 +41,18 @@ final class PdfCatalogResource extends Resource
                     ->options(Brand::pluck(column: 'name', key: 'id'))
                     ->searchable()
                     ->multiple(),
+                Select::make(name: PdfCatalog::CONDITION_CATEGORY)
+                    ->options(Category::pluck(column: 'name', key: 'id'))
+                    ->multiple()
+                    ->searchable(),
                 Select::make(name: PdfCatalog::CONDITION_GENDER)
-                    ->options(ItemMeta::whereHas('meta',function ($q) {
+                    ->options(ItemMeta::whereHas('meta', function ($q): void {
                         $q->where('name', PdfCatalog::META_GENDER);
                     })->select('value')->groupBy('value')->pluck(column: 'value', key: 'value'))
                     ->multiple()
                     ->searchable(),
                 Select::make(name: PdfCatalog::CONDITION_TYPE)
-                    ->options(ItemMeta::whereHas('meta',function ($q) {
+                    ->options(ItemMeta::whereHas('meta', function ($q): void {
                         $q->where('name', PdfCatalog::META_TYPE);
                     })->select('value')->groupBy('value')->pluck(column: 'value', key: 'value'))
                     ->multiple()
@@ -72,6 +72,8 @@ final class PdfCatalogResource extends Resource
 
                 ViewColumn::make('condition_brands')
                     ->view('filament.tables.columns.condition_array_to_string'),
+                ViewColumn::make('condition_categories')
+                    ->view('filament.tables.columns.condition_array_to_string'),
                 ViewColumn::make('condition_types')
                     ->view('filament.tables.columns.condition_array_to_string'),
                 ViewColumn::make('condition_genders')
@@ -86,7 +88,7 @@ final class PdfCatalogResource extends Resource
                 Action::make('regenerate')
                     ->action(fn (PdfCatalog $record) => $record->regenerate()),
                 Action::make('download')
-                    ->disabled(fn (PdfCatalog $record): bool => !(bool)$record->url)
+                    ->disabled(fn (PdfCatalog $record): bool => ! (bool)$record->url)
                     ->url(fn (PdfCatalog $record): string => Storage::url($record->url))
                     ->openUrlInNewTab(),
                 DeleteAction::make()

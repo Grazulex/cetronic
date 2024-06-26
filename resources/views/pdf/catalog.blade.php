@@ -11,6 +11,9 @@
                 <b>Marque:</b> {{$brandConditionNames ? implode(', ', $brandConditionNames) : 'any'}}
             </div>
             <div class="col-4">
+                <b>Catégories:</b> {{$categoryConditionNames ? implode(', ', $categoryConditionNames) : 'any'}}
+            </div>
+            <div class="col-4">
                 <b>Type:</b> {{$typeConditionNames ? implode(', ', $typeConditionNames) : 'any'}}
             </div>
             <div class="col-4">

@@ -47,10 +47,10 @@ final class TransfertImages extends Command
                     $fullFilename = $file->getClientOriginalName();
                     $filename = pathinfo($fullFilename, PATHINFO_FILENAME);
                     $reference = $filename;
-                    $order = $item->media->count()+1;
+                    $order = $item->media->count() + 1;
                     if (str_contains($reference, '_')) {
-                        $parts= explode('_', $reference);
-                        $order = (int)$parts[count($parts)-1];
+                        $parts = explode('_', $reference);
+                        $order = (int)$parts[count($parts) - 1];
                     }
 
                     $this->info('find item '.$item->id);

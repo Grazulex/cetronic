@@ -59,7 +59,7 @@ final readonly class OrderDataObject
                $cartService->getShippingTotal(),
             'total_price_with_tax' => $cartService->getTotalVAT($this->cart) +
                $cartService->getShippingTotalVAT(),
-            'total_tax' => $cartService->getVAT($this->cart)+$cartService->getShippingVAT(),
+            'total_tax' => $cartService->getVAT($this->cart) + $cartService->getShippingVAT(),
             'total_shipping' => $cartService->getShippingTotal(),
             'total_shipping_with_tax' => $cartService->getShippingTotalVAT(),
             'total_shipping_tax' => $cartService->getShippingVAT(),

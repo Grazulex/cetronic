@@ -27,9 +27,9 @@ final class SendMailNewOrder implements ShouldQueue
     public function handle(): void
     {
         if ($this->order->user->agent && $this->order->user->agent->email) {
-            $cc= [config(key: 'mail.from.address'),'geoffrey@cetronicbenelux.com', $this->order->user->agent->email];
+            $cc = [config(key: 'mail.from.address'),'geoffrey@cetronicbenelux.com', $this->order->user->agent->email];
         } else {
-            $cc= [config(key: 'mail.from.address'),'geoffrey@cetronicbenelux.com'];
+            $cc = [config(key: 'mail.from.address'),'geoffrey@cetronicbenelux.com'];
         }
 
         Mail::to(users: $this->order->user)

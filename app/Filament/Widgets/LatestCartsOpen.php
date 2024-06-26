@@ -19,7 +19,7 @@ final class LatestCartsOpen extends BaseWidget
 
     public static function canView(): bool
     {
-        return auth()->user()?->role == UserRoleEnum::ADMIN;
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
     protected function getTableQuery(): Builder

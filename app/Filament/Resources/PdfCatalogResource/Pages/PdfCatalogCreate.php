@@ -17,6 +17,7 @@ final class PdfCatalogCreate extends CreateRecord
     {
         $data['conditions'] = [
             PdfCatalog::CONDITION_BRAND => $data[PdfCatalog::CONDITION_BRAND] ?? null,
+            PdfCatalog::CONDITION_CATEGORY => $data[PdfCatalog::CONDITION_CATEGORY] ?? null,
             PdfCatalog::CONDITION_TYPE => $data[PdfCatalog::CONDITION_TYPE] ?? null,
             PdfCatalog::CONDITION_GENDER => $data[PdfCatalog::CONDITION_GENDER] ?? null
         ];

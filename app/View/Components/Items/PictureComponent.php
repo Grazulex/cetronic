@@ -16,7 +16,7 @@ final class PictureComponent extends Component
      *
      * @return void
      */
-    public function __construct(public Item $item, public string $slug='')
+    public function __construct(public Item $item, public string $slug = '')
     {
     }
 
