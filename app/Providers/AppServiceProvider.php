@@ -22,12 +22,25 @@ use App\Observers\LocationObserver;
 use App\Observers\OrderObserver;
 use App\Observers\UserBrandObserver;
 use App\Observers\UserObserver;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 final class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * The path to the "home" route for your application.
+     *
+     * Typically, users are redirected here after authentication.
+     *
+     * @var string
+     */
+    public const HOME = '/';
+
     /**
      * Register any application services.
      *
@@ -55,5 +68,14 @@ final class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Location::observe(LocationObserver::class);
         UserBrand::observe(UserBrandObserver::class);
+
+        $this->bootRoute();
+    }
+
+    public function bootRoute(): void
+    {
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
+
+
     }
 }
