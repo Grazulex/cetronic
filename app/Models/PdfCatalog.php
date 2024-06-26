@@ -36,9 +36,12 @@ class PdfCatalog extends Model
         'url'
     ];
 
-    protected $casts = [
-        'conditions' => 'json'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'conditions' => 'json'
+        ];
+    }
 
     public function regenerate()
     {

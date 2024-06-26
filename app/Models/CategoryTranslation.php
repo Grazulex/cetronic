@@ -20,9 +20,12 @@ final class CategoryTranslation extends Model
         'locale',
     ];
 
-    protected $casts = [
-        'locale' => TranslationLanguagesEnum::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'locale' => TranslationLanguagesEnum::class,
+        ];
+    }
 
     public function category(): BelongsTo
     {

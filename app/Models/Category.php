@@ -24,12 +24,15 @@ final class Category extends Model
         'show_picture_variant'
     ];
 
-    protected $casts = [
-        'is_published' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_export' => 'boolean',
-        'show_picture_variant' => 'boolean'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_export' => 'boolean',
+            'show_picture_variant' => 'boolean'
+        ];
+    }
 
     public function metas(): HasMany
     {

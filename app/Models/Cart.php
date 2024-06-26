@@ -23,9 +23,12 @@ final class Cart extends Model
         'invoice_location_id',
     ];
 
-    protected $casts = [
-        'status' => CartStatusEnum::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'status' => CartStatusEnum::class,
+        ];
+    }
 
     public function user(): BelongsTo
     {

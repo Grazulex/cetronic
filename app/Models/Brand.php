@@ -25,12 +25,15 @@ final class Brand extends Model
         'picture',
     ];
 
-    protected $casts = [
-        'is_published' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_register' => 'boolean',
-        'is_upload_actif' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_register' => 'boolean',
+            'is_upload_actif' => 'boolean',
+        ];
+    }
 
     public function users(): HasMany
     {

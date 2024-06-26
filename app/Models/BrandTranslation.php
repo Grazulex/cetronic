@@ -19,9 +19,12 @@ final class BrandTranslation extends Model
         'locale',
     ];
 
-    protected $casts = [
-        'locale' => TranslationLanguagesEnum::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'locale' => TranslationLanguagesEnum::class,
+        ];
+    }
 
     public function brand(): BelongsTo
     {

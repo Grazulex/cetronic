@@ -42,10 +42,13 @@ final class Item extends Model implements HasMedia
         'multiple_quantity'
     ];
 
-    protected $casts = [
-        'is_published' => 'boolean',
-        'is_new' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'is_new' => 'boolean',
+        ];
+    }
 
     public function getRouteKeyName(): string
     {

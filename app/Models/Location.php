@@ -35,10 +35,13 @@ final class Location extends Model
         'full_name',
     ];
 
-    protected $casts = [
-        'type' => LocationTypeEnum::class,
-        'country' => CountryEnum::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'type' => LocationTypeEnum::class,
+            'country' => CountryEnum::class,
+        ];
+    }
 
     public function user(): BelongsTo
     {

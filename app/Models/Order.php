@@ -60,10 +60,13 @@ final class Order extends Model
 
     ];
 
-    protected $casts = [
-        'status' => OrderStatusEnum::class,
-        'country' => CountryEnum::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'status' => OrderStatusEnum::class,
+            'country' => CountryEnum::class,
+        ];
+    }
 
     public function user(): BelongsTo
     {

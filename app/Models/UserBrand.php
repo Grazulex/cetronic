@@ -28,11 +28,14 @@ final class UserBrand extends Model
         'is_excluded',
     ];
 
-    protected $casts = [
-        'price_type' => PriceTypeEnum::class,
-        'not_show_promo' => 'boolean',
-        'is_excluded' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'price_type' => PriceTypeEnum::class,
+            'not_show_promo' => 'boolean',
+            'is_excluded' => 'boolean',
+        ];
+    }
 
     public function user(): BelongsTo
     {

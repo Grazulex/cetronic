@@ -18,9 +18,12 @@ final class UserDisable extends Model
         'is_enable',
     ];
 
-    protected $casts = [
-        'is_enable' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_enable' => 'boolean',
+        ];
+    }
 
     public function user(): BelongsTo
     {

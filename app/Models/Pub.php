@@ -20,8 +20,4 @@ final class Pub extends Model
         'language',
         'picture',
     ];
-
-    protected $casts = [
-
-    ];
 }

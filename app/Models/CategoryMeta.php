@@ -23,13 +23,16 @@ final class CategoryMeta extends Model
         'is_choice'
     ];
 
-    protected $casts = [
-        'is_color' => 'boolean',
-        'is_meta' => 'boolean',
-        'is_export' => 'boolean',
-        'is_variant' => 'boolean',
-        'is_choice' => 'boolean'
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_color' => 'boolean',
+            'is_meta' => 'boolean',
+            'is_export' => 'boolean',
+            'is_variant' => 'boolean',
+            'is_choice' => 'boolean'
+        ];
+    }
 
     public function category(): BelongsTo
     {
