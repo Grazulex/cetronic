@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enum\UserRoleEnum;
 use App\Exports\CategoriesExport;
 use App\Filament\Resources\BrandResource\RelationManagers\TranslationsRelationManager;
 use App\Models\Brand;
@@ -36,6 +37,11 @@ final class BrandResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-bookmark';
 
     protected static ?string $navigationGroup = 'Items';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     public static function form(Form $form): Form
     {

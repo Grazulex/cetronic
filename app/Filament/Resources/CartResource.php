@@ -6,6 +6,7 @@ namespace App\Filament\Resources;
 
 use App\Enum\CartStatusEnum;
 use App\Enum\LocationTypeEnum;
+use App\Enum\UserRoleEnum;
 use App\Filament\Resources\CartResource\Pages;
 use App\Filament\Resources\CartResource\RelationManagers\ItemsRelationManager;
 use App\Models\Cart;
@@ -25,6 +26,11 @@ final class CartResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $navigationGroup = 'Orders';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     public static function form(Form $form): Form
     {

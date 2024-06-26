@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enum\UserRoleEnum;
 use App\Exports\CategoriesExport;
 use App\Filament\Resources\CategoryResource\Pages\CreateCategory;
 use App\Filament\Resources\CategoryResource\Pages\EditCategory;
@@ -34,6 +35,11 @@ final class CategoryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-archive';
 
     protected static ?string $navigationGroup = 'Items';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     public static function form(Form $form): Form
     {

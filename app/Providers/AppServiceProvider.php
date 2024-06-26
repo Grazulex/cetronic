@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Enum\UserRoleEnum;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryMetaTranslation;
@@ -22,7 +23,11 @@ use App\Observers\LocationObserver;
 use App\Observers\OrderObserver;
 use App\Observers\UserBrandObserver;
 use App\Observers\UserObserver;
+use Filament\Facades\Filament;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 

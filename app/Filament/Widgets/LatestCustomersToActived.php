@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
+use App\Enum\UserRoleEnum;
 use App\Models\User;
 use Closure;
 use Filament\Tables;
@@ -14,6 +15,11 @@ use Illuminate\Database\Eloquent\Model;
 final class LatestCustomersToActived extends BaseWidget
 {
     protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        return auth()->user()?->role == UserRoleEnum::ADMIN;
+    }
 
     protected function getTableQuery(): Builder
     {

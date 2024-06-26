@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Widgets;
 
 use App\Enum\CartStatusEnum;
+use App\Enum\UserRoleEnum;
 use App\Models\Cart;
 use Closure;
 use Filament\Tables;
@@ -15,6 +16,11 @@ use Illuminate\Database\Eloquent\Model;
 final class LatestCartsOpen extends BaseWidget
 {
     protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        return auth()->user()?->role == UserRoleEnum::ADMIN;
+    }
 
     protected function getTableQuery(): Builder
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Enum\UserRoleEnum;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;
@@ -25,6 +26,11 @@ final class ImportPictures extends Page implements HasForms
     protected static ?string $navigationGroup = 'Upload';
 
     protected static string $view = 'filament.pages.import-pictures';
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     public array $pictures = [];
 

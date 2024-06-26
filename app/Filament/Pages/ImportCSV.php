@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Enum\UserRoleEnum;
 use App\Imports\ItemsImport;
 use App\Models\Category;
 use Filament\Forms;
@@ -22,6 +23,11 @@ final class ImportCSV extends Page implements HasForms
     protected static ?string $navigationIcon = 'heroicon-o-cloud-upload';
 
     protected static ?string $navigationGroup = 'Upload';
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     protected static string $view = 'filament.pages.import-c-s-v';
 

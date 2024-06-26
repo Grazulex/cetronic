@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enum\OrderStatusEnum;
+use App\Enum\UserRoleEnum;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers\ItemsRelationManager;
 use App\Models\Order;
@@ -26,6 +27,11 @@ final class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
     protected static ?string $navigationGroup = 'Orders';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     public static function form(Form $form): Form
     {

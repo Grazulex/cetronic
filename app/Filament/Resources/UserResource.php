@@ -37,6 +37,11 @@ final class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Users';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

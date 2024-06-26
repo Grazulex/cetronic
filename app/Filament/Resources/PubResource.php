@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enum\UserRoleEnum;
 use App\Filament\Resources\PubResource\Pages;
 use App\Models\Pub;
 use Filament\Forms\Components\FileUpload;
@@ -24,6 +25,11 @@ class PubResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     protected static ?string $navigationGroup = 'Items';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     public static function form(Form $form): Form
     {

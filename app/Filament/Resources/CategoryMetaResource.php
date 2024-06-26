@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Enum\UserRoleEnum;
 use App\Filament\Resources\CategoryMetaResource\RelationManagers\TranslationsRelationManager;
 use App\Models\CategoryMeta;
 use Filament\Resources\Form;
@@ -28,6 +29,11 @@ final class CategoryMetaResource extends Resource
     protected static ?string $navigationGroup = 'Items';
 
     protected static ?int $navigationSort = 99;
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->role === UserRoleEnum::ADMIN;
+    }
 
     public static function form(Form $form): Form
     {
