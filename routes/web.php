@@ -10,7 +10,7 @@ use App\Http\Controllers\ListingController;
 use App\Http\Controllers\User\UpdatePasswordController;
 use App\Http\Controllers\User\UpdateUserController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\Authenticate;
+use Illuminate\Auth\Middleware\Authenticate;
 use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Item;
