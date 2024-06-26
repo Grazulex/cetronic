@@ -21,6 +21,6 @@ final class MicroComponent extends Component
         $itemService = new ItemService($this->item);
         $price = $itemService->getPrice((auth()->user() ? auth()->user() : null));
 
-        return view('components.items.micro-component', ['price'=> $price]);
+        return view('components.items.micro-component', ['price' => $price]);
     }
 }

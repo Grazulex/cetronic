@@ -13,7 +13,7 @@ final class EmailVerificationNotificationController extends Controller
     /**
      * Send a new email verification notification.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)

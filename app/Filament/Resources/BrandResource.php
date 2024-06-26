@@ -40,7 +40,7 @@ final class BrandResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->role === UserRoleEnum::ADMIN;
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
     public static function form(Form $form): Form
@@ -90,7 +90,7 @@ final class BrandResource extends Resource
                 EditAction::make(),
                 Action::make('exportCSV')
                     ->label(__('Export XLXS'))
-                    ->action(fn ($record, array $data) => (new CategoriesExport(category::find($data['category_id']), $record))->download($record->name.'_'.Carbon::now().'.xlsx'))
+                    ->action(fn ($record, array $data) => (new CategoriesExport(Category::find($data['category_id']), $record))->download($record->name.'_'.Carbon::now().'.xlsx'))
                     ->form([
                         Select::make('category_id')
                             ->label('Category')

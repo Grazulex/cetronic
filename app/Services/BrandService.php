@@ -82,7 +82,7 @@ final class BrandService
     {
         $mainCategory = Category::where('slug', $catSlug)->first();
         $items = Item::where('brand_id', $brand->id)->where('category_id', $mainCategory->id)->where('is_published', true)->orderBy('reference')->get();
-        $pdf = Pdf::loadView('pdf/brand', ['brand'=>$brand, 'items'=>$items, 'user'=>$user])->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('pdf/brand', ['brand' => $brand, 'items' => $items, 'user' => $user])->setPaper('a4', 'landscape');
 
         return $pdf->stream();
     }

@@ -29,7 +29,7 @@ final class CartResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->role === UserRoleEnum::ADMIN;
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
     public static function form(Form $form): Form

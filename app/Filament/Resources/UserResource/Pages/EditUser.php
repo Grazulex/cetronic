@@ -30,7 +30,7 @@ final class EditUser extends EditRecord
                 UserBrand::create([
                     'brand_id' => $brand,
                     'category_id' => $brands['category_id'],
-                    'reduction'=>$brands['discount'],
+                    'reduction' => $brands['discount'],
                     'is_excluded' => $brands['is_excluded'],
                     'user_id' => $record->id,
                 ]);

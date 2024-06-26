@@ -89,7 +89,7 @@ return [
     'auth' => [
         'guard' => env('FILAMENT_AUTH_GUARD', 'web'),
         'pages' => [
-            'login' => \Filament\Http\Livewire\Auth\Login::class,
+            'login' => Filament\Http\Livewire\Auth\Login::class,
         ],
     ],
 
@@ -236,7 +236,7 @@ return [
     |
     */
 
-    'default_avatar_provider' => \Filament\AvatarProviders\UiAvatarsProvider::class,
+    'default_avatar_provider' => Filament\AvatarProviders\UiAvatarsProvider::class,
 
     /*
     |--------------------------------------------------------------------------

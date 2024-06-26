@@ -29,7 +29,7 @@ final class ImportPictures extends Page implements HasForms
 
     protected static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->role === UserRoleEnum::ADMIN;
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
     public array $pictures = [];
@@ -80,10 +80,10 @@ final class ImportPictures extends Page implements HasForms
             }
 
             if ( ! $item->media->where('file_name', $fullFilename)->first()) {
-                $order = $item->media->count()+1;
+                $order = $item->media->count() + 1;
                 if (str_contains($filename, '_')) {
-                    $parts= explode(separator: '_', string: $filename);
-                    $order = (int)$parts[count($parts)-1];
+                    $parts = explode(separator: '_', string: $filename);
+                    $order = (int)$parts[count($parts) - 1];
                 }
 
                 try {

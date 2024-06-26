@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enum\PdfGeneratorStatusEnum;
 use App\Jobs\PdfGenerate;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,12 +23,12 @@ class PdfCatalog extends Model
 {
     use HasFactory;
 
-    const CONDITION_BRAND = 'brand';
-    const CONDITION_TYPE = 'type';
-    const CONDITION_GENDER= 'gender';
+    public const CONDITION_BRAND = 'brand';
+    public const CONDITION_TYPE = 'type';
+    public const CONDITION_GENDER = 'gender';
 
-    const META_GENDER = 'genre';
-    const META_TYPE = 'type';
+    public const META_GENDER = 'genre';
+    public const META_TYPE = 'type';
 
     protected $fillable = [
         'conditions',
@@ -69,15 +70,15 @@ class PdfCatalog extends Model
 
     public function getGeneratedAtAttribute()
     {
-        return $this->updated_at != $this->created_at ? $this->updated_at : null;
+        return $this->updated_at !== $this->created_at ? $this->updated_at : null;
 
     }
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 
-        static::saved(function ($model) {
-            if ($model->status != PdfGeneratorStatusEnum::GENERATED) {
+        static::saved(function ($model): void {
+            if (PdfGeneratorStatusEnum::GENERATED !== $model->status) {
                 PdfGenerate::dispatch($model);
             }
         });

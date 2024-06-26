@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Enum\PdfGeneratorStatusEnum;
@@ -15,7 +17,10 @@ use Illuminate\Support\Facades\Storage;
 
 class PdfGenerate implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The number of seconds the job can run before timing out.
@@ -24,16 +29,16 @@ class PdfGenerate implements ShouldQueue
      */
     public $timeout = 9000;
 
-    const STORAGE_PDF_DIR = 'app/public/pdf/';
-    const FILE_NAME_PREFIX = 'catalog_';
-    const FILE_NAME_POSTFIX = '.pdf';
+    public const STORAGE_PDF_DIR = 'app/public/pdf/';
+    public const FILE_NAME_PREFIX = 'catalog_';
+    public const FILE_NAME_POSTFIX = '.pdf';
 
     /**
      * Create a new job instance.
      */
     public function __construct(public PdfCatalog $pdfCatalog)
     {
-        //
+
     }
 
     /**
@@ -47,7 +52,7 @@ class PdfGenerate implements ShouldQueue
         $brandConditionNames = $pdfCatalog->getConditionBrandsAttribute();
         $typeConditionNames = $pdfCatalog->getConditionTypesAttribute();
         $genderConditionNames = $pdfCatalog->getConditionGendersAttribute();
-        if (!empty($pdfConditions[PdfCatalog::CONDITION_BRAND])) {
+        if ( ! empty($pdfConditions[PdfCatalog::CONDITION_BRAND])) {
             $products->whereIn('brand_id', $pdfConditions[PdfCatalog::CONDITION_BRAND]);
             unset($pdfConditions[PdfCatalog::CONDITION_BRAND]);
         }
@@ -64,19 +69,19 @@ class PdfGenerate implements ShouldQueue
                 'products'
             )
         )->setPaper('a4', 'landscape');
-        $concatConditions = implode('_', $genderConditionNames) . ' '
-            . implode('_', $brandConditionNames) . ' '
-            . implode('_', $typeConditionNames);
+        $concatConditions = implode('_', $genderConditionNames).' '
+            .implode('_', $brandConditionNames).' '
+            .implode('_', $typeConditionNames);
         $fileName = self::FILE_NAME_PREFIX
-            . str_replace(' ', '_', trim($concatConditions))
-            . self::FILE_NAME_POSTFIX;
+            .str_replace(' ', '_', trim($concatConditions))
+            .self::FILE_NAME_POSTFIX;
 
-        if (!Storage::directories('public/pdf')) {
+        if ( ! Storage::directories('public/pdf')) {
             Storage::makeDirectory('public/pdf');
         }
 
-        $pdf->save(storage_path(self::STORAGE_PDF_DIR . $fileName));
-        $pdfCatalog->url = 'pdf/' . $fileName;
+        $pdf->save(storage_path(self::STORAGE_PDF_DIR.$fileName));
+        $pdfCatalog->url = 'pdf/'.$fileName;
         $pdfCatalog->status = PdfGeneratorStatusEnum::GENERATED;
         $pdfCatalog->save();
     }
@@ -84,12 +89,12 @@ class PdfGenerate implements ShouldQueue
     public function applyMetaConditions($products, $pdfConditions)
     {
         foreach ($pdfConditions as $conditionName => $condition) {
-            if (!empty($condition)) {
-                $products->whereHas('metas', function ($query) use ($condition, $conditionName) {
+            if ( ! empty($condition)) {
+                $products->whereHas('metas', function ($query) use ($condition, $conditionName): void {
                     $query->whereIn('value', $condition);
-                    $query->whereHas('meta', function ($q) use ($conditionName) {
+                    $query->whereHas('meta', function ($q) use ($conditionName): void {
                         $PdfCatalogClass = PdfCatalog::class;
-                        $q->where('name', constant($PdfCatalogClass . '::META_' . strtoupper($conditionName)));
+                        $q->where('name', constant($PdfCatalogClass.'::META_'.mb_strtoupper($conditionName)));
                     });
                 });
             }

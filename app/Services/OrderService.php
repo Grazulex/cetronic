@@ -97,7 +97,7 @@ final class OrderService
             $lastOrderReference = $lastOrderReference[1];
             $lastOrderReference = (int) $lastOrderReference;
             $lastOrderReference++;
-            $lastOrderReference = str_pad(
+            $lastOrderReference = mb_str_pad(
                 (string)$lastOrderReference,
                 4,
                 '0',

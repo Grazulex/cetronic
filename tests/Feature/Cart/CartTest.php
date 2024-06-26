@@ -92,9 +92,9 @@ it('can see VAT if belgium', function (Location $location, CountryEnum $country)
     expect($location->country)->toBe($country);
 
     $cartService = new CartService();
-    $vat= $cartService->getVAT($cart);
+    $vat = $cartService->getVAT($cart);
     $shippingVat = $cartService->getShippingVAT();
-    $total = $vat+$shippingVat;
+    $total = $vat + $shippingVat;
     $this->get(uri: route('cart'))
         ->assertStatus(Response::HTTP_OK)
         ->assertSee(__('cart.vat'))
@@ -112,9 +112,9 @@ it('can not see VAT if not belgium', function (Location $location, CountryEnum $
     $cart = Cart::where('user_id', $location->user->id)->where('status', CartStatusEnum::OPEN->value)->first();
     expect($location->country)->toBe($country);
     $cartService = new CartService();
-    $vat= $cartService->getVAT($cart);
+    $vat = $cartService->getVAT($cart);
     $shippingVat = $cartService->getShippingVAT();
-    $total = $vat+$shippingVat;
+    $total = $vat + $shippingVat;
 
     $this->get(uri: route('cart'))
         ->assertStatus(Response::HTTP_OK)

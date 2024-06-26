@@ -14,7 +14,7 @@ final class Picture3Component extends Component
     /**
      * Create a new component instance. (bootstrap carousel  with picture thumbnail)
      *
-     * @param item Displayed item
+     * @param Item Displayed item
      * @param itemCarouselId Displayed html id for the product carousel.
      * @param showThumb Show or hide thumbnail for the current carousel.
      *
@@ -22,9 +22,9 @@ final class Picture3Component extends Component
      */
     public function __construct(
         public Item $item,
-        public string $slug='',
-        public string $itemCarouselId='myCarousel',
-        public bool $showThumb=true
+        public string $slug = '',
+        public string $itemCarouselId = 'myCarousel',
+        public bool $showThumb = true
     ) {
     }
 

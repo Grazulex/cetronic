@@ -26,12 +26,12 @@ final class ImportCSV extends Page implements HasForms
 
     protected static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->role === UserRoleEnum::ADMIN;
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
     protected static string $view = 'filament.pages.import-c-s-v';
 
-    public array $csv= [];
+    public array $csv = [];
 
     public int $brand_id;
 
