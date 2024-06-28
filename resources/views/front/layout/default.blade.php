@@ -39,7 +39,7 @@
         })(window,document,'script','dataLayer','GTM-5NRD2WG');</script>
     <!-- End Google Tag Manager -->
 
-    @cookieconsentscripts
+    @cookieconsentscripts()
 </head>
 
 <body>
@@ -67,7 +67,7 @@
 
         @yield('content')
     </main>
-@cookieconsentview
+@cookieconsentview()
 </body>
 
 <x-footer-component />
