@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogCreate;
+use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogList;
+use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogRegenerate;
 use App\Filament\Resources\PdfCatalogResource\RelationManagers\TranslationsRelationManager;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ItemMeta;
 use App\Models\PdfCatalog;
+use Exception;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Forms\Components\Section;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Forms\Components\Select;
-use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogList;
-use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogCreate;
-use App\Filament\Resources\PdfCatalogResource\Pages\PdfCatalogRegenerate;
-use Exception;
 use Illuminate\Support\Facades\Storage;
 
 final class PdfCatalogResource extends Resource
@@ -56,8 +56,8 @@ final class PdfCatalogResource extends Resource
                         $q->where('name', PdfCatalog::META_TYPE);
                     })->select('value')->groupBy('value')->pluck(column: 'value', key: 'value'))
                     ->multiple()
-                    ->searchable()
-            ])
+                    ->searchable(),
+            ]),
         ]);
     }
 
@@ -86,12 +86,12 @@ final class PdfCatalogResource extends Resource
             ])
             ->actions([
                 Action::make('regenerate')
-                    ->action(fn (PdfCatalog $record) => $record->regenerate()),
+                    ->action(fn(PdfCatalog $record) => $record->regenerate()),
                 Action::make('download')
-                    ->disabled(fn (PdfCatalog $record): bool => ! (bool)$record->url)
-                    ->url(fn (PdfCatalog $record): string => Storage::url($record->url))
+                    ->disabled(fn(PdfCatalog $record): bool => ! (bool) $record->url)
+                    ->url(fn(PdfCatalog $record): string => Storage::url($record->url))
                     ->openUrlInNewTab(),
-                DeleteAction::make()
+                DeleteAction::make(),
             ])
             ->bulkActions([DeleteBulkAction::make()])
             ->defaultSort('created_at', 'desc');
@@ -110,12 +110,12 @@ final class PdfCatalogResource extends Resource
         return [
             'index' => PdfCatalogList::route('/'),
             'create' => PdfCatalogCreate::route('/create'),
-            'regenerate' => PdfCatalogRegenerate::route('/regenerate')
+            'regenerate' => PdfCatalogRegenerate::route('/regenerate'),
         ];
     }
 
     protected static function getNavigationBadge(): ?string
     {
-        return (string)static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }

@@ -6,29 +6,29 @@ namespace App\Filament\Resources;
 
 use App\Enum\UserRoleEnum;
 use App\Exports\CategoriesExport;
+use App\Filament\Resources\BrandResource\Pages\CreateBrand;
+use App\Filament\Resources\BrandResource\Pages\EditBrand;
+use App\Filament\Resources\BrandResource\Pages\ListBrands;
 use App\Filament\Resources\BrandResource\RelationManagers\TranslationsRelationManager;
 use App\Models\Brand;
 use App\Models\Category;
+use Carbon\Carbon;
+use Exception;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Carbon\Carbon;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Toggle;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Forms\Components\Select;
-use App\Filament\Resources\BrandResource\Pages\ListBrands;
-use App\Filament\Resources\BrandResource\Pages\CreateBrand;
-use App\Filament\Resources\BrandResource\Pages\EditBrand;
-use Exception;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 
 final class BrandResource extends Resource
 {
@@ -41,6 +41,41 @@ final class BrandResource extends Resource
     public static function canViewAny(): bool
     {
         return UserRoleEnum::ADMIN === auth()->user()?->role;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                ImageColumn::make('picture'),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                IconColumn::make('is_published')->boolean(),
+                IconColumn::make('is_featured')->boolean(),
+            ])
+            ->filters([
+
+            ])
+            ->actions([
+                EditAction::make(),
+                Action::make('exportCSV')
+                    ->label(__('Export XLXS'))
+                    ->action(fn($record, array $data) => (new CategoriesExport(Category::find($data['category_id']), $record))->download($record->name . '_' . Carbon::now() . '.xlsx'))
+                    ->form([
+                        Select::make('category_id')
+                            ->label('Category')
+                            ->options(Category::query()->pluck('name', 'id'))
+                            ->required(),
+                    ])
+                    ->tooltip(__('Export'))
+                    ->icon('heroicon-s-download')
+                    ->color('primary'),
+            ])
+            ->bulkActions([DeleteBulkAction::make()]);
     }
 
     public static function form(Form $form): Form
@@ -69,41 +104,6 @@ final class BrandResource extends Resource
         ]);
     }
 
-    /**
-     * @throws Exception
-     */
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                ImageColumn::make('picture'),
-                TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
-                IconColumn::make('is_published')->boolean(),
-                IconColumn::make('is_featured')->boolean(),
-            ])
-            ->filters([
-
-            ])
-            ->actions([
-                EditAction::make(),
-                Action::make('exportCSV')
-                    ->label(__('Export XLXS'))
-                    ->action(fn ($record, array $data) => (new CategoriesExport(Category::find($data['category_id']), $record))->download($record->name.'_'.Carbon::now().'.xlsx'))
-                    ->form([
-                        Select::make('category_id')
-                            ->label('Category')
-                            ->options(Category::query()->pluck('name', 'id'))
-                            ->required(),
-                    ])
-                    ->tooltip(__('Export'))
-                    ->icon('heroicon-s-download')
-                    ->color('primary'),
-            ])
-            ->bulkActions([DeleteBulkAction::make()]);
-    }
-
     public static function getRelations(): array
     {
         return [
@@ -122,6 +122,6 @@ final class BrandResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return (string)static::getModel()::count();
+        return (string) static::getModel()::count();
     }
 }

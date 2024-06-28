@@ -34,12 +34,23 @@ class PdfCatalog extends Model
     protected $fillable = [
         'conditions',
         'status',
-        'url'
+        'url',
     ];
 
     protected $casts = [
-        'conditions' => 'json'
+        'conditions' => 'json',
     ];
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function ($model): void {
+            if (PdfGeneratorStatusEnum::GENERATED !== $model->status) {
+                PdfGenerate::dispatch($model);
+            }
+        });
+    }
 
     public function regenerate()
     {
@@ -83,15 +94,5 @@ class PdfCatalog extends Model
     {
         return $this->updated_at !== $this->created_at ? $this->updated_at : null;
 
-    }
-    public static function boot(): void
-    {
-        parent::boot();
-
-        static::saved(function ($model): void {
-            if (PdfGeneratorStatusEnum::GENERATED !== $model->status) {
-                PdfGenerate::dispatch($model);
-            }
-        });
     }
 }

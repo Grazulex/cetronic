@@ -1,30 +1,39 @@
 img {
-    width: 100%;
-    max-height: 150px;
+    max-width: 100%; /* Empêche l'image de dépasser la largeur de son conteneur */
+    max-height: 100%; /* Empêche l'image de dépasser la hauteur de son conteneur */
+    object-fit: contain; /* Redimensionne l'image en conservant ses proportions */
+    width: auto; /* Permet à l'image de conserver ses proportions */
+    height: auto;
 }
 
 .page-break {
     page-break-after: always;
 }
+
 .page-header {
     height: 50px;
 }
+
 .conditions {
     font-size: 12px;
 }
+
 .item {
     height: 300px;
     font-size: 10px;
 }
+
 .item .image {
     width: 100%;
     min-height: 150px;
     overflow: hidden;
     margin-top: 10px;
 }
+
 .item .div {
     white-space: nowrap;
 }
+
 .item .product-data {
 
 }

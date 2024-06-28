@@ -5,28 +5,28 @@
     <link rel="stylesheet" href="{{ base_path('public/Css/simple-grid.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="row conditions">
-            <div class="col-4">
-                <b>Marque:</b> {{$brandConditionNames ? implode(', ', $brandConditionNames) : 'any'}}
-            </div>
-            <div class="col-4">
-                <b>Catégories:</b> {{$categoryConditionNames ? implode(', ', $categoryConditionNames) : 'any'}}
-            </div>
-            <div class="col-4">
-                <b>Type:</b> {{$typeConditionNames ? implode(', ', $typeConditionNames) : 'any'}}
-            </div>
-            <div class="col-4">
-                <b>Genre:</b> {{$genderConditionNames ? implode(', ', $genderConditionNames) : 'any'}}
-            </div>
+<div class="container">
+    <div class="row conditions">
+        <div class="col-3">
+            <b>Marque:</b> {{$brandConditionNames ? implode(', ', $brandConditionNames) : 'any'}}
+        </div>
+        <div class="col-3">
+            <b>Catégories:</b> {{$categoryConditionNames ? implode(', ', $categoryConditionNames) : 'any'}}
+        </div>
+        <div class="col-3">
+            <b>Type:</b> {{$typeConditionNames ? implode(', ', $typeConditionNames) : 'any'}}
+        </div>
+        <div class="col-3">
+            <b>Genre:</b> {{$genderConditionNames ? implode(', ', $genderConditionNames) : 'any'}}
         </div>
     </div>
-    <div class="container">
-        @php
-            $rowCount = 0;
-            $nextPage = 0;
-        @endphp
-        <div class="row">
+</div>
+<div class="container">
+    @php
+        $rowCount = 0;
+        $nextPage = 0;
+    @endphp
+    <div class="row">
         @foreach($products as $product)
             <div class="col-2 item">
                 <div>
@@ -48,18 +48,18 @@
                     $nextPage++;
                     $rowCount = 0;
                 @endphp
-                </div>
-                @if ($nextPage == 2)
-                    <div class="page-break"></div>
-                    <div class="page-header"></div>
-                    @php
-                        $nextPage = 0;
-                    @endphp
-                @endif
-                <div class="row">
-            @endif
-       @endforeach
-        </div>
     </div>
+    @if ($nextPage == 2)
+        <div class="page-break"></div>
+        <div class="page-header"></div>
+        @php
+            $nextPage = 0;
+        @endphp
+    @endif
+    <div class="row">
+        @endif
+        @endforeach
+    </div>
+</div>
 </body>
 </html>

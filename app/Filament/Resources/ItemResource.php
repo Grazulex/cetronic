@@ -61,7 +61,7 @@ final class ItemResource extends Resource
                                 ->required(),
                             Select::make('category_id')
                                 ->options(Category::pluck('name', 'id'))
-                                ->searchable()
+                                ->searchable(),
                         ]),
                     Tab::make('Master data')
                         ->schema([
@@ -175,14 +175,14 @@ final class ItemResource extends Resource
                     Stack::make([
                         BadgeColumn::make('orders_count')
                             ->counts(
-                                'orders'
+                                'orders',
                             )
                             ->suffix(' orders')
                             ->color('secondary')
                             ->sortable(),
                         BadgeColumn::make('media_count')
                             ->counts(
-                                'media'
+                                'media',
                             )
                             ->suffix(' pictures')
                             ->color('primary')
@@ -198,13 +198,13 @@ final class ItemResource extends Resource
                             ->date('d/m/Y')
                             ->sortable(),
                     ]),
-                ])
+                ]),
             ])
             ->filters([
                 SelectFilter::make('brand')->relationship('brand', 'name'),
                 SelectFilter::make('category')->relationship(
                     'category',
-                    'name'
+                    'name',
                 ),
                 TernaryFilter::make('is_published'),
                 TernaryFilter::make('is_new'),
@@ -215,10 +215,10 @@ final class ItemResource extends Resource
                     ->label(__('Duplicate'))
                     ->action(function ($record): void {
                         $new_item = $record->replicate();
-                        $new_item->reference = $new_item->reference.'_copy';
+                        $new_item->reference = $new_item->reference . '_copy';
                         $new_item->save();
                         $record->metas->each(
-                            fn ($metas) => $new_item->metas()->create($metas->toArray())
+                            fn($metas) => $new_item->metas()->create($metas->toArray()),
                         );
                     })
                     ->requiresConfirmation()
@@ -267,6 +267,6 @@ final class ItemResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return (string)static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }
