@@ -26,6 +26,7 @@ img {
 .item {
     height: 300px;
     font-size: 10px;
+    border: 1px solid #0a0e17;
 }
 
 .item .image {
@@ -33,6 +34,7 @@ img {
     height: 200px;
     overflow: hidden;
     margin-top: 10px;
+    border: #0a0e17 2px dashed;
 }
 
 .item .div {
