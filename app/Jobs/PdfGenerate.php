@@ -59,7 +59,7 @@ class PdfGenerate implements ShouldQueue
         }
         $this->applyMetaConditions($products, $pdfConditions);
 
-        $products = $products->get();
+        $products = $products->limit(36)->get();
 
         $pdf = Pdf::loadView(
             'pdf.catalog',
