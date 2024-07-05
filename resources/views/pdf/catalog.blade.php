@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Document</title>
     <style>
         /* styles.css */
 
@@ -40,19 +43,17 @@
         }
 
         .section-container {
-            display: flex;
-            flex-direction: column;
+            width: 100%;
         }
 
         .page {
-            height: 100vh;
+            width: 100%;
             page-break-after: always;
         }
 
         .row {
             display: flex;
-            flex-direction: row;
-            flex: 1;
+            width: 100%;
         }
 
         .column {
