@@ -41,7 +41,7 @@
 <body>
 <div class="section-container container">
     @php
-        $elements = $products;
+        $elements = $products->toArray();
         $chunks = array_chunk($elements, 12);
     @endphp
 
