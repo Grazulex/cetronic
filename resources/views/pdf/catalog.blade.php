@@ -1,69 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Document</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        img {
-            max-width: 100%; /* Empêche l'image de dépasser la largeur de son conteneur */
-            max-height: 100%; /* Empêche l'image de dépasser la hauteur de son conteneur */
-            object-fit: contain; /* Redimensionne l'image en conservant ses proportions */
-            width: auto; /* Permet à l'image de conserver ses proportions */
-            height: auto;
-        }
-
-        .image {
-            width: 100%;
-            height: 280px;
-            overflow: hidden;
-        }
-
-        .product-data {
-            font-size: 8px;
-
-        }
-
-
-        /* container for the whole page width and height */
-        .page {
-            width: 100%;
-            height: 100%;
-            padding: 10px;
-        }
-
-        /* each row need to have 50vh height */
-        .row {
-            height: 50vh;
-            display: block;
-            clear: both;
-        }
-
-        .col-2 {
-            width: 16%;
-            display: block;
-            float: left;
-            height: 50vh;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ base_path('public/Css/pdf.css') }}">
+    <link rel="stylesheet" href="{{ base_path('public/Css/simple-grid.css') }}">
 </head>
 <body>
-<div class="section-container container">
-    <div class="page">
-        <div class="row">
-            @foreach($products as $product)
-                <div class="col-2">
+<div class="container">
+    @php
+        $rowCount = 0;
+        $nextPage = 0;
+    @endphp
+    <div class="row">
+        @foreach($products as $product)
+            <div class="col-2 item">
+                <div>
                     <div class="image"><img src="{{$product->first_media_path}}"></div>
                     <div class="product-data">
                         <div class="sku"><b>{{$product->reference}}</b></div>
@@ -73,8 +23,26 @@
                         @endforeach
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+            @php
+                $rowCount++;
+            @endphp
+            @if ($rowCount == 6)
+                @php
+                    $nextPage++;
+                    $rowCount = 0;
+                @endphp
+    </div>
+    @if ($nextPage == 2)
+        <div class="page-break"></div>
+        <div class="page-header"></div>
+        @php
+            $nextPage = 0;
+        @endphp
+    @endif
+    <div class="row">
+        @endif
+        @endforeach
     </div>
 </div>
 </body>
