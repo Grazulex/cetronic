@@ -13,39 +13,24 @@
 
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f4f4f4;
         }
 
-        .page {
-            width: 100%;
-            height: 100%;
-            page-break-after: always;
+        .container {
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
-        .row {
-            display: flex;
-            width: 100%;
-            height: 50%; /* Each row should take half the height of the page */
-        }
-
-        .column {
-            flex: 1;
-            border: 1px solid #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            width: 100%;
+        .col-2 {
+            width: 16%;
+            display: block;
+            float: left;
+            height: 50vh;
         }
     </style>
 </head>
 <body>
-<div class="section-container">
+<div class="section-container container">
     @php
         $elements = range(1, 24); // Exemple d'éléments à afficher (24 éléments pour deux pages)
         $chunks = array_chunk($elements, 12); // Diviser les éléments en groupes de 12 pour chaque page
@@ -56,7 +41,7 @@
             @foreach (array_chunk($chunk, 6) as $row)
                 <div class="row">
                     @foreach ($row as $element)
-                        <div class="column">
+                        <div class="col-2">
                             {{ $element }}
                         </div>
                     @endforeach
