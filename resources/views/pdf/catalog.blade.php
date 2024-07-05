@@ -21,6 +21,13 @@
             padding-right: 16px;
         }
 
+        /* each row need to have 50vh height */
+        .row {
+            height: 50vh;
+            display: block;
+            clear: both;
+        }
+
         .col-2 {
             width: 16%;
             display: block;
