@@ -17,7 +17,7 @@
         }
 
         /* container for the whole page width and height */
-        .container {
+        .page {
             width: 100%;
             height: 100%;
             padding: 20px;
@@ -41,17 +41,24 @@
 <body>
 <div class="section-container container">
     @php
-        $elements = range(1, 24); // Exemple d'éléments à afficher (24 éléments pour deux pages)
-        $chunks = array_chunk($elements, 12); // Diviser les éléments en groupes de 12 pour chaque page
+        $elements = $products;
+        $chunks = array_chunk($elements, 12);
     @endphp
 
     @foreach ($chunks as $chunk)
         <div class="page">
             @foreach (array_chunk($chunk, 6) as $row)
                 <div class="row">
-                    @foreach ($row as $element)
+                    @foreach($products as $product)
                         <div class="col-2">
-                            {{ $element }}
+                            <div class="image"><img src="{{$product->first_media_path}}"></div>
+                            <div class="product-data">
+                                <div class="sku"><b>{{$product->slug}}</b></div>
+                                <div><b>{{$product->price}}€</b></div>
+                                @foreach($product->metas as $meta)
+                                    <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
+                                @endforeach
+                            </div>
                         </div>
                     @endforeach
                 </div>
