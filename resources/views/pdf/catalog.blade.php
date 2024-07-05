@@ -1,47 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        /* styles.css */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        .section-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .page {
-            height: 100vh;
-            page-break-after: always;
-        }
-
-        .row {
-            display: flex;
-            flex: 1;
-        }
-
-        .column {
-            flex: 1;
-            border: 1px solid #ccc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            background-color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ base_path('public/Css/pdf.css') }}">
 </head>
 <body>
 <div class="section-container">
