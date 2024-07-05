@@ -70,7 +70,7 @@ class PdfGenerate implements ShouldQueue
                 'genderConditionNames',
                 'products',
             ),
-        )->setPaper('a4', 'landscape')->setOptions(['margin-top' => 0, 'margin-bottom' => 0, 'margin-left' => 0, 'margin-right' => 0, 'dpi' => 72], true);
+        )->setPaper('a4', 'landscape');
 
         $concatConditions = implode('_', $genderConditionNames) . ' '
             . implode('_', $brandConditionNames) . ' '

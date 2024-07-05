@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="{{ base_path('public/Css/pdf.css') }}">
     <link rel="stylesheet" href="{{ base_path('public/Css/simple-grid.css') }}">
+    @page { margin:0px; }
 </head>
 <body>
 <div class="container">
