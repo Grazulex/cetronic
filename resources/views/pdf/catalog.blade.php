@@ -26,7 +26,7 @@
 
         .image {
             width: 100%;
-            height: 200px;
+            height: 250px;
             overflow: hidden;
             margin-top: 10px;
         }
