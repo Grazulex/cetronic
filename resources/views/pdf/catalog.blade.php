@@ -13,15 +13,13 @@
     <div class="row">
         @foreach($products as $product)
             <div class="col-2 item">
-                <div>
-                    <div class="image"><img src="{{$product->first_media_path}}"></div>
-                    <div class="product-data">
-                        <div class="sku"><b>{{$product->reference}}</b></div>
-                        <div><b>{{$product->price}}€</b></div>
-                        @foreach($product->metas as $meta)
-                            <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
-                        @endforeach
-                    </div>
+                <div class="image"><img src="{{$product->first_media_path}}"></div>
+                <div class="product-data">
+                    <div class="sku"><b>{{$product->reference}}</b></div>
+                    <div><b>{{$product->price}}€</b></div>
+                    @foreach($product->metas as $meta)
+                        <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
+                    @endforeach
                 </div>
             </div>
             @php
