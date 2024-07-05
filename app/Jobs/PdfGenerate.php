@@ -63,11 +63,17 @@ class PdfGenerate implements ShouldQueue
         $this->applyMetaConditions($products, $pdfConditions);
 
         //list of Items model with metas of type 1 and value "Gents"
-        $products = Item::where('is_published', 1)->whereHas('metas', function ($query): void {
-            $query->where('value', 'Gents')->where('meta_id', 1);
-        })->orderBy('brand_id');
+        $products = Item::where('is_published', 1)
+            ->with('brand', 'metas', 'variants', 'media')
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Gents')->where('meta_id', 1);
+            })
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Leather')->where('meta_id', 3);
+            })
+            ->orderBy('brand_id')->orderBy('reference');
 
-        $products = $products->limit(36)->get();
+        $products = $products->limit(100)->get();
 
         $pdf = Pdf::loadView(
             'pdf.catalog',
