@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Document</title>
     <style>
-        /* styles.css */
-
         * {
             margin: 0;
             padding: 0;
@@ -15,6 +13,7 @@
 
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
 
         header {
@@ -44,6 +43,8 @@
 
         .section-container {
             width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .page {
@@ -64,7 +65,7 @@
             align-items: center;
             padding: 10px;
             background-color: #fff;
-            min-height: 50vh; /* Ensure each row is half the viewport height */
+            height: 50vh; /* Ensure each row is half the viewport height */
         }
 
         footer {
@@ -72,8 +73,6 @@
             color: #fff;
             text-align: center;
             padding: 10px 0;
-            position: fixed;
-            bottom: 0;
             width: 100%;
         }
     </style>
