@@ -42,7 +42,6 @@
         .section-container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
         }
 
         .page {
@@ -52,6 +51,7 @@
 
         .row {
             display: flex;
+            flex-direction: row;
             flex: 1;
         }
 
@@ -63,6 +63,7 @@
             align-items: center;
             padding: 10px;
             background-color: #fff;
+            min-height: 50vh; /* Ensure each row is half the viewport height */
         }
 
         footer {
