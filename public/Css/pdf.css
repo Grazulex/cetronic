@@ -1,6 +1,7 @@
 /* reset margins */
-@page {
-    margin: 0cm;
+. {
+    margin: 0;
+    padding: 0;
 }
 
 img {
@@ -16,12 +17,8 @@ img {
 }
 
 .col-2 {
-    width: 17%;
+    width: 142px;
     float: left;
-}
-
-.page-header {
-    height: 50px;
 }
 
 .conditions {
@@ -38,7 +35,6 @@ img {
     width: 100%;
     height: 200px;
     overflow: hidden;
-    margin-top: 10px;
     border: #0a0e17 2px dashed;
 }
 
