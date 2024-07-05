@@ -16,6 +16,27 @@
             background-color: #f4f4f4;
         }
 
+        img {
+            max-width: 100%; /* Empêche l'image de dépasser la largeur de son conteneur */
+            max-height: 100%; /* Empêche l'image de dépasser la hauteur de son conteneur */
+            object-fit: contain; /* Redimensionne l'image en conservant ses proportions */
+            width: auto; /* Permet à l'image de conserver ses proportions */
+            height: auto;
+        }
+
+        .image {
+            width: 100%;
+            height: 60%;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .product-data {
+            font-size: 8px;
+
+        }
+
+
         /* container for the whole page width and height */
         .page {
             width: 100%;
