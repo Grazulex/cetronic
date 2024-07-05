@@ -15,6 +15,11 @@ img {
     page-break-after: always;
 }
 
+.col-2 {
+    width: 17%;
+    float: left;
+}
+
 .page-header {
     height: 50px;
 }
@@ -24,7 +29,7 @@ img {
 }
 
 .item {
-    height: 300px;
+    height: 350px;
     font-size: 10px;
     border: 1px solid #0a0e17;
 }
