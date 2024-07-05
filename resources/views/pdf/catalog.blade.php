@@ -16,9 +16,12 @@
             background-color: #f4f4f4;
         }
 
+        /* container for the whole page */
         .container {
-            padding-left: 16px;
-            padding-right: 16px;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         /* each row need to have 50vh height */
