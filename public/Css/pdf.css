@@ -1,3 +1,7 @@
+@page {
+    margin: 0px;
+}
+
 img {
     max-width: 100%; /* Empêche l'image de dépasser la largeur de son conteneur */
     max-height: 100%; /* Empêche l'image de dépasser la hauteur de son conteneur */
@@ -11,7 +15,7 @@ img {
 }
 
 .page-header {
-    height: 50px;
+    height: 0px;
 }
 
 .conditions {
