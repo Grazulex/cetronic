@@ -18,12 +18,14 @@
 
         .page {
             width: 100%;
+            height: 100%;
             page-break-after: always;
         }
 
         .row {
             display: flex;
             width: 100%;
+            height: 50%; /* Each row should take half the height of the page */
         }
 
         .column {
@@ -33,7 +35,6 @@
             justify-content: center;
             align-items: center;
             padding: 10px;
-            height: 200px; /* Set a fixed height for each row */
         }
 
         footer {
