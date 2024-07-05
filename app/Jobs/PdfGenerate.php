@@ -23,8 +23,11 @@ class PdfGenerate implements ShouldQueue
     use SerializesModels;
 
     public const STORAGE_PDF_DIR = 'app/public/pdf/';
+
     public const FILE_NAME_PREFIX = 'catalog_';
+
     public const FILE_NAME_POSTFIX = '.pdf';
+
     /**
      * The number of seconds the job can run before timing out.
      *
@@ -58,6 +61,11 @@ class PdfGenerate implements ShouldQueue
             unset($pdfConditions[PdfCatalog::CONDITION_CATEGORY]);
         }
         $this->applyMetaConditions($products, $pdfConditions);
+
+        //list of Items model with metas of type 1 and value "Gents"
+        $products = Item::where('is_published', 1)->whereHas('metas', function ($query): void {
+            $query->where('value', 'Gents')->where('meta_id', 1);
+        })->orderBy('brand_id');
 
         $products = $products->limit(36)->get();
 
@@ -105,6 +113,7 @@ class PdfGenerate implements ShouldQueue
                 });
             }
         }
+
         return $products;
     }
 }
