@@ -1,5 +1,7 @@
-@page {
-    margin: 0px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 img {
@@ -14,31 +16,23 @@ img {
     page-break-after: always;
 }
 
-.page-header {
-    height: 0px;
+.section-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-.conditions {
-    font-size: 12px;
+section {
+    display: flex;
+    flex: 1;
 }
 
-.item {
-    height: 415px;
-    font-size: 10px;
-}
-
-.item .image {
-    width: 100%;
-    height: 300px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-
-.item .div {
-    white-space: nowrap;
-}
-
-.item .product-data {
-    font-size: 8px;
-
+.column {
+    flex: 1;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
 }
