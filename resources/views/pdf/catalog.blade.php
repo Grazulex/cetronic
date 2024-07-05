@@ -16,37 +16,6 @@
             margin: 20px;
         }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
-
-        header nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        header nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
-
-        header nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .section-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
         .page {
             width: 100%;
             page-break-after: always;
@@ -59,18 +28,15 @@
 
         .column {
             flex: 1;
-            border: 1px solid #ccc;
+            border: 1px solid #000;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px;
-            background-color: #fff;
-            height: 50vh; /* Ensure each row is half the viewport height */
+            height: 200px; /* Set a fixed height for each row */
         }
 
         footer {
-            background-color: #333;
-            color: #fff;
             text-align: center;
             padding: 10px 0;
             width: 100%;
