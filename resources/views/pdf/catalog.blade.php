@@ -16,11 +16,10 @@
             background-color: #f4f4f4;
         }
 
-        /* container for the whole page */
+        /* container for the whole page width and height */
         .container {
             width: 100%;
-            max-width: 1024px;
-            margin: 0 auto;
+            height: 100%;
             padding: 20px;
         }
 
