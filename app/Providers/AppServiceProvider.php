@@ -33,9 +33,7 @@ final class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register(): void
-    {
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -45,7 +43,7 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
-        Blade::directive('money', fn ($amount) => "<?php echo number_format({$amount}, 2, ',', '.'). '€'; ?>");
+        Blade::directive('money', fn($amount) => "<?php echo number_format({$amount}, 2, ',', '.'). '€'; ?>");
         Brand::observe(BrandObserver::class);
         Category::observe(CategoryObserver::class);
         Item::observe(ItemObserver::class);

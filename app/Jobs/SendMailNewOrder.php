@@ -20,9 +20,7 @@ final class SendMailNewOrder implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public Order $order)
-    {
-    }
+    public function __construct(public Order $order) {}
 
     public function handle(): void
     {

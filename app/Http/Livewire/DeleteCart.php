@@ -15,9 +15,7 @@ final class DeleteCart extends Component
 {
     public CartItem $cartItem;
 
-    public function mount(): void
-    {
-    }
+    public function mount(): void {}
 
     public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
@@ -36,19 +34,19 @@ final class DeleteCart extends Component
             ]);
 
             return redirect()->route(route: 'home');
-        } else {
-            $this->redirectRoute('cart'); // hotfix to avoid 404 error
-            $this->emit(event: 'cart_updated');
-            $this->emit(event: 'total_updated');
-
-            $this->dispatchBrowserEvent(event: 'alert', data: [
-                'type' => 'success',
-                'message' => __('toast.item.removed'),
-            ]);
-
-            $this->dispatchBrowserEvent('cart-item-deleted', [
-                'cart_line_id' => $this->cartItem->id,
-            ]);
         }
+        $this->redirectRoute('cart'); // hotfix to avoid 404 error
+        $this->emit(event: 'cart_updated');
+        $this->emit(event: 'total_updated');
+
+        $this->dispatchBrowserEvent(event: 'alert', data: [
+            'type' => 'success',
+            'message' => __('toast.item.removed'),
+        ]);
+
+        $this->dispatchBrowserEvent('cart-item-deleted', [
+            'cart_line_id' => $this->cartItem->id,
+        ]);
+
     }
 }

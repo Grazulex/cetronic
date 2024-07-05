@@ -8,8 +8,8 @@ use App\Exports\UsersExport;
 use App\Filament\Resources\UserResource;
 use Carbon\Carbon;
 use Filament\Pages\Actions;
-use Filament\Resources\Pages\ListRecords;
 use Filament\Pages\Actions\Action;
+use Filament\Resources\Pages\ListRecords;
 use Maatwebsite\Excel\Facades\Excel;
 
 final class ListUsers extends ListRecords
@@ -18,7 +18,7 @@ final class ListUsers extends ListRecords
 
     public function exportXLSX(): \Symfony\Component\HttpFoundation\BinaryFileResponse
     {
-        return Excel::download(new UsersExport(), 'Users_'.Carbon::now().'.xlsx');
+        return Excel::download(new UsersExport(), 'Users_' . Carbon::now() . '.xlsx');
     }
 
     protected function getActions(): array

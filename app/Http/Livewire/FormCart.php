@@ -34,7 +34,7 @@ final class FormCart extends Component
 
     public function updateCart(CartService $cartService): void
     {
-        $cartService->updateCart(cartItem: $this->cartItem, quantity: (int)$this->quantity[$this->cartItem->id]);
+        $cartService->updateCart(cartItem: $this->cartItem, quantity: (int) $this->quantity[$this->cartItem->id]);
 
         $this->emit(event: 'cart_updated');
         $this->emit(event: 'quantity_updated');

@@ -45,7 +45,7 @@ it('can see promo if logged', function (): void {
         data: [
             'email' => $user->email,
             'password' => 'password',
-        ]
+        ],
     );
     $response->assertRedirect(route('home'));
     $this->followRedirects($response)->assertSee(__('home.items.promo'));
@@ -73,7 +73,7 @@ it('can not see a category disable in menu', function (): void {
         data: [
             'email' => $user->email,
             'password' => 'password',
-        ]
+        ],
     );
     $response->assertRedirect(route('home'));
     $this->followRedirects($response)->assertStatus(Response::HTTP_OK)

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Whitecube\LaravelCookieConsent\Consent;
-use Whitecube\LaravelCookieConsent\Facades\Cookies;
 use Whitecube\LaravelCookieConsent\CookiesServiceProvider as ServiceProvider;
+use Whitecube\LaravelCookieConsent\Facades\Cookies;
 
 class CookiesServiceProvider extends ServiceProvider
 {
@@ -22,7 +22,7 @@ class CookiesServiceProvider extends ServiceProvider
 
         // Register all Analytics cookies at once using one single shorthand method:
         Cookies::analytics()
-             ->google('GTM-5NRD2WG');
+            ->google('GTM-5NRD2WG');
 
         // Register custom cookies under the pre-existing "optional" category:
         // Cookies::optional()

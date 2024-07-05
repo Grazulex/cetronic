@@ -52,7 +52,7 @@ final class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'is_actif' => false,
                 'language' => $request->language,
-                'divers' => 'Registration infos. Is a old customer: '.(($request->customer && 'yes' === $request->customer) ? 'yes' : (($request->customer && 'no' === $request->customer) ? 'no' : 'unknown')).'. Interested in: '.(is_array($request->brands) ? implode(',', $request->brands) : '--'),
+                'divers' => 'Registration infos. Is a old customer: ' . (($request->customer && 'yes' === $request->customer) ? 'yes' : (($request->customer && 'no' === $request->customer) ? 'no' : 'unknown')) . '. Interested in: ' . (is_array($request->brands) ? implode(',', $request->brands) : '--'),
                 'role' => UserRoleEnum::CUSTOMER->value,
             ]);
 
@@ -76,9 +76,9 @@ final class RegisteredUserController extends Controller
             //Auth::login($user);
 
             return redirect(route('user_thanks'))->with('status', __('user.auth.registered.waiting'));
-        } else {
-            return redirect(route('user_thanks'))->with('status', __('user.auth.registered.error'));
         }
+        return redirect(route('user_thanks'))->with('status', __('user.auth.registered.error'));
+
     }
 
     /**

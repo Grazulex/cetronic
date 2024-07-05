@@ -6,8 +6,8 @@ namespace App\View\Components\Items;
 
 use App\Models\Item;
 use App\Services\ItemService;
-use Illuminate\View\Component;
 use Closure;
+use Illuminate\View\Component;
 
 final class Picture3Component extends Component
 {
@@ -24,9 +24,8 @@ final class Picture3Component extends Component
         public Item $item,
         public string $slug = '',
         public string $itemCarouselId = 'myCarousel',
-        public bool $showThumb = true
-    ) {
-    }
+        public bool $showThumb = true,
+    ) {}
 
     /**
      * Get the view / contents that represent the component.

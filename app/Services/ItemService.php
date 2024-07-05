@@ -14,17 +14,15 @@ use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 
 final class ItemService
 {
-    public function __construct(private Item $item)
-    {
-    }
+    public function __construct(private Item $item) {}
 
-    public function getPrice(User $user = null): \Illuminate\Support\Collection
+    public function getPrice(?User $user = null): \Illuminate\Support\Collection
     {
         if ($user) {
             return $this->getPricesForUser($user);
-        } else {
-            return $this->getPricesForGuest();
         }
+        return $this->getPricesForGuest();
+
     }
 
     public function getPictures(): MediaCollection
@@ -146,14 +144,14 @@ final class ItemService
                 'price_end'   => ($price_end > 0) ? $price_end : (($price_promo > 0) ? $price_promo : $price_start),
                 'sale'        => $this->item->sale_price,
             ]);
-        } else {
-            return collect([
-                'price_start' => $this->getDefaultPrice(),
-                'price_promo' => $this->item->price_promo,
-                'price_end'   => ($this->item->price_promo > 0) ? $this->item->price_promo : $this->getDefaultPrice(),
-                'sale'        => $this->item->sale_price,
-            ]);
         }
+        return collect([
+            'price_start' => $this->getDefaultPrice(),
+            'price_promo' => $this->item->price_promo,
+            'price_end'   => ($this->item->price_promo > 0) ? $this->item->price_promo : $this->getDefaultPrice(),
+            'sale'        => $this->item->sale_price,
+        ]);
+
     }
 
     private function getDefaultPrice(): float

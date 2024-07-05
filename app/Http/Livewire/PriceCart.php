@@ -17,9 +17,7 @@ final class PriceCart extends Component
 
     protected $listeners = ['quantity_updated' => 'render'];
 
-    public function mount(): void
-    {
-    }
+    public function mount(): void {}
 
     public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {

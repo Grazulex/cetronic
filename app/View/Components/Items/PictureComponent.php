@@ -6,8 +6,8 @@ namespace App\View\Components\Items;
 
 use App\Models\Item;
 use App\Services\ItemService;
-use Illuminate\View\Component;
 use Closure;
+use Illuminate\View\Component;
 
 final class PictureComponent extends Component
 {
@@ -16,9 +16,7 @@ final class PictureComponent extends Component
      *
      * @return void
      */
-    public function __construct(public Item $item, public string $slug = '')
-    {
-    }
+    public function __construct(public Item $item, public string $slug = '') {}
 
     /**
      * Get the view / contents that represent the component.

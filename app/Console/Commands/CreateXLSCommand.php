@@ -34,9 +34,9 @@ final class CreateXLSCommand extends Command
         $category = Category::find(1);
         $brand = Brand::find(5);
 
-        $name = 'cat'.$category->id.'_brand'.$brand->id.'.xlsx';
+        $name = 'cat' . $category->id . '_brand' . $brand->id . '.xlsx';
 
-        $this->info('Creating '.$name);
+        $this->info('Creating ' . $name);
         Excel::store(new CategoriesExport($category, $brand), $name, 'public');
         $this->info('Done');
     }

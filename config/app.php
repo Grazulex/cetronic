@@ -89,7 +89,7 @@ return [
     'available_locales' => [
         'en',
         'fr',
-        'nl'
+        'nl',
     ],
 
     /*

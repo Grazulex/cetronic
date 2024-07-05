@@ -38,7 +38,7 @@ final class BrandsRelationManager extends RelationManager
                             ->options(Category::pluck('name', 'id'))
                             ->searchable()
                             ->reactive()
-                            ->afterStateUpdated(fn (callable $set) => $set('category_meta_id', null)),
+                            ->afterStateUpdated(fn(callable $set) => $set('category_meta_id', null)),
                         Forms\Components\Select::make('category_meta_id')
                             ->label('Category Meta')
                             ->options(function (callable $get) {
@@ -51,7 +51,7 @@ final class BrandsRelationManager extends RelationManager
                             })
                             ->searchable()
                             ->reactive()
-                            ->afterStateUpdated(fn (callable $set) => $set('category_meta_value', null)),
+                            ->afterStateUpdated(fn(callable $set) => $set('category_meta_value', null)),
                         Forms\Components\Select::make('category_meta_value')
                             ->label('Category Meta Value')
                             ->options(function (callable $get) {

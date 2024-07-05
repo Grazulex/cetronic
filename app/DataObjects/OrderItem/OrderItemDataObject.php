@@ -12,8 +12,7 @@ final readonly class OrderItemDataObject
     public function __construct(
         private Order    $order,
         private CartItem $cartItem,
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

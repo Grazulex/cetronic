@@ -14,10 +14,7 @@ class ItemsComponent extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public array $brand)
-    {
-
-    }
+    public function __construct(public array $brand) {}
 
     /**
      * Get the view / contents that represent the component.

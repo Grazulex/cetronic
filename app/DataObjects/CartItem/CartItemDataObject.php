@@ -17,8 +17,7 @@ final readonly class CartItemDataObject
         private float  $price_promo = 0,
         private int    $quantity = 1,
         private string $variant = '',
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

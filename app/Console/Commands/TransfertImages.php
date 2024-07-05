@@ -35,12 +35,12 @@ final class TransfertImages extends Command
     public function handle()
     {
         $directory = 'public/items';
-        $this->info('find folder '.$directory);
+        $this->info('find folder ' . $directory);
         $files = Storage::files($directory, true);
         if ($files) {
-            $this->info('find files '.count($files));
+            $this->info('find files ' . count($files));
             foreach ($files as $filePath) {
-                $file = new UploadedFile(storage_path('app/'.$filePath), basename($filePath));
+                $file = new UploadedFile(storage_path('app/' . $filePath), basename($filePath));
                 $id = basename($file->getPath());
                 $item = Item::where('id', $id)->first();
                 if ($item) {
@@ -50,10 +50,10 @@ final class TransfertImages extends Command
                     $order = $item->media->count() + 1;
                     if (str_contains($reference, '_')) {
                         $parts = explode('_', $reference);
-                        $order = (int)$parts[count($parts) - 1];
+                        $order = (int) $parts[count($parts) - 1];
                     }
 
-                    $this->info('find item '.$item->id);
+                    $this->info('find item ' . $item->id);
                     try {
                         $item->addMedia($file)
                             ->setOrder($order)

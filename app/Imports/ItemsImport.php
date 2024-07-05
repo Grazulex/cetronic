@@ -15,9 +15,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 {
-    public function __construct(private readonly int $category_id, private array $headers)
-    {
-    }
+    public function __construct(private readonly int $category_id, private array $headers) {}
 
     public function collection(Collection $collection): void
     {
@@ -62,7 +60,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 ],
                 [
                     'name' => trim(mb_convert_encoding($meta, 'UTF-8', 'UTF-8')),
-                ]
+                ],
             );
         }
 
@@ -82,7 +80,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 [
                     'name' => trim($row['brand']),
                     'description' => '',
-                ]
+                ],
             );
 
 
@@ -96,10 +94,10 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 $multi = 1;
                 $parts = explode(
                     '/',
-                    str_replace('"', '', $row['colisage'])
+                    str_replace('"', '', $row['colisage']),
                 );
                 if (count($parts) > 0) {
-                    $multi = intval($parts[0]);
+                    $multi = (int) ($parts[0]);
                     if (0 === $multi) {
                         $multi = 1;
                     }
@@ -117,16 +115,16 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'master_id' => Item::where('reference', $row['master_reference'])->first()->id ?? null,
                     'is_published' => 1 === $row['is_published'],
                     'is_new' => 1 === $row['is_new'],
-                    'price' => floatval($row['price']),
-                    'price_b2b' => floatval($row['price_b2b']),
-                    'price_fix' => floatval($row['price_fix']),
-                    'price_promo' => floatval($row['price_promo']),
-                    'price_special1' => floatval($row['price_special_1']),
-                    'price_special2' => floatval($row['price_special_2']),
-                    'price_special3' => floatval($row['price_special_3']),
-                    'sale_price' => floatval($row['sale_price']),
+                    'price' => (float) ($row['price']),
+                    'price_b2b' => (float) ($row['price_b2b']),
+                    'price_fix' => (float) ($row['price_fix']),
+                    'price_promo' => (float) ($row['price_promo']),
+                    'price_special1' => (float) ($row['price_special_1']),
+                    'price_special2' => (float) ($row['price_special_2']),
+                    'price_special3' => (float) ($row['price_special_3']),
+                    'sale_price' => (float) ($row['sale_price']),
                     'multiple_quantity' => $multi,
-                ]
+                ],
             );
 
             $this->createMetas($metas, $item, $row);
@@ -140,7 +138,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 ->where('category_id', $this->category_id)
                 ->first();
 
-            if ($row[$meta] && str_contains((string)$row[$meta], ',')) {
+            if ($row[$meta] && str_contains((string) $row[$meta], ',')) {
                 $values = explode(',', $row[$meta]);
 
                 ItemMeta::where('item_id', $item->id)
@@ -157,7 +155,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                         ],
                         [
                             'value' => trim($value),
-                        ]
+                        ],
                     );
                 }
             } else {
@@ -165,18 +163,18 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
 
                     ItemMeta::where('item_id', $item->id)
                         ->where('meta_id', $category_meta->id)
-                        ->where('value', '!=', trim((string)$row[$meta]))
+                        ->where('value', '!=', trim((string) $row[$meta]))
                         ->delete();
 
                     ItemMeta::updateOrCreate(
                         [
                             'item_id' => $item->id,
                             'meta_id' => $category_meta->id,
-                            'value' => trim((string)$row[$meta]),
+                            'value' => trim((string) $row[$meta]),
                         ],
                         [
-                            'value' => trim((string)$row[$meta]),
-                        ]
+                            'value' => trim((string) $row[$meta]),
+                        ],
                     );
                 }
             }

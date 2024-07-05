@@ -20,7 +20,7 @@ final class UpdateUserController extends Controller
             auth()->user(),
             new UserDataObject(
                 request: $request,
-            )
+            ),
         );
         return redirect()
             ->back()

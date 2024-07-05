@@ -21,7 +21,7 @@ final class TranslationsServiceProvider extends LaravelTranslationsApplicationSe
                 'admin@jnkconsult.be',
                 'info@cetronicbenelux.com',
                 'bhamani.geoffrey@gmail.com',
-                'geoffrey@cetronicbenelux.com'
+                'geoffrey@cetronicbenelux.com',
             ]);
         });
     }

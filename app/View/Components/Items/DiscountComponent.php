@@ -6,13 +6,13 @@ namespace App\View\Components\Items;
 
 use App\Models\Item;
 use App\Services\UserService;
+use Closure;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 use Illuminate\View\Component;
-use Closure;
 
 final class DiscountComponent extends Component
 {

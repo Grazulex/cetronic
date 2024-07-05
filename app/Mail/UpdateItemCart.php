@@ -17,9 +17,7 @@ final class UpdateItemCart extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public function __construct(protected Item $item, protected User $user)
-    {
-    }
+    public function __construct(protected Item $item, protected User $user) {}
 
     public function envelope(): Envelope
     {
@@ -33,7 +31,7 @@ final class UpdateItemCart extends Mailable
         return new Content(
             view: 'emails.cart.updateItem',
             with: [
-                'product' => $this->item->category->name.' - '.$this->item->brand->name.' ('.$this->item->reference.')',
+                'product' => $this->item->category->name . ' - ' . $this->item->brand->name . ' (' . $this->item->reference . ')',
                 'name' => $this->user->name,
             ],
         );

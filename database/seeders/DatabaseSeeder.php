@@ -85,7 +85,7 @@ final class DatabaseSeeder extends Seeder
             foreach ($items as $item) {
                 $metas = CategoryMeta::where(
                     'category_id',
-                    $category->id
+                    $category->id,
                 )->get();
                 foreach ($metas as $meta) {
                     if ($meta->is_color) {
@@ -138,7 +138,7 @@ final class DatabaseSeeder extends Seeder
 
     public function getRandomColor()
     {
-        return '#'.
+        return '#' .
             str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
     }
 }

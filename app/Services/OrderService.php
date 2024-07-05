@@ -25,8 +25,8 @@ final class OrderService
     {
         $order = (new CreateOrderAction())->handle(
             new OrderDataObject(
-                cart: $cart
-            )
+                cart: $cart,
+            ),
         );
 
         $cartItems = $cart->items;
@@ -34,8 +34,8 @@ final class OrderService
             (new CreateOrderItemAction())->handle(
                 new OrderItemDataObject(
                     order: $order,
-                    cartItem: $cartItem
-                )
+                    cartItem: $cartItem,
+                ),
             );
         }
         $cart->status = CartStatusEnum::SOLD;
@@ -48,33 +48,33 @@ final class OrderService
     {
         $items = $order->items;
         $zip = new ZipArchive();
-        $filename = mb_strtoupper($order->reference.'.zip');
+        $filename = mb_strtoupper($order->reference . '.zip');
 
         $zip->open(
-            public_path('/storage/orders/'.$filename),
-            ZipArchive::CREATE | ZipArchive::OVERWRITE
+            public_path('/storage/orders/' . $filename),
+            ZipArchive::CREATE | ZipArchive::OVERWRITE,
         );
         foreach ($items as $item) {
             $i = 1;
-            foreach (Storage::allFiles('public/items/'.$item->item->id)
+            foreach (Storage::allFiles('public/items/' . $item->item->id)
                 as $file) {
                 $name = basename($file);
                 $zip->addFile(
                     public_path(
-                        'storage/items/'.$item->item->id.'/'.$name
+                        'storage/items/' . $item->item->id . '/' . $name,
                     ),
-                    $item->item->reference.
-                        '_'.
-                        $i.
-                        '.'.
-                        File::extension($file)
+                    $item->item->reference .
+                        '_' .
+                        $i .
+                        '.' .
+                        File::extension($file),
                 );
                 $i++;
             }
         }
         $zip->close();
 
-        return public_path('/storage/orders/'.$filename);
+        return public_path('/storage/orders/' . $filename);
     }
 
     public function getPdf(Order $order): Response
@@ -98,14 +98,14 @@ final class OrderService
             $lastOrderReference = (int) $lastOrderReference;
             $lastOrderReference++;
             $lastOrderReference = str_pad(
-                (string)$lastOrderReference,
+                (string) $lastOrderReference,
                 4,
                 '0',
-                STR_PAD_LEFT
+                STR_PAD_LEFT,
             );
-            $lastOrderReference = $year.$month.'-'.$lastOrderReference;
+            $lastOrderReference = $year . $month . '-' . $lastOrderReference;
         } else {
-            $lastOrderReference = $year.$month.'-'.'0001';
+            $lastOrderReference = $year . $month . '-' . '0001';
         }
 
         return $lastOrderReference;
@@ -115,23 +115,23 @@ final class OrderService
     {
         $items = $order->items;
         $zip = new ZipArchive();
-        $filename = mb_strtoupper($order->reference.'.zip');
+        $filename = mb_strtoupper($order->reference . '.zip');
 
         $zip->open(
-            public_path('/storage/orders/'.$filename),
-            ZipArchive::CREATE | ZipArchive::OVERWRITE
+            public_path('/storage/orders/' . $filename),
+            ZipArchive::CREATE | ZipArchive::OVERWRITE,
         );
         foreach ($items as $item) {
             foreach ($item->item->getMedia()
                      as $file) {
                 $zip->addFile(
                     $file->getPath(),
-                    $file->file_name
+                    $file->file_name,
                 );
             }
         }
         $zip->close();
 
-        return public_path('/storage/orders/'.$filename);
+        return public_path('/storage/orders/' . $filename);
     }
 }

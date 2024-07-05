@@ -79,7 +79,7 @@ final class UserResource extends Resource
                     Stack::make([
                         BadgeColumn::make('orders_count')
                             ->counts(
-                                'orders'
+                                'orders',
                             )
                             ->suffix(' orders')
                             ->color('primary')
@@ -102,7 +102,7 @@ final class UserResource extends Resource
                             ->sortable()
                             ->searchable(),
                     ]),
-                ])
+                ]),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -128,7 +128,7 @@ final class UserResource extends Resource
                                 $userService = new UserService($record);
                                 echo $userService->getPdf();
                             },
-                            'order_'.$record->id.'.pdf'
+                            'order_' . $record->id . '.pdf',
                         );
                     })
                     ->icon('heroicon-s-printer')
@@ -243,6 +243,6 @@ final class UserResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return (string)static::getModel()::count();
+        return (string) static::getModel()::count();
     }
 }

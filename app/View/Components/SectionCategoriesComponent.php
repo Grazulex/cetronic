@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\View\Components;
 
 use App\Services\CategoryService;
-use Illuminate\View\Component;
 use Closure;
+use Illuminate\View\Component;
 
 final class SectionCategoriesComponent extends Component
 {
@@ -15,9 +15,7 @@ final class SectionCategoriesComponent extends Component
      *
      * @return void
      */
-    public function __construct(private CategoryService $categoryService)
-    {
-    }
+    public function __construct(private CategoryService $categoryService) {}
 
     /**
      * Get the view / contents that represent the component.

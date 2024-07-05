@@ -16,6 +16,6 @@ final class OrderObserver
 
     public function deleted(Order $order): void
     {
-        $order->update(['reference' => $order->reference.'-DELETED']);
+        $order->update(['reference' => $order->reference . '-DELETED']);
     }
 }

@@ -60,7 +60,7 @@ final class ListingController extends Controller
     {
         $search = $request->get('search-input');
 
-        $items = Item::where('reference', 'LIKE', '%'.$search.'%')
+        $items = Item::where('reference', 'LIKE', '%' . $search . '%')
             ->enable(auth()->user())
             ->with('category')
             ->with('brand')
@@ -72,13 +72,13 @@ final class ListingController extends Controller
 
         if (count($items) > 1) {
             return view('front.pages.search', compact('search', 'items'));
-        } else {
-            if (1 === count($items)) {
-                return redirect()->route('item', ['item' => $items->first()->slug]);
-            } else {
-                return redirect()->route('home');
-            }
         }
+        if (1 === count($items)) {
+            return redirect()->route('item', ['item' => $items->first()->slug]);
+        }
+        return redirect()->route('home');
+
+
     }
 
 }

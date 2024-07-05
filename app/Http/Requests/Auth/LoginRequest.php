@@ -29,7 +29,7 @@ final class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (auth()->attemptWhen($this->only('email', 'password'), fn ($user) => $user->can_connect(), $this->boolean('remember'))) {
+        if (auth()->attemptWhen($this->only('email', 'password'), fn($user) => $user->can_connect(), $this->boolean('remember'))) {
             RateLimiter::clear($this->throttleKey());
         } else {
             throw ValidationException::withMessages([
@@ -69,6 +69,6 @@ final class LoginRequest extends FormRequest
 
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->input('email')) . '|' . $this->ip());
     }
 }

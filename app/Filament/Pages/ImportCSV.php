@@ -10,26 +10,15 @@ use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Pages\Page;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Redirector;
 use Maatwebsite\Excel\Facades\Excel;
-use Filament\Pages\Page;
 use Maatwebsite\Excel\HeadingRowImport;
 
 final class ImportCSV extends Page implements HasForms
 {
     use InteractsWithForms;
-
-    protected static ?string $navigationIcon = 'heroicon-o-cloud-upload';
-
-    protected static ?string $navigationGroup = 'Upload';
-
-    protected static function shouldRegisterNavigation(): bool
-    {
-        return UserRoleEnum::ADMIN === auth()->user()?->role;
-    }
-
-    protected static string $view = 'filament.pages.import-c-s-v';
 
     public array $csv = [];
 
@@ -37,9 +26,15 @@ final class ImportCSV extends Page implements HasForms
 
     public int $category_id;
 
+    protected static ?string $navigationIcon = 'heroicon-o-cloud-upload';
+
+    protected static ?string $navigationGroup = 'Upload';
+
+    protected static string $view = 'filament.pages.import-c-s-v';
+
     protected array $rules = [
         'category_id' => 'required',
-        'csv' => 'required'
+        'csv' => 'required',
     ];
 
     public function submit(): Redirector|RedirectResponse
@@ -52,6 +47,11 @@ final class ImportCSV extends Page implements HasForms
         }
 
         return redirect()->route(route: 'filament.resources.items.index')->with(key: 'success', value: 'CSV imported successfully!');
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
     protected function getFormSchema(): array

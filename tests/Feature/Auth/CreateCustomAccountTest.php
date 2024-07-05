@@ -49,7 +49,7 @@ it('can create a new account', function (): void {
             'brands' => ['brand1', 'brand2'],
             'password' => 'password',
             'password_confirmation' => 'password',
-        ]
+        ],
     )
         ->assertRedirect(route('user_thanks'))
         ->assertSessionHas('status', __('user.auth.registered.waiting'));
@@ -108,7 +108,7 @@ it('can not create a account without email', function (): void {
             'brands' => ['brand1', 'brand2'],
             'password' => 'password',
             'password_confirmation' => 'password',
-        ]
+        ],
     )
         ->assertSessionHasErrors('email');
 });
@@ -132,7 +132,7 @@ it('can not create a account without vat', function (): void {
             'brands' => ['brand1', 'brand2'],
             'password' => 'password',
             'password_confirmation' => 'password',
-        ]
+        ],
     )
         ->assertSessionHasErrors('vat');
 });

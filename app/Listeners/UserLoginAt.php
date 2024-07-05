@@ -15,9 +15,7 @@ final class UserLoginAt
      *
      * @return void
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 
     public function handle(Login $event): void

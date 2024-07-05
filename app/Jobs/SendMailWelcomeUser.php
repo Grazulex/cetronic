@@ -20,9 +20,7 @@ final class SendMailWelcomeUser implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public User $user)
-    {
-    }
+    public function __construct(public User $user) {}
 
     public function handle(): void
     {

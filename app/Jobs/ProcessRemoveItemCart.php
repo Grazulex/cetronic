@@ -23,9 +23,7 @@ final class ProcessRemoveItemCart implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public Item $item)
-    {
-    }
+    public function __construct(public Item $item) {}
 
     public function handle(): void
     {
@@ -39,7 +37,7 @@ final class ProcessRemoveItemCart implements ShouldQueue
                     item: $this->item,
                     user: $cartItem->cart->user,
                     quantity: $cartItem->quantity,
-                )
+                ),
             );
 
             if ($cartItem->cart->user->can_connect() && $cartItem->cart->user->receive_cart_notification) {

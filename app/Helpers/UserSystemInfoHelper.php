@@ -108,7 +108,7 @@ final class UserSystemInfoHelper
 
         if ((mb_strpos(
             mb_strtolower($_SERVER['HTTP_ACCEPT']),
-            'application/vnd.wap.xhtml+xml'
+            'application/vnd.wap.xhtml+xml',
         ) > 0) ||
             ((isset($_SERVER['HTTP_X_WAP_PROFILE']) ||
                 isset($_SERVER['HTTP_PROFILE'])))) {
@@ -144,14 +144,15 @@ final class UserSystemInfoHelper
             //do something for tablet devices
 
             return 'Tablet';
-        } elseif ($mobile_browser > 0) {
+        }
+        if ($mobile_browser > 0) {
             //do something for mobile devices
 
             return 'Mobile';
-        } else {
-            //do something for everything else
-            return 'Computer';
         }
+        //do something for everything else
+        return 'Computer';
+
     }
     private static function get_user_agent(): string
     {

@@ -37,14 +37,14 @@ final class CartService
         return (int) CartItem::where('cart_id', $cart->id)->sum('quantity');
     }
 
-    public function creatNewCart(User $user, string $cookie = null): Cart
+    public function creatNewCart(User $user, ?string $cookie = null): Cart
     {
         if ($cookie) {
             $cart = (new CreateCartAction())->handle(
                 new CartDataObject(
                     user: (new GuestService())->getGuestUser(),
                     cookie: $cookie,
-                )
+                ),
             );
         } else {
             $cart = (new CreateCartAction())->handle(
@@ -52,7 +52,7 @@ final class CartService
                     user: $user,
                     shipping_location: ($shipping = $user->locations()->where('type', LocationTypeEnum::SHIPPING)->first()) ? $shipping : null,
                     invoice_location: ($invoice = $user->locations()->where('type', LocationTypeEnum::INVOICE)->first()) ? $invoice : null,
-                )
+                ),
             );
         }
 
@@ -105,7 +105,7 @@ final class CartService
                     price_promo: $price_promo,
                     quantity: $quantity,
                     variant: $variant,
-                )
+                ),
             );
         }
 

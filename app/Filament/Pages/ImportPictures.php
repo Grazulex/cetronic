@@ -21,22 +21,17 @@ final class ImportPictures extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-photograph';
-
-    protected static ?string $navigationGroup = 'Upload';
-
-    protected static string $view = 'filament.pages.import-pictures';
-
-    protected static function shouldRegisterNavigation(): bool
-    {
-        return UserRoleEnum::ADMIN === auth()->user()?->role;
-    }
-
     public array $pictures = [];
 
     public int $brand_id;
 
     public int $category_id;
+
+    protected static ?string $navigationIcon = 'heroicon-o-photograph';
+
+    protected static ?string $navigationGroup = 'Upload';
+
+    protected static string $view = 'filament.pages.import-pictures';
 
     protected array $rules = [
         'brand_id' => 'required',
@@ -83,7 +78,7 @@ final class ImportPictures extends Page implements HasForms
                 $order = $item->media->count() + 1;
                 if (str_contains($filename, '_')) {
                     $parts = explode(separator: '_', string: $filename);
-                    $order = (int)$parts[count($parts) - 1];
+                    $order = (int) $parts[count($parts) - 1];
                 }
 
                 try {
@@ -98,6 +93,11 @@ final class ImportPictures extends Page implements HasForms
         }
 
         return redirect()->route(route: 'filament.resources.items.index')->with(key: 'success', value: 'Pictures imported successfully!');
+    }
+
+    protected static function shouldRegisterNavigation(): bool
+    {
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
     protected function getFormSchema(): array

@@ -19,9 +19,7 @@ use Illuminate\Support\Collection;
 
 final readonly class UserService
 {
-    public function __construct(private User $user)
-    {
-    }
+    public function __construct(private User $user) {}
 
     public function getAllMetasExcluded(): Collection
     {
@@ -31,7 +29,7 @@ final readonly class UserService
             ->pluck('category_meta_value');
     }
 
-    public function getAllBrandAndCategoryRules(Brand $brand, Category $category = null): null|Collection
+    public function getAllBrandAndCategoryRules(Brand $brand, ?Category $category = null): null|Collection
     {
         if ($category) {
             if ( ! $rule = UserBrand::where('user_id', $this->user->id)->where('brand_id', $brand->id)->where('category_id', $category->id)->get()) {
@@ -39,9 +37,9 @@ final readonly class UserService
             }
 
             return $rule;
-        } else {
-            return UserBrand::where('user_id', $this->user->id)->where('brand_id', $brand->id)->get();
         }
+        return UserBrand::where('user_id', $this->user->id)->where('brand_id', $brand->id)->get();
+
     }
 
     public function getAllBrandAndCategoryDiscounts(Brand $brand, Category $category): null|Collection
@@ -54,7 +52,7 @@ final readonly class UserService
         return UserDiscount::where('user_id', $this->user->id)->where('brand_id', $brand->id)->where('category_id', $category->id)->where('quantity', '<=', $quantity)->orderBy('quantity', 'desc')->first();
     }
 
-    public function getOpenCart(string $cookie = null): Cart|null
+    public function getOpenCart(?string $cookie = null): Cart|null
     {
         if ($cookie) {
             $guest = (new GuestService())->getGuestUser();

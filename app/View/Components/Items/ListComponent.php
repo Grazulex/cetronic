@@ -67,7 +67,7 @@ final class ListComponent extends Component
         }
 
         if ($request->has('paginate')) {
-            $this->paginate = (int)$request->get('paginate');
+            $this->paginate = (int) $request->get('paginate');
         }
     }
 

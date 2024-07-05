@@ -13,8 +13,7 @@ final readonly class CartOutDataObject
         private Item $item,
         private User $user,
         private int  $quantity = 1,
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

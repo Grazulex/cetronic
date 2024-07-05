@@ -13,6 +13,10 @@ use Filament\Widgets\StatsOverviewWidget\Card;
 
 final class StatsOverview extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return UserRoleEnum::ADMIN === auth()->user()?->role;
+    }
     protected function getCards(): array
     {
         return [
@@ -20,10 +24,5 @@ final class StatsOverview extends BaseWidget
             Card::make('Items off line', Item::where('is_published', false)->count())->color('warning'),
             Card::make('Carts open', Cart::where('status', CartStatusEnum::OPEN->value)->count())->color('success'),
         ];
-    }
-
-    public static function canView(): bool
-    {
-        return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 }

@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 use function Pest\Laravel\actingAs;
 
-function loginAsUser(User $user = null): User
+function loginAsUser(?User $user = null): User
 {
-    $user = $user ?? User::factory()->create([
+    $user ??= User::factory()->create([
         'role' => UserRoleEnum::CUSTOMER,
         'is_actif' => true,
     ]);
@@ -26,9 +26,9 @@ function loginAsUser(User $user = null): User
     return $user;
 }
 
-function loginAsAdmin(User $user = null): User
+function loginAsAdmin(?User $user = null): User
 {
-    $user = $user ?? User::factory()->create([
+    $user ??= User::factory()->create([
         'role' => UserRoleEnum::ADMIN,
         'is_actif' => true,
     ]);
@@ -37,9 +37,9 @@ function loginAsAdmin(User $user = null): User
     return $user;
 }
 
-function loginAsAgent(User $user = null): User
+function loginAsAgent(?User $user = null): User
 {
-    $user = $user ?? User::factory()->create([
+    $user ??= User::factory()->create([
         'role' => UserRoleEnum::AGENT,
         'is_actif' => true,
     ]);
@@ -52,8 +52,8 @@ function createItems(int $count): Collection
 {
     Brand::factory()->count(1)->create(['is_featured' => true]);
     $category = Category::factory()->count(1)->create();
-    CategoryTranslation::factory()->count(1)->create(['category_id' => $category->first()->id, 'locale' => 'fr', 'name' => 'FR-'.$category->first()->name]);
-    CategoryTranslation::factory()->count(1)->create(['category_id' => $category->first()->id, 'locale' => 'nl', 'name' => 'NL-'.$category->first()->name]);
+    CategoryTranslation::factory()->count(1)->create(['category_id' => $category->first()->id, 'locale' => 'fr', 'name' => 'FR-' . $category->first()->name]);
+    CategoryTranslation::factory()->count(1)->create(['category_id' => $category->first()->id, 'locale' => 'nl', 'name' => 'NL-' . $category->first()->name]);
     $categoryMeta = CategoryMeta::factory()->count(1)->create(['category_id' => $category->first()->id]);
     $items = Item::factory()->count($count)->create(['brand_id' => Brand::first()->id, 'category_id' => $category->first()->id, 'is_published' => true]);
 

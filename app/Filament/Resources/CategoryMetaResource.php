@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Enum\UserRoleEnum;
+use App\Filament\Resources\CategoryMetaResource\Pages\EditCategoryMeta;
+use App\Filament\Resources\CategoryMetaResource\Pages\ListCategoryMetas;
 use App\Filament\Resources\CategoryMetaResource\RelationManagers\TranslationsRelationManager;
 use App\Models\CategoryMeta;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteBulkAction;
-use App\Filament\Resources\CategoryMetaResource\Pages\ListCategoryMetas;
-use App\Filament\Resources\CategoryMetaResource\Pages\EditCategoryMeta;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TextColumn;
 
 final class CategoryMetaResource extends Resource
 {
@@ -50,7 +50,7 @@ final class CategoryMetaResource extends Resource
                 TextColumn::make('category.name')->searchable(),
                 TextColumn::make('name')->searchable(),
                 BadgeColumn::make('translations_count')->counts(
-                    'translations'
+                    'translations',
                 ),
             ])
             ->filters([

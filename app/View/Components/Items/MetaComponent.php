@@ -6,9 +6,9 @@ namespace App\View\Components\Items;
 
 use App\Models\Item;
 use App\Models\ItemMeta;
+use Closure;
 use Illuminate\Support\Facades\App;
 use Illuminate\View\Component;
-use Closure;
 
 final class MetaComponent extends Component
 {

@@ -57,8 +57,8 @@ final class ItemMeta extends Model
     protected function color(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value,
-            set: fn ($value) => $value
+            get: fn($value) => $value,
+            set: fn($value) => $value,
         );
     }
 }

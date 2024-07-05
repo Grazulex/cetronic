@@ -29,7 +29,7 @@ final class LatestCartsOpen extends BaseWidget
 
     protected function getTableRecordUrlUsing(): Closure
     {
-        return fn (Model $record): string => route('filament.resources.carts.edit', ['record' => $record]);
+        return fn(Model $record): string => route('filament.resources.carts.edit', ['record' => $record]);
     }
 
     protected function getTableColumns(): array

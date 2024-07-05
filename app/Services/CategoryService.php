@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 final class CategoryService
 {
-    public function getCategories(User $user = null): Collection
+    public function getCategories(?User $user = null): Collection
     {
         return Category::enabled(auth()->user())
             ->select(['id', 'name', 'slug'])

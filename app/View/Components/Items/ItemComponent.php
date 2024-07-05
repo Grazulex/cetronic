@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\View\Components\Items;
 
 use App\Models\Item;
-use Illuminate\View\Component;
 use Closure;
+use Illuminate\View\Component;
 
 final class ItemComponent extends Component
 {
@@ -15,9 +15,7 @@ final class ItemComponent extends Component
      *
      * @return void
      */
-    public function __construct(public Item $item)
-    {
-    }
+    public function __construct(public Item $item) {}
 
     /**
      * Get the view / contents that represent the component.

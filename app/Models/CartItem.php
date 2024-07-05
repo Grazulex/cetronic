@@ -20,7 +20,7 @@ final class CartItem extends Model
         'price_old',
         'price',
         'price_promo',
-        'variant'
+        'variant',
     ];
 
     public function item(): BelongsTo
@@ -36,24 +36,24 @@ final class CartItem extends Model
     protected function priceOld(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function price(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function pricePromo(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 }

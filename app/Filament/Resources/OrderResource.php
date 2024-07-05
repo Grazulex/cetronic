@@ -71,7 +71,7 @@ final class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status')->sortable(),
                 Tables\Columns\TextColumn::make('total_price')->suffix('€')->alignRight(),
                 Tables\Columns\BadgeColumn::make('items_count')->counts(
-                    'items'
+                    'items',
                 )->alignRight(),
             ])
             ->defaultSort('created_at', 'desc')
@@ -79,22 +79,22 @@ final class OrderResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
                 Filter::make('open')
                     ->query(
-                        fn (Builder $query): Builder => $query->where(
+                        fn(Builder $query): Builder => $query->where(
                             'status',
-                            OrderStatusEnum::OPEN->value
-                        )
+                            OrderStatusEnum::OPEN->value,
+                        ),
                     ),
                 Filter::make('in preparation')->query(
-                    fn (Builder $query): Builder => $query->where(
+                    fn(Builder $query): Builder => $query->where(
                         'status',
-                        OrderStatusEnum::IN_PREPARATION->value
-                    )
+                        OrderStatusEnum::IN_PREPARATION->value,
+                    ),
                 ),
                 Filter::make('shipped')->query(
-                    fn (Builder $query): Builder => $query->where(
+                    fn(Builder $query): Builder => $query->where(
                         'status',
-                        OrderStatusEnum::SHIPPED->value
-                    )
+                        OrderStatusEnum::SHIPPED->value,
+                    ),
                 ),
             ])
             ->actions([
@@ -109,7 +109,7 @@ final class OrderResource extends Resource
                                 $orderService = new OrderService();
                                 echo $orderService->getPdf($record);
                             },
-                            'order_'.$record->reference.'.pdf'
+                            'order_' . $record->reference . '.pdf',
                         );
                     })
                     ->tooltip(__('Export'))
@@ -157,6 +157,6 @@ final class OrderResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return (string)static::getModel()::count();
+        return (string) static::getModel()::count();
     }
 }

@@ -20,7 +20,7 @@ final class CategoryMeta extends Model
         'is_meta',
         'is_export',
         'is_variant',
-        'is_choice'
+        'is_choice',
     ];
 
     protected $casts = [
@@ -28,7 +28,7 @@ final class CategoryMeta extends Model
         'is_meta' => 'boolean',
         'is_export' => 'boolean',
         'is_variant' => 'boolean',
-        'is_choice' => 'boolean'
+        'is_choice' => 'boolean',
     ];
 
     public function category(): BelongsTo

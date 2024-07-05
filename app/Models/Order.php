@@ -56,7 +56,7 @@ final class Order extends Model
         'invoice_country',
         'invoice_vat',
         'comment',
-        'franco'
+        'franco',
 
     ];
 
@@ -94,88 +94,88 @@ final class Order extends Model
     protected function franco(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalPrice(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalPriceWithTax(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalTax(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalShipping(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalShippingWithTax(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalShippingTax(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalProducts(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalProductsWithTax(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function totalProductsTax(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function discount(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 }

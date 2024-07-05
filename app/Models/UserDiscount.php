@@ -41,8 +41,8 @@ final class UserDiscount extends Model
     protected function reduction(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 }

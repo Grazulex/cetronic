@@ -28,7 +28,7 @@ final class LatestCustomersToActived extends BaseWidget
 
     protected function getTableRecordUrlUsing(): Closure
     {
-        return fn (Model $record): string => route('filament.resources.users.edit', ['record' => $record]);
+        return fn(Model $record): string => route('filament.resources.users.edit', ['record' => $record]);
     }
 
     protected function getTableColumns(): array

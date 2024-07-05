@@ -23,9 +23,7 @@ final class ProcessUpdatePriceCart implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public Item $item, public ?User $user = null)
-    {
-    }
+    public function __construct(public Item $item, public ?User $user = null) {}
 
     public function handle(): void
     {

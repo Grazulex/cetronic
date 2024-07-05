@@ -50,10 +50,10 @@ it('have reduction without promo with default price', closure: function (): void
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe($item->price * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe(0);
-        expect((int)$prices['sale'] * 100)->toBe($item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe((int)($item->price - ($item->price * $userBrand->first()->reduction / 100)) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe($item->price * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe(0);
+        expect((int) $prices['sale'] * 100)->toBe($item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe((int) ($item->price - ($item->price * $userBrand->first()->reduction / 100)) * 100);
     }
 });
 
@@ -65,10 +65,10 @@ it('have coefficient without promo with default price', closure: function (): vo
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe(($item->price * $userBrand->first()->coefficient) * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe(0);
-        expect((int)$prices['sale'] * 100)->toBe($item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe(($item->price * $userBrand->first()->coefficient) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe(($item->price * $userBrand->first()->coefficient) * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe(0);
+        expect((int) $prices['sale'] * 100)->toBe($item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe(($item->price * $userBrand->first()->coefficient) * 100);
     }
 });
 
@@ -80,10 +80,10 @@ it('have additional price without promo with default price', closure: function (
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe(0);
-        expect((int)$prices['sale'] * 100)->toBe($item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe(0);
+        expect((int) $prices['sale'] * 100)->toBe($item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * 100);
     }
 });
 
@@ -95,10 +95,10 @@ it('have promo with default price', closure: function (): void {
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe((int)$item->price * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe((int)$item->price_promo * 100);
-        expect((int)$prices['sale'] * 100)->toBe((int)$item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe((int)(($item->price_promo > 0) ? $item->price_promo : $item->price) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe((int) $item->price * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe((int) $item->price_promo * 100);
+        expect((int) $prices['sale'] * 100)->toBe((int) $item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe((int) (($item->price_promo > 0) ? $item->price_promo : $item->price) * 100);
     }
 });
 
@@ -110,10 +110,10 @@ it('have reduction with promo with default price', closure: function (): void {
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe((int)$item->price * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe((int)$item->price_promo * 100);
-        expect((int)$prices['sale'] * 100)->toBe((int)$item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe((int)((($item->price_promo > 0) ? $item->price_promo : $item->price) - ((($item->price_promo > 0) ? $item->price_promo : $item->price) * $userBrand->first()->reduction / 100)) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe((int) $item->price * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe((int) $item->price_promo * 100);
+        expect((int) $prices['sale'] * 100)->toBe((int) $item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe((int) ((($item->price_promo > 0) ? $item->price_promo : $item->price) - ((($item->price_promo > 0) ? $item->price_promo : $item->price) * $userBrand->first()->reduction / 100)) * 100);
     }
 });
 
@@ -126,10 +126,10 @@ it('have coefficient with promo with default price', closure: function (): void 
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe((int)($item->price * $userBrand->first()->coefficient) * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe((int)($item->price_promo * $userBrand->first()->coefficient) * 100);
-        expect((int)$prices['sale'] * 100)->toBe((int)$item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe((int)($item->price_promo * $userBrand->first()->coefficient) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe((int) ($item->price * $userBrand->first()->coefficient) * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe((int) ($item->price_promo * $userBrand->first()->coefficient) * 100);
+        expect((int) $prices['sale'] * 100)->toBe((int) $item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe((int) ($item->price_promo * $userBrand->first()->coefficient) * 100);
     }
 });
 
@@ -142,10 +142,10 @@ it('have additional price with promo with default price', closure: function (): 
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe((int)($item->price + $userBrand->first()->addition_price) * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe((int)($item->price_promo + $userBrand->first()->addition_price) * 100);
-        expect((int)$prices['sale'] * 100)->toBe((int)$item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe((int)($item->price_promo + $userBrand->first()->addition_price) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe((int) ($item->price + $userBrand->first()->addition_price) * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe((int) ($item->price_promo + $userBrand->first()->addition_price) * 100);
+        expect((int) $prices['sale'] * 100)->toBe((int) $item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe((int) ($item->price_promo + $userBrand->first()->addition_price) * 100);
     }
 });
 
@@ -157,10 +157,10 @@ it('have reduction + coefficient without promo with promo price', closure: funct
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe($item->price * $userBrand->first()->coefficient * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe(0);
-        expect((int)$prices['sale'] * 100)->toBe($item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe((($item->price * $userBrand->first()->coefficient) - (($item->price * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe($item->price * $userBrand->first()->coefficient * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe(0);
+        expect((int) $prices['sale'] * 100)->toBe($item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe((($item->price * $userBrand->first()->coefficient) - (($item->price * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
     }
 });
 
@@ -172,10 +172,10 @@ it('have reduction + coefficient + additional price without promo with promo pri
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * $userBrand->first()->coefficient * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe(0);
-        expect((int)$prices['sale'] * 100)->toBe($item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe(((($item->price + $userBrand->first()->addition_price) * $userBrand->first()->coefficient) - ((($item->price +  $userBrand->first()->addition_price) * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * $userBrand->first()->coefficient * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe(0);
+        expect((int) $prices['sale'] * 100)->toBe($item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe(((($item->price + $userBrand->first()->addition_price) * $userBrand->first()->coefficient) - ((($item->price +  $userBrand->first()->addition_price) * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
     }
 });
 
@@ -187,10 +187,10 @@ it('have reduction + coefficient with promo with promo price', closure: function
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe($item->price * $userBrand->first()->coefficient * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe($item->price_promo * $userBrand->first()->coefficient * 100);
-        expect((int)$prices['sale'] * 100)->toBe($item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe((($item->price_promo * $userBrand->first()->coefficient) - (($item->price_promo * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe($item->price * $userBrand->first()->coefficient * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe($item->price_promo * $userBrand->first()->coefficient * 100);
+        expect((int) $prices['sale'] * 100)->toBe($item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe((($item->price_promo * $userBrand->first()->coefficient) - (($item->price_promo * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
     }
 });
 
@@ -202,9 +202,9 @@ it('have reduction + coefficient + additional price with promo with promo price'
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice($user);
-        expect((int)$prices['price_start'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * $userBrand->first()->coefficient * 100);
-        expect((int)$prices['price_promo'] * 100)->toBe(($item->price_promo + $userBrand->first()->addition_price) * $userBrand->first()->coefficient * 100);
-        expect((int)$prices['sale'] * 100)->toBe($item->sale_price * 100);
-        expect((int)$prices['price_end'] * 100)->toBe(((($item->price_promo + $userBrand->first()->addition_price) * $userBrand->first()->coefficient) - ((($item->price_promo + $userBrand->first()->addition_price) * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
+        expect((int) $prices['price_start'] * 100)->toBe(($item->price + $userBrand->first()->addition_price) * $userBrand->first()->coefficient * 100);
+        expect((int) $prices['price_promo'] * 100)->toBe(($item->price_promo + $userBrand->first()->addition_price) * $userBrand->first()->coefficient * 100);
+        expect((int) $prices['sale'] * 100)->toBe($item->sale_price * 100);
+        expect((int) $prices['price_end'] * 100)->toBe(((($item->price_promo + $userBrand->first()->addition_price) * $userBrand->first()->coefficient) - ((($item->price_promo + $userBrand->first()->addition_price) * $userBrand->first()->coefficient) * $userBrand->first()->reduction / 100)) * 100);
     }
 });

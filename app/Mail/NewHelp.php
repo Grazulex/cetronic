@@ -15,9 +15,7 @@ final class NewHelp extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public function __construct(protected array $datas)
-    {
-    }
+    public function __construct(protected array $datas) {}
 
     public function envelope(): Envelope
     {

@@ -29,7 +29,7 @@ final class BrandFactory extends Factory
             'description' => fake()->paragraph(),
             'is_published' => true,
             'is_featured' => true,
-            'picture' => 'brands/'.fake()->image('public/storage/brands', 640, 480, null, false),
+            'picture' => 'brands/' . fake()->image('public/storage/brands', 640, 480, null, false),
         ];
     }
 }

@@ -15,7 +15,7 @@ final class UpdatePasswordController extends Controller
         if (
             ! Hash::check(
                 $request->get(key: 'current-password'),
-                auth()->user()->password
+                auth()->user()->password,
             )
         ) {
             // The passwords match
@@ -23,14 +23,14 @@ final class UpdatePasswordController extends Controller
                 ->back()
                 ->with(
                     key: 'error',
-                    value: 'Your current password does not matches with the password.'
+                    value: 'Your current password does not matches with the password.',
                 );
         }
 
         if (
             0 === strcmp(
                 $request->get(key: 'current-password'),
-                $request->get(key: 'new-password')
+                $request->get(key: 'new-password'),
             )
         ) {
             // Current password and new password same
@@ -38,7 +38,7 @@ final class UpdatePasswordController extends Controller
                 ->back()
                 ->with(
                     key: 'error',
-                    value: 'New Password cannot be same as your current password.'
+                    value: 'New Password cannot be same as your current password.',
                 );
         }
 

@@ -16,7 +16,7 @@ final class CategoryTranslationFactory extends Factory
         return [
             'name' => fake()->domainWord(),
             'slug' => fake()->slug(),
-            'locale' => fake()->randomElement(['fr', 'nl'])
+            'locale' => fake()->randomElement(['fr', 'nl']),
         ];
     }
 }

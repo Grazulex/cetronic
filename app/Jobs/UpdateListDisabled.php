@@ -18,9 +18,7 @@ final class UpdateListDisabled implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public UserBrand $userBrand)
-    {
-    }
+    public function __construct(public UserBrand $userBrand) {}
 
 
     public function handle(): void

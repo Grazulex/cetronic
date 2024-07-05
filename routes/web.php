@@ -38,7 +38,7 @@ use Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect;
 */
 
 Route::get('imager/{src?}', function ($src) {
-    $cacheimage = Image::cache(fn ($image) => $image->make('files/image/'.$src)->resize(60, 60), 10, true);
+    $cacheimage = Image::cache(fn($image) => $image->make('files/image/' . $src)->resize(60, 60), 10, true);
 
     return Response::make($cacheimage, 200, ['Content-Type' => 'image/jpeg']);
 });
@@ -47,38 +47,38 @@ Route::get('imager/{src?}', function ($src) {
 Route::get('orders/zip/{order}', function (Order $order, OrderService $orderService) {
     return Response()->download(
         $orderService->getPicturesZip($order),
-        mb_strtoupper($order->reference).'.zip',
-        ['Content-type' => 'application/zip']
+        mb_strtoupper($order->reference) . '.zip',
+        ['Content-type' => 'application/zip'],
     );
 })->name('user_orders.zip');
 Route::get('items/zip/{item}', function (Item $item, ItemService $itemService) {
     return Response()->download(
         $itemService->getPicturesZip($item),
-        mb_strtoupper($item->slug).'.jpeg',
-        ['Content-type' => 'media/jpeg']
+        mb_strtoupper($item->slug) . '.jpeg',
+        ['Content-type' => 'media/jpeg'],
     );
 })->name('item.zip');
 Route::get('orders/pdf/{order}', function (Order $order, OrderService $orderService) {
     return response()->streamDownload(function () use ($order, $orderService): void {
         echo $orderService->getPdf($order);
-    }, mb_strtoupper($order->reference).'.pdf');
+    }, mb_strtoupper($order->reference) . '.pdf');
 })->name('user_orders.pdf');
-Route::get('order/thanks', fn () => view('front.pages.order.thanks'))->name('order.thanks');
+Route::get('order/thanks', fn() => view('front.pages.order.thanks'))->name('order.thanks');
 Route::view('register/thanks', 'front.users.thanks')->name('user_thanks');
 
-Route::get('brands/download_agent', fn () => Excel::download(new ItemsExport(), 'cetronic-items-catalog.xlsx'))->name('brand.download.agent');
+Route::get('brands/download_agent', fn() => Excel::download(new ItemsExport(), 'cetronic-items-catalog.xlsx'))->name('brand.download.agent');
 
 Route::get('brands/download/{brand}/{catSlug}', function (Brand $brand, string $slug, BrandService $brandService) {
     return response()->streamDownload(function () use ($brand, $slug, $brandService): void {
         echo $brandService->getCatalog($brand, $slug, auth()->user());
-    }, mb_strtoupper($brand->name).'.pdf');
+    }, mb_strtoupper($brand->name) . '.pdf');
 })->name('brand.download.catalog');
 
 Route::get('brands/download_zip/{brand}/{catSlug}', function (Brand $brand, string $slug, BrandService $brandService) {
     return Response()->download(
         $brandService->getPictures($brand, $slug),
-        mb_strtoupper($brand->slug).'.zip',
-        ['Content-type' => 'application/zip']
+        mb_strtoupper($brand->slug) . '.zip',
+        ['Content-type' => 'application/zip'],
     );
 })->name('brand.download.zip');
 
@@ -101,7 +101,7 @@ Route::group(
         Route::view('help', 'front.pages.help')->name('help');
         Route::post('help-send', SendHelpController::class)->name('help.send');
         Route::get('cart', [CartController::class, 'index'])->name('cart');
-        Route::get('item/{item:slug}', fn (Item $item) => view('front.pages.item', ['item' => $item]))->name('item');
+        Route::get('item/{item:slug}', fn(Item $item) => view('front.pages.item', ['item' => $item]))->name('item');
 
         Route::group(
             [
@@ -109,12 +109,12 @@ Route::group(
                 'middleware' => [Authenticate::class],
             ],
             function (): void {
-                Route::get('{cart}/locations', fn (Cart $cart) => view('front.pages.cart.locations', ['cart' => $cart]))->name('cart.locations');
+                Route::get('{cart}/locations', fn(Cart $cart) => view('front.pages.cart.locations', ['cart' => $cart]))->name('cart.locations');
                 Route::controller(CartController::class)->group(function (): void {
                     Route::get('{cart}/confirm', 'confirm')->name('cart.confirm');
                     Route::get('{cart}/store', 'store')->name('cart.store');
                 });
-            }
+            },
         );
 
         Route::group(
@@ -127,17 +127,17 @@ Route::group(
                 Route::view('profile', 'front.users.profile')->name('user_profile');
                 Route::post('profile', UpdateUserController::class)->name('user_profile.update');
                 Route::view('orders', 'front.users.orders')->name('user_orders');
-                Route::get('orders/content/{order}', fn (Order $order) => view('front.users.orders.detail', ['order' => $order]))->name('user_orders.detail');
+                Route::get('orders/content/{order}', fn(Order $order) => view('front.users.orders.detail', ['order' => $order]))->name('user_orders.detail');
                 Route::post('changePassword', UpdatePasswordController::class)->name('user_profile.changepassword');
                 Route::view('locations', 'front.users.locations')->name('user_locations.list');
                 Route::view('locations/add', 'front.users.locations.form')->name('user_location.add');
-                Route::get('locations/{location}/edit', fn (Location $location) => view('front.users.locations.form', ['location' => $location]))->name('user_location.edit');
+                Route::get('locations/{location}/edit', fn(Location $location) => view('front.users.locations.form', ['location' => $location]))->name('user_location.edit');
                 Route::controller(UserController::class)->group(function (): void {
                     Route::get('locations/{location}/delete', 'locationDelete')->name('user_location.delete');
                     Route::post('locations/create', 'locationCreate')->name('user_location.create');
                     Route::post('locations/{location}/update', 'locationUpdate')->name('user_location.update');
                 });
-            }
+            },
         );
 
         Route::get('{cat}/{type}/{slug}', [
@@ -145,6 +145,6 @@ Route::group(
             'index',
         ])->name('list');
 
-        require __DIR__.'/auth.php';
-    }
+        require __DIR__ . '/auth.php';
+    },
 );

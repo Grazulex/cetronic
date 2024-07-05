@@ -22,9 +22,7 @@ final class ProcessAddItemCart implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public Item $item)
-    {
-    }
+    public function __construct(public Item $item) {}
 
     public function handle(): void
     {
@@ -47,7 +45,7 @@ final class ProcessAddItemCart implements ShouldQueue
                 price: $item['price_promo'],
                 price_promo: $item['price_end'],
                 quantity: $cartOut->quantity,
-                price_old: $item['price_start']
+                price_old: $item['price_start'],
             );
 
             if ($cartOut->user->can_connect() && $cartOut->user->receive_cart_notification) {

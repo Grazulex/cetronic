@@ -10,7 +10,7 @@ trait EnumFormat
     {
         $list = [];
         foreach (self::cases() as $case) {
-            $list[$case->$column] = $case->$key;
+            $list[$case->{$column}] = $case->{$key};
         }
         return $list;
     }

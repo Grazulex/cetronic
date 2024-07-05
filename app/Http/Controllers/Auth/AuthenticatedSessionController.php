@@ -24,7 +24,7 @@ final class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        return redirect(app()->getLocale().RouteServiceProvider::HOME);
+        return redirect(app()->getLocale() . RouteServiceProvider::HOME);
     }
 
     public function destroy(Request $request): RedirectResponse

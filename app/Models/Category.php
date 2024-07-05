@@ -21,14 +21,14 @@ final class Category extends Model
         'is_export',
         'picture',
         'order',
-        'show_picture_variant'
+        'show_picture_variant',
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
         'is_featured' => 'boolean',
         'is_export' => 'boolean',
-        'show_picture_variant' => 'boolean'
+        'show_picture_variant' => 'boolean',
     ];
 
     public function metas(): HasMany

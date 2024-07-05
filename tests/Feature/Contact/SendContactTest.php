@@ -25,7 +25,7 @@ it('can send a contact', function (): void {
             'email' => fake()->email,
             'phone' => fake()->phoneNumber,
             'message' => fake()->text,
-        ]
+        ],
     );
     $response->assertStatus(Response::HTTP_FOUND);
     $response->assertRedirect(route('contact.thanks'));
@@ -41,6 +41,6 @@ it('can not send a contact if wrong data', function (): void {
             'email' => '',
             'phone' => fake()->phoneNumber,
             'message' => fake()->text,
-        ]
+        ],
     )->assertSessionHasErrors('email');
 });

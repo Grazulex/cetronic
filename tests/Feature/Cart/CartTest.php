@@ -9,9 +9,10 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Location;
 use App\Services\CartService;
-use Symfony\Component\HttpFoundation\Response;
 
 use function Pest\Livewire\livewire;
+
+use Symfony\Component\HttpFoundation\Response;
 
 it('can be incremented', function (): void {
     $items = createItems(15);
@@ -98,7 +99,7 @@ it('can see VAT if belgium', function (Location $location, CountryEnum $country)
     $this->get(uri: route('cart'))
         ->assertStatus(Response::HTTP_OK)
         ->assertSee(__('cart.vat'))
-        ->assertSee(str_replace('.', ',', (string)$total))
+        ->assertSee(str_replace('.', ',', (string) $total))
     ;
 })->with(data: 'locations_be');
 
@@ -119,17 +120,13 @@ it('can not see VAT if not belgium', function (Location $location, CountryEnum $
     $this->get(uri: route('cart'))
         ->assertStatus(Response::HTTP_OK)
         ->assertDontSee(__('cart.vat'))
-        ->assertDontSee(str_replace('.', ',', (string)$total));
+        ->assertDontSee(str_replace('.', ',', (string) $total));
 })->with(data: 'locations_fr');
 
-it('have free shipping if above franco', function (): void {
-})->todo();
+it('have free shipping if above franco', function (): void {})->todo();
 
-it('have shipping if under franco', function (): void {
-})->todo();
+it('have shipping if under franco', function (): void {})->todo();
 
-it('have shipping if fixe shipping price', function (): void {
-})->todo();
+it('have shipping if fixe shipping price', function (): void {})->todo();
 
-it('can update quantity', function (): void {
-})->todo();
+it('can update quantity', function (): void {})->todo();

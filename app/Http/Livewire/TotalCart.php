@@ -19,9 +19,7 @@ final class TotalCart extends Component
 
     protected $listeners = ['total_updated' => 'render'];
 
-    public function mount(): void
-    {
-    }
+    public function mount(): void {}
 
     public function render(GuestService $guestService, CartService $cartService): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {

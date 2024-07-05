@@ -6,8 +6,8 @@ namespace App\View\Components;
 
 use App\Models\Category;
 use App\Services\BrandService;
-use Illuminate\View\Component;
 use Closure;
+use Illuminate\View\Component;
 
 final class MenuFeaturedComponent extends Component
 {

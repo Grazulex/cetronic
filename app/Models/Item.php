@@ -39,7 +39,7 @@ final class Item extends Model implements HasMedia
         'price_special3',
         'price_fix',
         'sale_price',
-        'multiple_quantity'
+        'multiple_quantity',
     ];
 
     protected $casts = [
@@ -88,7 +88,7 @@ final class Item extends Model implements HasMedia
             return $query->where('is_published', true);
         }
 
-        return $query->whereDoesntHave('disables', fn ($query) => $query->where('user_id', $user->id)->where('is_enable', true))
+        return $query->whereDoesntHave('disables', fn($query) => $query->where('user_id', $user->id)->where('is_enable', true))
             ->where('is_published', true);
     }
     public function scopeActive(Builder $query): void
@@ -111,75 +111,75 @@ final class Item extends Model implements HasMedia
         return $this->hasMany(OrderItem::class);
     }
 
-    protected function price(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function priceB2b(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function pricePromo(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function priceSpecial1(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function priceSpecial2(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function priceSpecial3(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function salePrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
-    protected function priceFix(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
-        );
-    }
-
     public function getFirstMediaPathAttribute()
     {
         return file_exists($this->getFirstMediaPath())
             ? $this->getFirstMediaPath()
             : public_path('emptyImage.jpg');
 
+    }
+
+    protected function price(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function priceB2b(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function pricePromo(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function priceSpecial1(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function priceSpecial2(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function priceSpecial3(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function salePrice(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function priceFix(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
     }
 }

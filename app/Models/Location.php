@@ -48,8 +48,8 @@ final class Location extends Model
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => $attributes['vat'].' - '.trim($attributes['company'].' '.$attributes['firstname'].' '.$attributes['lastname']).' - '.trim($attributes['street'].' '.$attributes['street_number']).', '.$attributes['zip'].' '.$attributes['city'].'. '.$attributes['country'],
-            set: null
+            get: fn($value, $attributes) => $attributes['vat'] . ' - ' . trim($attributes['company'] . ' ' . $attributes['firstname'] . ' ' . $attributes['lastname']) . ' - ' . trim($attributes['street'] . ' ' . $attributes['street_number']) . ', ' . $attributes['zip'] . ' ' . $attributes['city'] . '. ' . $attributes['country'],
+            set: null,
         );
     }
 }

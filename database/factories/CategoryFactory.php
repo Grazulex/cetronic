@@ -28,7 +28,7 @@ final class CategoryFactory extends Factory
             'slug' => '',
             'is_published' => true,
             'is_featured' => true,
-            'picture' => 'categories/'.fake()->image('public/storage/categories', 640, 480, null, false),
+            'picture' => 'categories/' . fake()->image('public/storage/categories', 640, 480, null, false),
         ];
     }
 }

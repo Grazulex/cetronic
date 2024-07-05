@@ -34,7 +34,7 @@ final class BrandService
             ->orderBy('name', 'ASC')->get();
     }
 
-    public function getAllBrandsAndCategories(User $user = null): array
+    public function getAllBrandsAndCategories(?User $user = null): array
     {
         $data = [];
         $categoryService = new CategoryService();
@@ -92,26 +92,26 @@ final class BrandService
         $mainCategory = Category::where('slug', $catSlug)->first();
         $items = Item::where('brand_id', $brand->id)->where('category_id', $mainCategory->id)->where('is_published', true)->orderBy('reference')->get();
         $zip = new ZipArchive();
-        $filename = mb_strtoupper($brand->slug.'.zip');
+        $filename = mb_strtoupper($brand->slug . '.zip');
 
         $zip->open(
-            public_path('/storage/brands/'.$filename),
-            ZipArchive::CREATE | ZipArchive::OVERWRITE
+            public_path('/storage/brands/' . $filename),
+            ZipArchive::CREATE | ZipArchive::OVERWRITE,
         );
         foreach ($items as $item) {
             foreach ($item->getMedia()
                 as $file) {
                 $zip->addFile(
                     $file->getPath(),
-                    $file->file_name
+                    $file->file_name,
                 );
             }
         }
         $zip->close();
 
-        return public_path('/storage/brands/'.$filename);
+        return public_path('/storage/brands/' . $filename);
     }
-    private function getBrands($category, User $user = null): Collection
+    private function getBrands($category, ?User $user = null): Collection
     {
         return  Brand::enabled(auth()->user(), $category)
             ->select(['name', 'id', 'slug'])

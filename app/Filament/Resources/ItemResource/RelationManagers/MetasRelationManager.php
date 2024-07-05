@@ -35,7 +35,7 @@ final class MetasRelationManager extends RelationManager
                     ->options(CategoryMeta::pluck('name', 'id'))
                     ->searchable()
                     ->reactive()
-                    ->afterStateUpdated(fn (callable $set) => $set('value', null))
+                    ->afterStateUpdated(fn(callable $set) => $set('value', null))
                     ->required(),
                 Select::make('value')
                     ->options(function (callable $get) {
@@ -47,12 +47,12 @@ final class MetasRelationManager extends RelationManager
                     })
                     ->searchable()
                     ->required()
-                    ->visible(fn (Closure $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
+                    ->visible(fn(Closure $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
                 TextInput::make('value')
-                    ->visible(fn (Closure $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
+                    ->visible(fn(Closure $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
                 ColorPicker::make('color')
                     ->required()
-                    ->visible(fn (Closure $get) => true === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
+                    ->visible(fn(Closure $get) => true === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
             ]);
     }
 
@@ -63,7 +63,7 @@ final class MetasRelationManager extends RelationManager
                 TextColumn::make('meta.name')->searchable(),
                 TextColumn::make('value')
                     ->searchable(),
-                BadgeColumn::make('color')->extraAttributes(fn (Model $record): array => ['style' => 'background:'.$record->color]),
+                BadgeColumn::make('color')->extraAttributes(fn(Model $record): array => ['style' => 'background:' . $record->color]),
             ])
             ->filters([
 

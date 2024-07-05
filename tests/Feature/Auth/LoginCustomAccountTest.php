@@ -20,7 +20,7 @@ it('can not login if wrong data', function (): void {
         data: [
             'email' => fake()->email,
             'password' => 'password',
-        ]
+        ],
     )
         ->assertSessionHasErrors('email');
 });
@@ -32,7 +32,7 @@ it('can login', function (): void {
         data: [
             'email' => $user->email,
             'password' => 'password',
-        ]
+        ],
     )
         ->assertRedirect(route('home'));
 });
@@ -45,7 +45,7 @@ it('has event or update updated_at after login', function (): void {
         data: [
             'email' => $user->email,
             'password' => 'password',
-        ]
+        ],
     )
         ->assertRedirect(route('home'));
 

@@ -11,9 +11,7 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 final class CategorySheet implements FromArray, WithTitle
 {
-    public function __construct(private Category $category)
-    {
-    }
+    public function __construct(private Category $category) {}
 
     public function array(): array
     {

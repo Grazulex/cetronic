@@ -15,8 +15,7 @@ final readonly class OrderDataObject
 {
     public function __construct(
         private Cart $cart,
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {
@@ -32,9 +31,9 @@ final readonly class OrderDataObject
             'status' => OrderStatusEnum::OPEN,
             'shipping_company' => $this->cart->shippingLocation->company,
             'shipping_name' => trim(
-                $this->cart->shippingLocation->firstname.
-                   ' '.
-                   $this->cart->shippingLocation->lastname
+                $this->cart->shippingLocation->firstname .
+                   ' ' .
+                   $this->cart->shippingLocation->lastname,
             ),
             'shipping_street' => $this->cart->shippingLocation->street,
             'shipping_street_number' => $this->cart->shippingLocation->street_number,
@@ -44,8 +43,8 @@ final readonly class OrderDataObject
             'shipping_country' => $this->cart->shippingLocation->country,
             'shipping_phone' => $this->cart->shippingLocation->phone,
             'invoice_company' => $this->cart->invoiceLocation->company,
-            'invoice_name' => $this->cart->invoiceLocation->firstname.
-               ' '.
+            'invoice_name' => $this->cart->invoiceLocation->firstname .
+               ' ' .
                $this->cart->invoiceLocation->lastname,
             'invoice_street' => $this->cart->invoiceLocation->street,
             'invoice_street_number' => $this->cart->invoiceLocation->street_number,

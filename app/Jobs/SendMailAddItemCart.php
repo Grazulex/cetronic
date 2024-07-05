@@ -21,9 +21,7 @@ final class SendMailAddItemCart implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public User $user, public Item $item)
-    {
-    }
+    public function __construct(public User $user, public Item $item) {}
 
     public function handle(): void
     {

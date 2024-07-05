@@ -5,9 +5,10 @@ declare(strict_types=1);
 
 use App\Http\Livewire\FormItem;
 use App\Models\CategoryTranslation;
-use Symfony\Component\HttpFoundation\Response;
 
 use function Pest\Livewire\livewire;
+
+use Symfony\Component\HttpFoundation\Response;
 
 it('can see item in en', function (): void {
     $item = createItems(1)->first();
@@ -71,14 +72,10 @@ it('can see medias', function (): void {
         ->assertSee($item->getMedia()[1]->url);
 });
 
-it('can see variants', function (): void {
-})->todo();
+it('can see variants', function (): void {})->todo();
 
-it('can see metas', function (): void {
-})->todo();
+it('can see metas', function (): void {})->todo();
 
-it('can not order if not logged', function (): void {
-})->todo();
+it('can not order if not logged', function (): void {})->todo();
 
-it('can order if logged', function (): void {
-})->todo();
+it('can order if logged', function (): void {})->todo();

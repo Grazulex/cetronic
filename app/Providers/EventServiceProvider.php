@@ -32,9 +32,7 @@ final class EventServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(): void
-    {
-    }
+    public function boot(): void {}
 
     /**
      * Determine if events and listeners should be automatically discovered.

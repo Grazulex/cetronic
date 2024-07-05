@@ -10,8 +10,7 @@ final readonly class UserDataObject
 {
     public function __construct(
         private UpdateUserRequest $request,
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

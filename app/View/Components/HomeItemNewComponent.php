@@ -6,8 +6,8 @@ namespace App\View\Components;
 
 use App\Services\CategoryService;
 use App\Services\ItemService;
-use Illuminate\View\Component;
 use Closure;
+use Illuminate\View\Component;
 
 final class HomeItemNewComponent extends Component
 {
@@ -16,9 +16,7 @@ final class HomeItemNewComponent extends Component
      *
      * @return void
      */
-    public function __construct(private CategoryService $categoryService, private ItemService $itemService, public int $qty = 8)
-    {
-    }
+    public function __construct(private CategoryService $categoryService, private ItemService $itemService, public int $qty = 8) {}
 
     /**
      * Get the view / contents that represent the component.

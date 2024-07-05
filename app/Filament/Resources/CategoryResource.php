@@ -77,10 +77,10 @@ final class CategoryResource extends Resource
                 IconColumn::make('is_export')->boolean(),
                 TextColumn::make('order'),
                 BadgeColumn::make('metas_count')->counts(
-                    'metas'
+                    'metas',
                 ),
                 BadgeColumn::make('items_count')->counts(
-                    'items'
+                    'items',
                 ),
             ])
             ->filters([
@@ -90,7 +90,7 @@ final class CategoryResource extends Resource
                 EditAction::make(),
                 Action::make('exportCSV')
                     ->label(__('Export XLSX'))
-                    ->action(fn ($record) => (new CategoriesExport($record))->download($record->name.'_'.Carbon::now().'.xlsx'))
+                    ->action(fn($record) => (new CategoriesExport($record))->download($record->name . '_' . Carbon::now() . '.xlsx'))
                     ->tooltip(__('Export'))
                     ->icon('heroicon-s-download')
                     ->color('primary'),
@@ -117,6 +117,6 @@ final class CategoryResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return (string)static::getModel()::count();
+        return (string) static::getModel()::count();
     }
 }

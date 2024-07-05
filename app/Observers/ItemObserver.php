@@ -16,20 +16,20 @@ final class ItemObserver
     public function deleting(Item $item): void
     {
         ProcessRemoveItemCart::dispatch($item);
-        if (Storage::exists('public/items/'.$item->id)) {
-            Storage::deleteDirectory('public/items/'.$item->id);
+        if (Storage::exists('public/items/' . $item->id)) {
+            Storage::deleteDirectory('public/items/' . $item->id);
         }
     }
 
     public function creating(Item $item): void
     {
-        $item->slug = Str::slug($item->brand_id.'_'.$item->category_id.'-'.$item->reference);
+        $item->slug = Str::slug($item->brand_id . '_' . $item->category_id . '-' . $item->reference);
     }
 
     public function updating(Item $item): void
     {
         if ($item->isDirty('brand_id') || $item->isDirty('reference')) {
-            $item->slug = Str::slug($item->brand_id.'_'.$item->category_id.'-'.$item->reference);
+            $item->slug = Str::slug($item->brand_id . '_' . $item->category_id . '-' . $item->reference);
         }
 
         if (

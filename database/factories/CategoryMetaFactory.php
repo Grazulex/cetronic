@@ -24,7 +24,7 @@ final class CategoryMetaFactory extends Factory
             'is_meta' => fake()->boolean(),
             'is_export' => fake()->boolean(),
             'is_variant' => fake()->boolean(),
-            'is_choice' => fake()->boolean()
+            'is_choice' => fake()->boolean(),
         ];
     }
 }

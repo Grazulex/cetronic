@@ -20,7 +20,7 @@ final class UserController extends Controller
     }
 
     public function locationCreate(
-        CreateLocationRequest $request
+        CreateLocationRequest $request,
     ): RedirectResponse {
         $user = auth()->user();
         $validated = $request->validated();
@@ -33,7 +33,7 @@ final class UserController extends Controller
 
     public function locationUpdate(
         CreateLocationRequest $request,
-        Location $location
+        Location $location,
     ): RedirectResponse {
         $validated = $request->validated();
         $location->update($validated);

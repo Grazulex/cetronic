@@ -6,22 +6,6 @@
 </head>
 <body>
 <div class="container">
-    <div class="row conditions">
-        <div class="col-3">
-            <b>Marque:</b> {{$brandConditionNames ? implode(', ', $brandConditionNames) : 'any'}}
-        </div>
-        <div class="col-3">
-            <b>Catégories:</b> {{$categoryConditionNames ? implode(', ', $categoryConditionNames) : 'any'}}
-        </div>
-        <div class="col-3">
-            <b>Type:</b> {{$typeConditionNames ? implode(', ', $typeConditionNames) : 'any'}}
-        </div>
-        <div class="col-3">
-            <b>Genre:</b> {{$genderConditionNames ? implode(', ', $genderConditionNames) : 'any'}}
-        </div>
-    </div>
-</div>
-<div class="container">
     @php
         $rowCount = 0;
         $nextPage = 0;
@@ -32,7 +16,7 @@
                 <div>
                     <div class="image"><img src="{{$product->first_media_path}}"></div>
                     <div class="product-data">
-                        <div class="sku"><b>{{$product->slug}}</b></div>
+                        <div class="sku"><b>{{strtoupper($product->reference)}}</b></div>
                         <div><b>{{$product->price}}€</b></div>
                         @foreach($product->metas as $meta)
                             <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>

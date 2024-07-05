@@ -16,8 +16,7 @@ final readonly class CartDataObject
         private ?Location       $shipping_location = null,
         private ?Location       $invoice_location = null,
         private ?string         $cookie = null,
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

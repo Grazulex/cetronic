@@ -41,13 +41,13 @@ final class CartResource extends Resource
                     ->options(
                         User::all()
                             ->pluck('name', 'id')
-                            ->toArray()
+                            ->toArray(),
                     )
                     ->searchable()
                     ->reactive()
                     ->afterStateUpdated(
-                        fn (callable $set) => $set('shipping_location_id', null),
-                        fn (callable $set) => $set('invoice_location_id', null)
+                        fn(callable $set) => $set('shipping_location_id', null),
+                        fn(callable $set) => $set('invoice_location_id', null),
                     )
                     ->required(),
                 Forms\Components\Select::make('shipping_location_id')
@@ -99,17 +99,17 @@ final class CartResource extends Resource
             ->filters([
                 Filter::make('open')
                     ->query(
-                        fn (Builder $query): Builder => $query->where(
+                        fn(Builder $query): Builder => $query->where(
                             'status',
-                            CartStatusEnum::OPEN->value
-                        )
+                            CartStatusEnum::OPEN->value,
+                        ),
                     )
                     ->default(),
                 Filter::make('close')->query(
-                    fn (Builder $query): Builder => $query->where(
+                    fn(Builder $query): Builder => $query->where(
                         'status',
-                        CartStatusEnum::SOLD->value
-                    )
+                        CartStatusEnum::SOLD->value,
+                    ),
                 ),
             ])
             ->actions([Tables\Actions\EditAction::make()])
@@ -132,6 +132,6 @@ final class CartResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return (string)static::getModel()::count();
+        return (string) static::getModel()::count();
     }
 }

@@ -65,7 +65,7 @@ final class FormItem extends Component
         $prices = $itemService->getPrice(user: (auth()->user()) ? auth()->user() : null);
 
 
-        $cartService->addToCart(cart: $openCart, item:  $this->item, price: $prices['price_promo'], price_promo: $prices['price_end'], quantity: (int)$this->quantity[$this->item->id], price_old: $prices['price_start'], variant: $this->variant[$this->item->id]);
+        $cartService->addToCart(cart: $openCart, item:  $this->item, price: $prices['price_promo'], price_promo: $prices['price_end'], quantity: (int) $this->quantity[$this->item->id], price_old: $prices['price_start'], variant: $this->variant[$this->item->id]);
 
         $this->emit(event: 'cart_updated');
 

@@ -39,7 +39,7 @@ final class User extends Authenticatable implements FilamentUser, HasLocalePrefe
         'divers',
         'receive_cart_notification',
         'language',
-        'logged_at'
+        'logged_at',
     ];
 
     protected $hidden = [
@@ -109,31 +109,31 @@ final class User extends Authenticatable implements FilamentUser, HasLocalePrefe
     protected function franco(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function shippingPrice(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value / 100,
-            set: fn ($value) => $value * 100
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
         );
     }
 
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => ucwords($value),
+            get: fn($value) => ucwords($value),
         );
     }
 
     protected function email(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => mb_strtolower($value),
-            set: fn ($value) => mb_strtolower($value)
+            get: fn($value) => mb_strtolower($value),
+            set: fn($value) => mb_strtolower($value),
         );
     }
 }
