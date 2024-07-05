@@ -26,9 +26,8 @@
 
         .image {
             width: 100%;
-            height: 250px;
+            height: 300px;
             overflow: hidden;
-            margin-top: 10px;
         }
 
         .product-data {
@@ -41,7 +40,7 @@
         .page {
             width: 100%;
             height: 100%;
-            padding: 20px;
+            padding: 10px;
         }
 
         /* each row need to have 50vh height */
@@ -52,7 +51,7 @@
         }
 
         .col-2 {
-            width: 16%;
+            width: 17%;
             display: block;
             float: left;
             height: 50vh;
