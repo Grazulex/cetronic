@@ -26,7 +26,7 @@
 
         .image {
             width: 100%;
-            height: 300px;
+            height: 280px;
             overflow: hidden;
         }
 
@@ -51,7 +51,7 @@
         }
 
         .col-2 {
-            width: 17%;
+            width: 16%;
             display: block;
             float: left;
             height: 50vh;
@@ -73,7 +73,7 @@
                         <div class="col-2">
                             <div class="image"><img src="{{$product->first_media_path}}"></div>
                             <div class="product-data">
-                                <div class="sku"><b>{{$product->slug}}</b></div>
+                                <div class="sku"><b>{{$product->reference}}</b></div>
                                 <div><b>{{$product->price}}€</b></div>
                                 @foreach($product->metas as $meta)
                                     <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
