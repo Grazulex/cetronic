@@ -46,23 +46,12 @@ class PdfGenerate implements ShouldQueue
     public function handle(): void
     {
         $pdfCatalog = $this->pdfCatalog;
-        $pdfConditions = $pdfCatalog->conditions;
-        $products = Item::with('brand', 'metas', 'variants', 'media');
         $brandConditionNames = $pdfCatalog->getConditionBrandsAttribute();
         $categoryConditionNames = $pdfCatalog->getConditionCategoriesAttribute();
         $typeConditionNames = $pdfCatalog->getConditionTypesAttribute();
         $genderConditionNames = $pdfCatalog->getConditionGendersAttribute();
-        if ( ! empty($pdfConditions[PdfCatalog::CONDITION_BRAND])) {
-            $products->whereIn('brand_id', $pdfConditions[PdfCatalog::CONDITION_BRAND]);
-            unset($pdfConditions[PdfCatalog::CONDITION_BRAND]);
-        }
-        if ( ! empty($pdfConditions[PdfCatalog::CONDITION_CATEGORY])) {
-            $products->whereIn('category_id', $pdfConditions[PdfCatalog::CONDITION_CATEGORY]);
-            unset($pdfConditions[PdfCatalog::CONDITION_CATEGORY]);
-        }
-        $this->applyMetaConditions($products, $pdfConditions);
 
-        //list of Items model with metas of type 1 and value "Gents"
+        //Gents lists
         $products = Item::where('is_published', 1)
             ->with('brand', 'metas', 'variants', 'media')
             ->whereHas('metas', function ($query): void {
@@ -73,7 +62,39 @@ class PdfGenerate implements ShouldQueue
             })
             ->orderBy('brand_id')->orderBy('reference');
 
-        $products = $products->limit(100)->get();
+        $productsToPrint = $products->get();
+
+        $products = Item::where('is_published', 1)
+            ->with('brand', 'metas', 'variants', 'media')
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Gents')->where('meta_id', 1);
+            })
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Silicone')->where('meta_id', 3);
+            })
+            ->orderBy('brand_id')->orderBy('reference');
+
+        $productsToPrint2 = $products->get();
+
+        $products = Item::where('is_published', 1)
+            ->with('brand', 'metas', 'variants', 'media')
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Gents')->where('meta_id', 1);
+            })
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', '!=', 'Leather')
+                    ->where('value', '!=', 'Silicone')
+                    ->where('meta_id', 3);
+            })
+            ->orderBy('brand_id')->orderBy('reference');
+
+        $productsToPrint3 = $products->get();
+
+        //Ladies lists
+
+        //combine products
+        $products = $productsToPrint->merge($productsToPrint2)->merge($productsToPrint3);
+
 
         $pdf = Pdf::loadView(
             'pdf.catalog',

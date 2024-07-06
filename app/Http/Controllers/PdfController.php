@@ -13,6 +13,7 @@ final class PdfController extends Controller
     public function index()
     {
 
+        //Gents lists
         $products = Item::where('is_published', 1)
             ->with('brand', 'metas', 'variants', 'media')
             ->whereHas('metas', function ($query): void {
@@ -23,9 +24,39 @@ final class PdfController extends Controller
             })
             ->orderBy('brand_id')->orderBy('reference');
 
-        $products  = Item::limit(100);
+        $productsToPrint = $products->get();
 
-        $products = $products->limit(24)->get();
+        $products = Item::where('is_published', 1)
+            ->with('brand', 'metas', 'variants', 'media')
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Gents')->where('meta_id', 1);
+            })
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Silicone')->where('meta_id', 3);
+            })
+            ->orderBy('brand_id')->orderBy('reference');
+
+        $productsToPrint2 = $products->get();
+
+        $products = Item::where('is_published', 1)
+            ->with('brand', 'metas', 'variants', 'media')
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Gents')->where('meta_id', 1);
+            })
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', '!=', 'Leather')
+                    ->where('value', '!=', 'Silicone')
+                    ->where('meta_id', 3);
+            })
+            ->orderBy('brand_id')->orderBy('reference');
+
+        $productsToPrint3 = $products->get();
+
+        //Ladies lists
+
+        //combine products
+        $products = $productsToPrint->merge($productsToPrint2)->merge($productsToPrint3);
+
         //create pdf
         $pdf = Pdf::loadView(
             'pdf.catalog',
@@ -40,6 +71,4 @@ final class PdfController extends Controller
 
         return $pdf->stream('pdf.catalog');
     }
-
-
 }
