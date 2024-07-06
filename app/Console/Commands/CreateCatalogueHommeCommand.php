@@ -9,7 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class CreateCatalogueCommand extends Command
+class CreateCatalogueHommeCommand extends Command
 {
     /**
      * Execute the console command.
@@ -28,7 +28,7 @@ class CreateCatalogueCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:create-catalogue';
+    protected $signature = 'app:create-catalogue-homme';
     /**
      * The console command description.
      *
