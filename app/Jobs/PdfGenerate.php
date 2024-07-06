@@ -46,10 +46,6 @@ class PdfGenerate implements ShouldQueue
     public function handle(): void
     {
         $pdfCatalog = $this->pdfCatalog;
-        $brandConditionNames = $pdfCatalog->getConditionBrandsAttribute();
-        $categoryConditionNames = $pdfCatalog->getConditionCategoriesAttribute();
-        $typeConditionNames = $pdfCatalog->getConditionTypesAttribute();
-        $genderConditionNames = $pdfCatalog->getConditionGendersAttribute();
 
         //Gents lists
         $products = Item::where('is_published', 1)
@@ -70,7 +66,7 @@ class PdfGenerate implements ShouldQueue
                 $query->where('value', 'Gents')->where('meta_id', 1);
             })
             ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Silicone')->where('meta_id', 3);
+                $query->where('value', 'Stainless Steel')->where('meta_id', 3);
             })
             ->orderBy('brand_id')->orderBy('reference');
 
@@ -82,38 +78,41 @@ class PdfGenerate implements ShouldQueue
                 $query->where('value', 'Gents')->where('meta_id', 1);
             })
             ->whereHas('metas', function ($query): void {
-                $query->where('value', '!=', 'Leather')
-                    ->where('value', '!=', 'Silicone')
-                    ->where('meta_id', 3);
+                $query->where('value', 'Silicone')->where('meta_id', 3);
             })
             ->orderBy('brand_id')->orderBy('reference');
 
         $productsToPrint3 = $products->get();
 
+        $products = Item::where('is_published', 1)
+            ->with('brand', 'metas', 'variants', 'media')
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', 'Gents')->where('meta_id', 1);
+            })
+            ->whereHas('metas', function ($query): void {
+                $query->where('value', '!=', 'Leather')
+                    ->where('value', '!=', 'Silicone')
+                    ->where('value', '!=', 'Stainless Steel')
+                    ->where('meta_id', 3);
+            })
+            ->orderBy('brand_id')->orderBy('reference');
+
+        $productsToPrint4 = $products->get();
+
         //Ladies lists
 
         //combine products
-        $products = $productsToPrint->merge($productsToPrint2)->merge($productsToPrint3);
-
+        $products = $productsToPrint->merge($productsToPrint2)->merge($productsToPrint3)->merge($productsToPrint4);
 
         $pdf = Pdf::loadView(
             'pdf.catalog',
             compact(
-                'brandConditionNames',
-                'categoryConditionNames',
-                'typeConditionNames',
-                'genderConditionNames',
                 'products',
             ),
         )->setPaper('a4', 'landscape');
 
-        $concatConditions = implode('_', $genderConditionNames) . ' '
-            . implode('_', $brandConditionNames) . ' '
-            . implode('_', $categoryConditionNames) . ' '
-            . implode('_', $typeConditionNames);
-
         $fileName = self::FILE_NAME_PREFIX
-            . str_replace(' ', '_', trim($concatConditions))
+            . 'Hommes'
             . self::FILE_NAME_POSTFIX;
 
         if ( ! Storage::directories('public/pdf')) {
@@ -125,22 +124,5 @@ class PdfGenerate implements ShouldQueue
         $pdfCatalog->url = 'pdf/' . $fileName;
         $pdfCatalog->status = PdfGeneratorStatusEnum::GENERATED;
         $pdfCatalog->save();
-    }
-
-    public function applyMetaConditions($products, $pdfConditions)
-    {
-        foreach ($pdfConditions as $conditionName => $condition) {
-            if ( ! empty($condition)) {
-                $products->whereHas('metas', function ($query) use ($condition, $conditionName): void {
-                    $query->whereIn('value', $condition);
-                    $query->whereHas('meta', function ($q) use ($conditionName): void {
-                        $PdfCatalogClass = PdfCatalog::class;
-                        $q->where('name', constant($PdfCatalogClass . '::META_' . mb_strtoupper($conditionName)));
-                    });
-                });
-            }
-        }
-
-        return $products;
     }
 }
