@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Contact\SendContactController;
 use App\Http\Controllers\Help\SendHelpController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\User\UpdatePasswordController;
 use App\Http\Controllers\User\UpdateUserController;
 use App\Http\Controllers\UserController;
@@ -93,6 +94,7 @@ Route::group(
     ],
     function (): void {
         Route::view('/', 'front.pages.home')->name('home');
+        Route::get('pdf', [PdfController::class, 'index'])->name('pdf');
         Route::view('about', 'front.pages.about')->name('about');
         Route::any('search', [ListingController::class, 'search'])->name('search')->methods('get', 'post');
         Route::view('contact', 'front.pages.contact')->name('contact');
