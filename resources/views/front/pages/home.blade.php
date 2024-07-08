@@ -8,6 +8,7 @@
 @stop
 @section('content')
     <x-slide-component />
+    <x-section-message />
     @if (auth()->check())
         <x-home-item-promo-component qty="8" />
     @endif
