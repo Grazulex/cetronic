@@ -40,6 +40,7 @@ final class Item extends Model implements HasMedia
         'price_fix',
         'sale_price',
         'multiple_quantity',
+        'catalog_group',
     ];
 
     protected $casts = [

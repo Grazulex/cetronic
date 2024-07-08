@@ -62,6 +62,7 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
             'Sale Price',
             'Price Fix',
             'Multiple Quantity',
+            'catalog_group',
         ];
 
         $metas = CategoryMeta::where('category_id', $this->category->id)->get();
@@ -76,7 +77,7 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
 
     public function map($row): array
     {
-        $data = [$row->id, $row->reference, $row->category->name, $row->brand->name, ($row->master) ? $row->master->reference : '', $row->description, ($row->is_new) ? '1' : '0', ($row->is_published) ? '1' : '0', '', $row->price, $row->price_b2b, $row->price_promo, $row->price_special1, $row->price_special2, $row->price_special3, $row->sale_price, $row->price_fix, $row->multiple_quantity];
+        $data = [$row->id, $row->reference, $row->category->name, $row->brand->name, ($row->master) ? $row->master->reference : '', $row->description, ($row->is_new) ? '1' : '0', ($row->is_published) ? '1' : '0', '', $row->price, $row->price_b2b, $row->price_promo, $row->price_special1, $row->price_special2, $row->price_special3, $row->sale_price, $row->price_fix, $row->multiple_quantity, $row->catalog_group];
 
         $metas = CategoryMeta::where('category_id', $this->category->id)->get();
         foreach ($metas as $meta) {

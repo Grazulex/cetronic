@@ -47,6 +47,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             'sale_price',
             'price_fix',
             'multiple_quantity',
+            'catalog_group',
         ];
 
         $metas = array_diff($this->headers[0][0], $remove);
@@ -124,6 +125,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'price_special3' => (float) ($row['price_special_3']),
                     'sale_price' => (float) ($row['sale_price']),
                     'multiple_quantity' => $multi,
+                    'catalog_group' => ($row['catalog_group']) ?: null,
                 ],
             );
 

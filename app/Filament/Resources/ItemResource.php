@@ -77,6 +77,7 @@ final class ItemResource extends Resource
                                 ->default(1),
                             Textarea::make('description')
                                 ->columns(2),
+                            TextInput::make('catalog_group'),
                         ])
                         ->columns(2),
                     Tab::make('Activations')
