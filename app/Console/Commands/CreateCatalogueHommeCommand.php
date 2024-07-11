@@ -41,62 +41,10 @@ class CreateCatalogueHommeCommand extends Command
      */
     public function handle(): void
     {
-        //Gents lists
-        $products = Item::where('is_published', 1)
-            ->with('brand', 'metas', 'variants', 'media')
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Gents')->where('meta_id', 1);
-            })
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Leather')->where('meta_id', 3);
-            })
-            ->orderBy('brand_id')->orderBy('reference');
-
-        $productsToPrint = $products->get();
 
         $products = Item::where('is_published', 1)
             ->with('brand', 'metas', 'variants', 'media')
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Gents')->where('meta_id', 1);
-            })
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Stainless Steel')->where('meta_id', 3);
-            })
-            ->orderBy('brand_id')->orderBy('reference');
-
-        $productsToPrint2 = $products->get();
-
-        $products = Item::where('is_published', 1)
-            ->with('brand', 'metas', 'variants', 'media')
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Gents')->where('meta_id', 1);
-            })
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Silicone')->where('meta_id', 3);
-            })
-            ->orderBy('brand_id')->orderBy('reference');
-
-        $productsToPrint3 = $products->get();
-
-        $products = Item::where('is_published', 1)
-            ->with('brand', 'metas', 'variants', 'media')
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', 'Gents')->where('meta_id', 1);
-            })
-            ->whereHas('metas', function ($query): void {
-                $query->where('value', '!=', 'Leather')
-                    ->where('value', '!=', 'Silicone')
-                    ->where('value', '!=', 'Stainless Steel')
-                    ->where('meta_id', 3);
-            })
-            ->orderBy('brand_id')->orderBy('reference');
-
-        $productsToPrint4 = $products->get();
-
-        //Ladies lists
-
-        //combine products
-        $products = $productsToPrint->merge($productsToPrint2)->merge($productsToPrint3)->merge($productsToPrint4);
+            ->orderBy('catalog_group')->orderBy('reference');
 
         $pdf = Pdf::loadView(
             'pdf.catalog',
@@ -106,7 +54,7 @@ class CreateCatalogueHommeCommand extends Command
         )->setPaper('a4', 'landscape');
 
         $fileName = self::FILE_NAME_PREFIX
-            . 'Hommes'
+            . 'Full'
             . self::FILE_NAME_POSTFIX;
 
         if ( ! Storage::directories('public/pdf')) {

@@ -15,7 +15,7 @@
             <div class="col-2 item">
                 <div class="image"><img src="{{$product->first_media_path}}"></div>
                 <div class="product-data">
-                    <div class="sku"><b>{{$product->reference}} - {{$product->price}}€</b></div>
+                    <div class="sku"><b>{{$product->reference}} - {{$product->sale_price}}€</b></div>
                     <div class="meta">
                         @foreach($product->metas as $meta)
                             <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
