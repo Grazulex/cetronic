@@ -46,6 +46,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             'price_special_3',
             'sale_price',
             'price_fix',
+            'reseller_price',
             'multiple_quantity',
             'catalog_group',
         ];
@@ -124,6 +125,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'price_special2' => (float) ($row['price_special_2']),
                     'price_special3' => (float) ($row['price_special_3']),
                     'sale_price' => (float) ($row['sale_price']),
+                    'reseller_price' => (float) ($row['reseller_price']),
                     'multiple_quantity' => $multi,
                     'catalog_group' => ($row['catalog_group']) ?: null,
                 ],

@@ -9,9 +9,18 @@
     @php
         $rowCount = 0;
         $nextPage = 0;
+        $oldGroup = '';
     @endphp
     <div class="row">
         @foreach($products as $product)
+            @if ($rowCount > 0 && $oldGroup != $product->catalog_group)
+                @php
+                    $rowCount = 0;
+                    $nextPage++;
+                @endphp
+                <div class="page-break"></div>
+                <div class="page-header"></div>
+            @endif
             <div class="col-2 item">
                 <div class="image"><img src="{{$product->first_media_path}}"></div>
                 <div class="product-data">
@@ -20,6 +29,7 @@
                         @foreach($product->metas as $meta)
                             <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
                         @endforeach
+                        <div><b>Group: {{ $product->catalog_group }}</b></div>
                     </div>
                 </div>
             </div>
@@ -41,6 +51,9 @@
     @endif
     <div class="row">
         @endif
+        @php
+            $oldGroup = $product->catalog_group;
+        @endphp
         @endforeach
     </div>
 </div>

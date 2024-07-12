@@ -138,6 +138,11 @@ final class ItemResource extends Resource
                                 ->numeric()
                                 ->default(0)
                                 ->suffix('€'),
+                            TextInput::make('reseller_price')
+                                ->required()
+                                ->numeric()
+                                ->default(0)
+                                ->suffix('€'),
                         ])
                         ->columns(4),
                 ])->columnSpan('full'),

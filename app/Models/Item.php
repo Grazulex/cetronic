@@ -41,6 +41,7 @@ final class Item extends Model implements HasMedia
         'sale_price',
         'multiple_quantity',
         'catalog_group',
+        'reseller_price',
     ];
 
     protected $casts = [
@@ -177,6 +178,14 @@ final class Item extends Model implements HasMedia
     }
 
     protected function priceFix(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100,
+            set: fn($value) => $value * 100,
+        );
+    }
+
+    protected function resellerPrice(): Attribute
     {
         return Attribute::make(
             get: fn($value) => $value / 100,
