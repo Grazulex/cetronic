@@ -44,7 +44,7 @@ class CreateCatalogueHommeCommand extends Command
 
         $products = Item::where('is_published', 1)
             ->with('brand', 'metas', 'variants', 'media')
-            ->orderBy('catalog_group')->orderBy('reference');
+            ->orderBy('catalog_group')->orderBy('reference')->get();
 
         $pdf = Pdf::loadView(
             'pdf.catalog',
