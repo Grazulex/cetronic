@@ -43,6 +43,7 @@ class CreateCatalogueHommeCommand extends Command
     {
 
         $products = Item::where('is_published', 1)
+            ->whereNotNull('catalog_group')
             ->with('brand', 'metas', 'variants', 'media')
             ->orderBy('catalog_group')->orderBy('reference')->get();
 
