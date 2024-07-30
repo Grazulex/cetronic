@@ -70,6 +70,7 @@ final class ListItems extends Component
                 ->with('variants')
                 ->whereNull(columns: 'master_id')
                 //->orderByRaw(sql: 'LENGTH(reference) ASC')
+                ->orderBy('catalog_group')
                 ->orderBy(column: 'reference')
                 ->paginate(perPage: 21);
         } else {
@@ -80,6 +81,7 @@ final class ListItems extends Component
                 ->with('brand')
                 ->with('variants')
                 ->whereNull(columns: 'master_id')
+                ->orderBy('catalog_group')
                 ->orderBy(column: 'reference')
                 ->paginate(perPage: 21);
         }
