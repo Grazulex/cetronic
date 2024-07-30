@@ -66,6 +66,7 @@ final class ListingController extends Controller
             ->with('brand')
             ->with('variants')
             ->whereNull('master_id')
+            ->orderBy('catalog_group')
             ->orderByRaw(sql: 'LENGTH(reference) ASC')
             ->orderBy('reference')
             ->paginate(21);

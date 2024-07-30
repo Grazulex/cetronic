@@ -54,6 +54,7 @@ final class ListComponent extends Component
 
             $this->orderField = match ($request->get('order')) {
                 'price_asc', 'price_desc' => 'price',
+                'catalogue' => 'catalog_group',
                 default => 'reference',
             };
 
