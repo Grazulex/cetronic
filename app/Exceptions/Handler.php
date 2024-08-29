@@ -45,10 +45,6 @@ final class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e): void {
-            if (app()->bound('honeybadger')) {
-                app('honeybadger')->notify($e, app('request'));
-            }
-        });
+
     }
 }
