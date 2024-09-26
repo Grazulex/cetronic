@@ -40,7 +40,6 @@ final class CartController extends Controller
             $cartLines = $cartService->getCartContent(cart: $openCart);
         }
 
-
         if ($cartLines) {
             foreach ($cartLines as $cartLine) {
                 if ($cartLine->item) {
@@ -50,11 +49,10 @@ final class CartController extends Controller
                     } else {
                         $prices = $itemService->getPrice();
                     }
-                    $cartService->updatePrices(cart: $openCart, item:  $cartLine->item, price: $prices['price_promo'], price_promo: $prices['price_end'], price_old: $prices['price_start'], variant: $cartLine->variant);
+                    $cartService->updatePrices(cart: $openCart, item: $cartLine->item, price: $prices['price_promo'], price_promo: $prices['price_end'], price_old: $prices['price_start'], variant: $cartLine->variant);
                 }
             }
         }
-
 
         return view(view: 'front.pages.cart', data: compact('cartLines', 'openCart'));
     }
