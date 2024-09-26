@@ -22,7 +22,8 @@
                         @if (Route::is('item') )
                 <div class="easyzoom easyzoom--overlay">
                     <a href="{{ $picture->getUrl() }}">
-                        <img src="{{ $picture->getUrl() }}" alt="" class="cetronic-card-img"  />
+                        <div class="cetronic-card-img" style="background-image: url('{{ $picture->getUrl() }}')">
+                        </div>
                     </a>
                 </div>
                         @else
