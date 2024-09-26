@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('Css/easyzoom.css') }}">
 
     <title>Cetronic Benelux - @yield('title')</title>
     <meta name="description" content="Cetronic Benelux - @yield('description')">
@@ -81,7 +82,7 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
-
+<script src="{{ asset('js/easyzoom.js') }}"></script>
 <script>
     AOS.init();
 </script>
@@ -146,6 +147,14 @@
             }, 500, 'linear');
         });
     });
+</script>
+
+<!-- zoom -->
+<script>
+
+$(function(){
+    $('.easyzoom').easyZoom();
+});
 </script>
 
 <!-- owl-carousel -->
