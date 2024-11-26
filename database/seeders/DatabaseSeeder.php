@@ -14,6 +14,7 @@ use App\Models\CategoryMeta;
 use App\Models\Item;
 use App\Models\ItemMeta;
 use App\Models\Location;
+use App\Models\Message;
 use App\Models\User;
 use App\Services\OrderService;
 use Faker\Factory;
@@ -35,6 +36,12 @@ final class DatabaseSeeder extends Seeder
                 Storage::deleteDirectory(storage_path($folder));
             }
         }
+        Message::factory(10)->create();
+        User::factory(1)->create([
+            'email' => 'jms@grazulex.be',
+            'name' => 'admin',
+            'password' => bcrypt('password'),
+        ]);
         User::factory(2)->create();
         Brand::factory(10)->create();
         Category::factory(5)->create();
