@@ -27,6 +27,8 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\Layout\Split;
@@ -229,6 +231,7 @@ final class ItemResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
+                RestoreAction::make(),
                 Action::make('Duplicate')
                     ->label(__('Duplicate'))
                     ->action(function ($record): void {
@@ -246,6 +249,7 @@ final class ItemResource extends Resource
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),
+                RestoreBulkAction::make(),
                 BulkAction::make('published')
                     ->label(__('Published selection'))
                     ->icon('heroicon-s-check-circle')

@@ -6,6 +6,7 @@ namespace App\Filament\Resources\ItemResource\Pages;
 
 use App\Filament\Resources\ItemResource;
 use Filament\Pages\Actions\DeleteAction;
+use Filament\Pages\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 
 final class EditItem extends EditRecord
@@ -16,6 +17,7 @@ final class EditItem extends EditRecord
     {
         return [
             DeleteAction::make(),
+            RestoreAction::make(),
         ];
     }
 }
