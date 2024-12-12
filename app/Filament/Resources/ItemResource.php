@@ -22,6 +22,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -33,6 +34,8 @@ use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 
 final class ItemResource extends Resource
@@ -46,6 +49,14 @@ final class ItemResource extends Resource
     public static function canViewAny(): bool
     {
         return UserRoleEnum::ADMIN === auth()->user()?->role;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 
     public static function form(Form $form): Form
@@ -214,6 +225,7 @@ final class ItemResource extends Resource
                 ),
                 TernaryFilter::make('is_published'),
                 TernaryFilter::make('is_new'),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 EditAction::make(),
