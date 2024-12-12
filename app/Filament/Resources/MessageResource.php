@@ -41,7 +41,7 @@ class MessageResource extends Resource
                                 'nl' => 'nl',
                                 'fr' => 'fr',
                             ]),
-                        Forms\Components\Textarea::make('content')
+                        Forms\Components\RichEditor::make('content')
                             ->required(),
                     ]),
 

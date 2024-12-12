@@ -3,7 +3,7 @@
         @foreach($messages as $message)
             <div class="col-12">
                 <h1>{{ $message->title }}</h1>
-                <h3>{{ $message->content }}</h3>
+                <h3>{!! str($message->content)->sanitizeHtml()  !!}</h3>
             </div>
         @endforeach
     </div>
