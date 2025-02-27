@@ -41,7 +41,7 @@ final class ProcessAddItemCart implements ShouldQueue
 
             $cartService->addToCart(
                 cart: $cart,
-                item:  $this->item,
+                item: $this->item,
                 price: $item['price_promo'],
                 price_promo: $item['price_end'],
                 quantity: $cartOut->quantity,
