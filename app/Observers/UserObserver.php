@@ -12,7 +12,7 @@ final class UserObserver
 {
     public function creating(User $user): void
     {
-        $user->password = bcrypt(rand(100000, 999999));
+        //$user->password = bcrypt(rand(100000, 999999));
     }
 
     public function created(User $user): void
