@@ -15,5 +15,4 @@ return [
     ],
     'cataloge_download' => 'Download Catalog',
     'search' => 'Zoeken',
-    'promos' => 'Onze aanbiedingen',
 ];
