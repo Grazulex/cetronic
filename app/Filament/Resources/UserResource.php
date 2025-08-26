@@ -71,6 +71,7 @@ final class UserResource extends Resource
                             ->searchable()
                             ->sortable(),
                         TextColumn::make('role')
+                            ->label('Type de compte')
                             ->searchable()
                             ->sortable(),
                         TextColumn::make('customerType.name')
@@ -112,10 +113,100 @@ final class UserResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('role')
+                    ->label('Type de compte')
+                    ->options([
+                        'admin' => 'Admin',
+                        'agent' => 'Agent', 
+                        'customer' => 'Client',
+                    ]),
                 Tables\Filters\SelectFilter::make('customer_type_id')
                     ->label('Type de client')
                     ->options(CustomerType::where('is_active', true)->pluck('name', 'id'))
                     ->searchable(),
+                Tables\Filters\TernaryFilter::make('is_actif')
+                    ->label('Compte actif')
+                    ->placeholder('Tous')
+                    ->trueLabel('Actifs')
+                    ->falseLabel('Inactifs'),
+                Tables\Filters\TernaryFilter::make('is_blocked')
+                    ->label('Compte bloqué')
+                    ->placeholder('Tous')
+                    ->trueLabel('Bloqués')
+                    ->falseLabel('Non bloqués'),
+                Tables\Filters\SelectFilter::make('language')
+                    ->label('Langue')
+                    ->options([
+                        'fr' => 'Français',
+                        'en' => 'English',
+                        'nl' => 'Nederlands',
+                    ]),
+                Tables\Filters\SelectFilter::make('invoice_country')
+                    ->label('Pays de facturation')
+                    ->options([
+                        'BEL' => 'Belgique',
+                        'FRA' => 'France', 
+                        'NLD' => 'Pays-Bas',
+                        'DEU' => 'Allemagne',
+                        'LUX' => 'Luxembourg',
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['value'],
+                                fn (Builder $query, $country): Builder => $query->whereHas('locations', function (Builder $query) use ($country) {
+                                    $query->where('type', 'invoice')->where('country', $country);
+                                }),
+                            );
+                    }),
+                Tables\Filters\Filter::make('invoice_zip')
+                    ->form([
+                        Forms\Components\TextInput::make('zip')
+                            ->label('Code postal de facturation')
+                            ->placeholder('Ex: 1000, 7500, etc.')
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['zip'],
+                                fn (Builder $query, $zip): Builder => $query->whereHas('locations', function (Builder $query) use ($zip) {
+                                    $query->where('type', 'invoice')->where('zip', 'like', "%{$zip}%");
+                                }),
+                            );
+                    }),
+                Tables\Filters\Filter::make('invoice_city')
+                    ->form([
+                        Forms\Components\TextInput::make('city')
+                            ->label('Ville de facturation')
+                            ->placeholder('Ex: Bruxelles, Paris, etc.')
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['city'],
+                                fn (Builder $query, $city): Builder => $query->whereHas('locations', function (Builder $query) use ($city) {
+                                    $query->where('type', 'invoice')->where('city', 'like', "%{$city}%");
+                                }),
+                            );
+                    }),
+                Tables\Filters\Filter::make('has_orders')
+                    ->label('A des commandes')
+                    ->query(fn (Builder $query): Builder => $query->has('orders')),
+                Tables\Filters\Filter::make('no_orders')
+                    ->label('Sans commande')
+                    ->query(fn (Builder $query): Builder => $query->doesntHave('orders')),
+                Tables\Filters\Filter::make('franco_above_100')
+                    ->label('Franco > 100€')
+                    ->query(fn (Builder $query): Builder => $query->where('franco', '>', 10000)), // en centimes
+                Tables\Filters\Filter::make('created_last_month')
+                    ->label('Créé le mois dernier')
+                    ->query(fn (Builder $query): Builder => $query->whereBetween('created_at', [
+                        now()->subMonth()->startOfMonth(),
+                        now()->subMonth()->endOfMonth(),
+                    ])),
+                Tables\Filters\Filter::make('never_logged')
+                    ->label('Jamais connecté')
+                    ->query(fn (Builder $query): Builder => $query->whereNull('logged_at')),
             ])
             ->actions(actions: [
                 Tables\Actions\EditAction::make(),
