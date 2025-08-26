@@ -11,6 +11,17 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        // Initialize session for tests
+        $this->startSession();
+        
+        // Share empty error bag to avoid undefined variable errors
+        view()->share('errors', session()->get('errors', new \Illuminate\Support\MessageBag()));
+    }
+
     protected function tearDown(): void
     {
         putenv(LaravelLocalization::ENV_ROUTE_KEY);
