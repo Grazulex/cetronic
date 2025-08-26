@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\ViewErrorBag;
 use Mcamara\LaravelLocalization\LaravelLocalization;
 
 abstract class TestCase extends BaseTestCase
@@ -19,7 +20,8 @@ abstract class TestCase extends BaseTestCase
         $this->startSession();
         
         // Share empty error bag to avoid undefined variable errors
-        view()->share('errors', session()->get('errors', new \Illuminate\Support\MessageBag()));
+        $errors = new ViewErrorBag();
+        view()->share('errors', $errors);
     }
 
     protected function tearDown(): void
