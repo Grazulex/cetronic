@@ -25,7 +25,16 @@
         @php
             $orders = $record->orders()->whereIn('status', [\App\Enum\OrderStatusEnum::SHIPPED, \App\Enum\OrderStatusEnum::OPEN])->get();
             $totalOrders = $orders->count();
-            $totalAmount = $orders->sum('total_price_with_tax') / 100;
+            
+            // Calculer le montant total à partir des order_items (comme pour les marques/catégories)
+            $totalAmountQuery = \Illuminate\Support\Facades\DB::table('order_items')
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->where('orders.user_id', $record->id)
+                ->whereIn('orders.status', [\App\Enum\OrderStatusEnum::SHIPPED->value, \App\Enum\OrderStatusEnum::OPEN->value])
+                ->whereNull('orders.deleted_at')
+                ->sum(\Illuminate\Support\Facades\DB::raw('order_items.price_paid * order_items.quantity'));
+            
+            $totalAmount = $totalAmountQuery / 100; // Conversion de centimes en euros
             $avgOrderAmount = $totalOrders > 0 ? $totalAmount / $totalOrders : 0;
             
             // Statistiques par mois (derniers 6 mois)
@@ -307,6 +316,14 @@
                                     $orderItems = $order->items;
                                     $totalQuantity = $orderItems->sum('quantity');
                                     $productCount = $orderItems->count();
+                                    
+                                    // Calculer le montant réel à partir des order_items
+                                    $realTotalHT = \DB::table('order_items')
+                                        ->where('order_id', $order->id)
+                                        ->sum(\DB::raw('price_paid * quantity')) / 100;
+                                    
+                                    // Estimation du TTC (ajouter 21% de TVA par défaut)
+                                    $realTotalTTC = $realTotalHT * 1.21;
                                 @endphp
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -339,10 +356,10 @@
                                         <span class="text-xs text-gray-500">article(s)</span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ number_format($order->total_price / 100, 2, ',', ' ') }} €
+                                        {{ number_format($realTotalHT, 2, ',', ' ') }} €
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{ number_format($order->total_price_with_tax / 100, 2, ',', ' ') }} €
+                                        {{ number_format($realTotalTTC, 2, ',', ' ') }} €
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
