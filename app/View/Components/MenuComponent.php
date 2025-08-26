@@ -25,7 +25,8 @@ final class MenuComponent extends Component
     public function render()
     {
         $categories = $this->brandService->getAllBrandsAndCategories(auth()->user());
+        $categoriesWithPromos = $this->brandService->getCategoriesWithPromos(auth()->user());
 
-        return view('components.menu-component', compact('categories'));
+        return view('components.menu-component', compact('categories', 'categoriesWithPromos'));
     }
 }

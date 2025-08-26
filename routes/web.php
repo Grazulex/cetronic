@@ -142,6 +142,11 @@ Route::group(
             },
         );
 
+        Route::get('{cat}/promo/nos-promos', [
+            ListingController::class,
+            'promo',
+        ])->name('promo');
+
         Route::get('{cat}/{type}/{slug}', [
             ListingController::class,
             'index',

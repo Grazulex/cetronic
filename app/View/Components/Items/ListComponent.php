@@ -83,7 +83,32 @@ final class ListComponent extends Component
      */
     public function render()
     {
-        if ('brand' === $this->type) {
+        if ('promo' === $this->type) {
+            // Pour les promotions, nous filtrons par catégorie et price_promo
+            $mainCategory = Category::where('slug', $this->catSlug)->first();
+            
+            $query = Item::where('category_id', $mainCategory->id)
+                ->where('price_fix', '>', 0)
+                ->enable(auth()->user())
+                ->with('category')
+                ->with('brand')
+                ->with('variants')
+                ->whereNull('master_id');
+            
+            $query = $this->addPriceJoinsIfNeeded($query);
+            $items = $this->applyOrderingAndPagination($query);
+            
+            $model = $mainCategory;
+            $metas = collect(); // Pas de métadonnées pour les promos
+            
+            $selected = $this->selected;
+            $new = $this->new;
+            $order = $this->order;
+            $paginate = $this->paginate;
+
+            return view('components.items.list-component', compact('items', 'model', 'metas', 'selected', 'order', 'new', 'paginate'));
+            
+        } else if ('brand' === $this->type) {
             $model = Brand::where('slug', $this->slug)->first();
             $search = 'brand_id';
         } else {
@@ -226,12 +251,18 @@ final class ListComponent extends Component
         }
 
         $brand = null;
-        $model = Category::where('slug', $this->catSlug)->first();
-        if ('brand' === $this->type) {
-            $brand = Brand::where('slug', $this->slug)->first();
+        if ('promo' === $this->type) {
+            // Pour les promos, le modèle est déjà défini
+            $categoryService = new CategoryService();
+            $metas = collect(); // Pas de métadonnées pour les promos
+        } else {
+            $model = Category::where('slug', $this->catSlug)->first();
+            if ('brand' === $this->type) {
+                $brand = Brand::where('slug', $this->slug)->first();
+            }
+            $categoryService = new CategoryService();
+            $metas = $categoryService->getAllMetasAndValues($model, $brand);
         }
-        $categoryService = new CategoryService();
-        $metas = $categoryService->getAllMetasAndValues($model, $brand);
 
         $selected = $this->selected;
         $new = $this->new;

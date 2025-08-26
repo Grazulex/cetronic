@@ -54,6 +54,14 @@
                         </div>
 
                         <ul class="dropdown-content dropdown-menu" aria-labelledby="navbarDropdown">
+                            @if(isset($categoriesWithPromos[$category['id']]))
+                            <li>
+                                <a class="dropdown-item fw-bold text-danger" href="{{ route('promo', ['cat' => $category['slug']]) }}">
+                                    🎯 {{ __('nav.promos') }}
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            @endif
                             @foreach ($category['brands'] as $brand)
                             <li>
                                 <a class="dropdown-item" href="{{ route('list', ['cat' => $category['slug'], 'type' => 'brand', 'slug' => $brand['slug']]) }}">

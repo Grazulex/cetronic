@@ -53,7 +53,38 @@ final class ListingController extends Controller
             $description = null;
         }
 
-        return view(view: 'front.pages.listing', data: compact('type', 'slug', 'name', 'description', 'catSlug', 'model'));
+        $search = null; // Valeur par défaut pour éviter l'erreur
+
+        return view(view: 'front.pages.listing', data: compact('type', 'slug', 'name', 'description', 'catSlug', 'model', 'search'));
+    }
+
+    public function promo(string $catSlug): Application|Factory|View|\Illuminate\Foundation\Application|RedirectResponse
+    {
+        $category = Category::where('slug', $catSlug)
+            ->with('translations', function ($query): void {
+                $query->where('locale', App::currentLocale());
+            })
+            ->first();
+
+        if (!$category) {
+            return redirect()->route('home');
+        }
+
+        $name = 'Nos promos';
+        if (isset($category->translations->first()->name)) {
+            $categoryName = $category->translations->first()->name;
+        } else {
+            $categoryName = $category->name;
+        }
+        
+        $name .= ' - ' . $categoryName;
+        $description = null;
+        $type = 'promo';
+        $slug = 'nos-promos';
+        $model = $category;
+        $search = null; // Valeur par défaut pour éviter l'erreur
+
+        return view('front.pages.listing', compact('type', 'slug', 'name', 'description', 'catSlug', 'model', 'search'));
     }
 
     public function search(Request $request): Application|Factory|View|\Illuminate\Foundation\Application|RedirectResponse

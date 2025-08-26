@@ -111,6 +111,34 @@ final class BrandService
 
         return public_path('/storage/brands/' . $filename);
     }
+
+    /**
+     * Vérifier s'il y a des produits en promotion (price_fix) pour chaque catégorie
+     * pour l'utilisateur connecté
+     */
+    public function getCategoriesWithPromos(?User $user = null): array
+    {
+        $data = [];
+        $categoryService = new CategoryService();
+        $categories = $categoryService->getCategories(user: $user);
+        
+        foreach ($categories as $category) {
+            // Compter les produits en promo dans cette catégorie pour cet utilisateur
+            $promoCount = Item::where('category_id', $category['id'])
+                ->whereNotNull('price_fix')
+                ->where('price_fix', '>', 0)
+                ->enable($user)
+                ->whereNull('master_id')
+                ->count();
+                
+            if ($promoCount > 0) {
+                $data[$category['id']] = true;
+            }
+        }
+        
+        return $data;
+    }
+
     private function getBrands($category, ?User $user = null): Collection
     {
         return  Brand::enabled(auth()->user(), $category)
