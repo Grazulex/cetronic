@@ -23,7 +23,7 @@
 
         <!-- Statistiques des commandes -->
         @php
-            $orders = $record->orders()->where('status', \App\Enum\OrderStatusEnum::SHIPPED)->get();
+            $orders = $record->orders()->whereIn('status', [\App\Enum\OrderStatusEnum::SHIPPED, \App\Enum\OrderStatusEnum::OPEN])->get();
             $totalOrders = $orders->count();
             $totalAmount = $orders->sum('total_price_with_tax') / 100;
             $avgOrderAmount = $totalOrders > 0 ? $totalAmount / $totalOrders : 0;
@@ -136,7 +136,7 @@
                 ->join('items', 'order_items.item_id', '=', 'items.id')
                 ->join('brands', 'items.brand_id', '=', 'brands.id')
                 ->where('orders.user_id', $record->id)
-                ->where('orders.status', \App\Enum\OrderStatusEnum::SHIPPED->value)
+                ->whereIn('orders.status', [\App\Enum\OrderStatusEnum::SHIPPED->value, \App\Enum\OrderStatusEnum::OPEN->value])
                 ->whereNull('orders.deleted_at')
                 ->select(
                     'brands.name as brand_name',
@@ -155,7 +155,7 @@
                 ->join('items', 'order_items.item_id', '=', 'items.id')
                 ->join('categories', 'items.category_id', '=', 'categories.id')
                 ->where('orders.user_id', $record->id)
-                ->where('orders.status', \App\Enum\OrderStatusEnum::SHIPPED->value)
+                ->whereIn('orders.status', [\App\Enum\OrderStatusEnum::SHIPPED->value, \App\Enum\OrderStatusEnum::OPEN->value])
                 ->whereNull('orders.deleted_at')
                 ->select(
                     'categories.name as category_name',
