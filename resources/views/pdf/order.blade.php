@@ -192,10 +192,10 @@
                                         <td>{{ $item->name }}</td>
                                         <td style="text-align: right">
                                             @if ($item->price_old > 0)
-                                                <font class="strike">@money($item->price_old)</font>
+                                                @money($item->price_old)
                                             @endif
                                             @if ($item->price_show > 0)
-                                                <font class="strike">@money($item->price_show)</font>
+                                                @money($item->price_show)
                                             @endif
                                         </td>
                                         <td style="text-align: right">
