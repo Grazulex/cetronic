@@ -135,18 +135,12 @@ final class ListComponent extends Component
                     $query = Item::where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
                         ->where('is_new', true)
-                        ->enable(auth()->user())
-                        ->whereHas('metas', function ($query): void {
-                            foreach ($this->selected as $meta => $values) {
-                                $query->whereIn('item_id', function ($query) use ($meta, $values): void {
-                                    $query->select('item_id')
-                                        ->from('item_metas')
-                                        ->where('meta_id', $meta)
-                                        ->whereIn('value', $values);
-                                });
-                            }
-                        })
-                        ->with('category')
+                        ->enable(auth()->user());
+                    
+                    // Appliquer les filtres de métadonnées avec logique AND
+                    $query = $this->applyMetadataFilters($query);
+                    
+                    $query = $query->with('category')
                         ->with('brand')
                         ->with('variants')
                         ->whereNull('master_id');
@@ -157,18 +151,12 @@ final class ListComponent extends Component
                     $query = Item::where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
                         ->where('is_new', true)
-                        ->enable(auth()->user())
-                        ->whereHas('metas', function ($query): void {
-                            foreach ($this->selected as $meta => $values) {
-                                $query->whereIn('item_id', function ($query) use ($meta, $values): void {
-                                    $query->select('item_id')
-                                        ->from('item_metas')
-                                        ->where('meta_id', $meta)
-                                        ->whereIn('value', $values);
-                                });
-                            }
-                        })
-                        ->with('category')
+                        ->enable(auth()->user());
+                    
+                    // Appliquer les filtres de métadonnées avec logique AND
+                    $query = $this->applyMetadataFilters($query);
+                    
+                    $query = $query->with('category')
                         ->with('brand')
                         ->with('variants');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
@@ -179,18 +167,12 @@ final class ListComponent extends Component
                 if ( ! $hasVariant) {
                     $query = Item::where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
-                        ->enable(auth()->user())
-                        ->whereHas('metas', function ($query): void {
-                            foreach ($this->selected as $meta => $values) {
-                                $query->whereIn('item_id', function ($query) use ($meta, $values): void {
-                                    $query->select('item_id')
-                                        ->from('item_metas')
-                                        ->where('meta_id', $meta)
-                                        ->whereIn('value', $values);
-                                });
-                            }
-                        })
-                        ->with('category')
+                        ->enable(auth()->user());
+                    
+                    // Appliquer les filtres de métadonnées avec logique AND
+                    $query = $this->applyMetadataFilters($query);
+                    
+                    $query = $query->with('category')
                         ->with('brand')
                         ->with('variants')
                         ->whereNull('master_id');
@@ -198,20 +180,14 @@ final class ListComponent extends Component
                     $query = $this->addPriceJoinsIfNeeded($query);
                     $items = $this->applyOrderingAndPagination($query);
                 } else {
-                    $items = Item::where($search, $model->id)
+                    $query = Item::where($search, $model->id)
                         ->enable(auth()->user())
-                        ->where('category_id', $mainCategory->id)
-                        ->whereHas('metas', function ($query): void {
-                            foreach ($this->selected as $meta => $values) {
-                                $query->whereIn('item_id', function ($query) use ($meta, $values): void {
-                                    $query->select('item_id')
-                                        ->from('item_metas')
-                                        ->where('meta_id', $meta)
-                                        ->whereIn('value', $values);
-                                });
-                            }
-                        })
-                        ->with('category')
+                        ->where('category_id', $mainCategory->id);
+                    
+                    // Appliquer les filtres de métadonnées avec logique AND
+                    $query = $this->applyMetadataFilters($query);
+                    
+                    $items = $query->with('category')
                         ->with('brand')
                         ->with('variants')->get();
 
@@ -385,5 +361,20 @@ final class ListComponent extends Component
         
         // Conserver tous les paramètres de query string
         return $paginator->withQueryString();
+    }
+
+    /**
+     * Apply metadata filters using AND logic instead of OR
+     * Each selected metadata must be present on the item
+     */
+    private function applyMetadataFilters($query)
+    {
+        foreach ($this->selected as $meta => $values) {
+            $query->whereHas('metas', function ($q) use ($meta, $values): void {
+                $q->where('meta_id', $meta)
+                  ->whereIn('value', $values);
+            });
+        }
+        return $query;
     }
 }
