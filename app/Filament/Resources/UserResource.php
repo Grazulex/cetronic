@@ -214,6 +214,17 @@ final class UserResource extends Resource
             ])
             ->actions(actions: [
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('stats')
+                    ->label('Statistiques')
+                    ->icon('heroicon-s-chart-bar')
+                    ->color(fn ($record) => ($record->role === UserRoleEnum::CUSTOMER && $record->orders_count > 0) ? 'success' : 'gray')
+                    ->url(fn ($record) => ($record->role === UserRoleEnum::CUSTOMER && $record->orders_count > 0) 
+                        ? UserResource::getUrl('customer-stats', ['record' => $record]) 
+                        : null)
+                    ->disabled(fn ($record) => $record->role !== UserRoleEnum::CUSTOMER || $record->orders_count == 0)
+                    ->tooltip(fn ($record) => $record->role !== UserRoleEnum::CUSTOMER 
+                        ? 'Statistiques disponibles uniquement pour les clients' 
+                        : ($record->orders_count == 0 ? 'Aucune commande trouvée' : 'Voir les statistiques')),
                 Tables\Actions\Action::make('Login')
                     ->label(__('Login with this user'))
                     ->action(function ($record) {
@@ -349,6 +360,7 @@ final class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            'customer-stats' => Pages\CustomerStats::route('/{record}/stats'),
         ];
     }
 
