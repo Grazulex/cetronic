@@ -124,6 +124,10 @@ final class UserResource extends Resource
                     ->label('Type de client')
                     ->options(CustomerType::where('is_active', true)->pluck('name', 'id'))
                     ->searchable(),
+                Tables\Filters\SelectFilter::make('agent_id')
+                    ->label('Agent')
+                    ->options(User::where('role', 'agent')->pluck('name', 'id'))
+                    ->searchable(),
                 Tables\Filters\TernaryFilter::make('is_actif')
                     ->label('Compte actif')
                     ->placeholder('Tous')
@@ -298,6 +302,7 @@ final class UserResource extends Resource
                 ])->columns(2),
                 Forms\Components\Section::make('Activations')->schema([
                     Forms\Components\Select::make('agent_id')
+                        ->label('Agent')
                         ->options(User::pluck('name', 'id'))
                         ->searchable(),
                     Forms\Components\Toggle::make('is_actif')
