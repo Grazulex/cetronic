@@ -16,20 +16,20 @@ final class PriceTestSeeder extends Seeder
      */
     public function run(): void
     {
-        // Pour l'URL /fr/okeefe/category/okeefe, on a besoin de:
-        // - catSlug = "okeefe" (filtre par catégorie)
-        // - type = "category", slug = "okeefe" (affiche la catégorie okeefe)
-        // Donc tous les items doivent être dans la catégorie "okeefe"
+        // Pour l'URL /fr/bradtke/category/bradtke, on a besoin de:
+        // - catSlug = "bradtke" (filtre par catégorie)
+        // - type = "category", slug = "bradtke" (affiche la catégorie bradtke)
+        // Donc tous les items doivent être dans la catégorie "bradtke"
         
-        $okeefeCategory = Category::where('slug', 'okeefe')->first();
+        $targetCategory = Category::where('slug', 'bradtke')->first();
         $brands = Brand::limit(5)->get(); // Prendre plusieurs marques différentes
 
-        if (!$okeefeCategory || $brands->count() == 0) {
-            $this->command->error('Catégorie okeefe ou marques non trouvées');
+        if (!$targetCategory || $brands->count() == 0) {
+            $this->command->error('Catégorie bradtke ou marques non trouvées');
             return;
         }
 
-        $this->command->info("Création d'items de test dans la catégorie: {$okeefeCategory->slug}");
+        $this->command->info("Création d'items de test dans la catégorie: {$targetCategory->slug}");
         $this->command->info("Avec différentes marques pour tester");
 
         // Supprimer les anciens items de test
@@ -40,7 +40,7 @@ final class PriceTestSeeder extends Seeder
             'reference' => 'TEST-001',
             'slug' => 'test-001-prix-normal',
             'brand_id' => $brands[0]->id,
-            'category_id' => $okeefeCategory->id,
+            'category_id' => $targetCategory->id,
             'description' => 'Test: Prix normal 100€ - ' . $brands[0]->slug,
             'is_published' => true,
             'price' => 10000, // 100€ en centimes
@@ -53,7 +53,7 @@ final class PriceTestSeeder extends Seeder
             'reference' => 'TEST-002',
             'slug' => 'test-002-promo-avantageuse',
             'brand_id' => $brands[1]->id,
-            'category_id' => $okeefeCategory->id,
+            'category_id' => $targetCategory->id,
             'description' => 'Test: Prix 120€, Promo 80€ - ' . $brands[1]->slug,
             'is_published' => true,
             'price' => 12000, // 120€
@@ -66,7 +66,7 @@ final class PriceTestSeeder extends Seeder
             'reference' => 'TEST-003',
             'slug' => 'test-003-promo-moins-avantageuse',
             'brand_id' => $brands[2]->id,
-            'category_id' => $okeefeCategory->id,
+            'category_id' => $targetCategory->id,
             'description' => 'Test: Prix 90€, Promo 110€ - ' . $brands[2]->slug,
             'is_published' => true,
             'price' => 9000, // 90€
@@ -79,7 +79,7 @@ final class PriceTestSeeder extends Seeder
             'reference' => 'TEST-004',
             'slug' => 'test-004-prix-tres-bas',
             'brand_id' => $brands[3]->id,
-            'category_id' => $okeefeCategory->id,
+            'category_id' => $targetCategory->id,
             'description' => 'Test: Prix très bas 50€ - ' . $brands[3]->slug,
             'is_published' => true,
             'price' => 5000, // 50€
@@ -92,7 +92,7 @@ final class PriceTestSeeder extends Seeder
             'reference' => 'TEST-005',
             'slug' => 'test-005-grosse-promo',
             'brand_id' => $brands[4]->id ?? $brands[0]->id,
-            'category_id' => $okeefeCategory->id,
+            'category_id' => $targetCategory->id,
             'description' => 'Test: Prix 200€, Promo 60€ - ' . ($brands[4]->slug ?? $brands[0]->slug),
             'is_published' => true,
             'price' => 20000, // 200€
@@ -105,7 +105,7 @@ final class PriceTestSeeder extends Seeder
             'reference' => 'TEST-006',
             'slug' => 'test-006-prix-moyen',
             'brand_id' => $brands[1]->id,
-            'category_id' => $okeefeCategory->id,
+            'category_id' => $targetCategory->id,
             'description' => 'Test: Prix moyen 75€ - ' . $brands[1]->slug,
             'is_published' => true,
             'price' => 7500, // 75€
@@ -118,7 +118,7 @@ final class PriceTestSeeder extends Seeder
             'reference' => 'TEST-007',
             'slug' => 'test-007-promo-egale',
             'brand_id' => $brands[2]->id,
-            'category_id' => $okeefeCategory->id,
+            'category_id' => $targetCategory->id,
             'description' => 'Test: Prix 85€, Promo 85€ - ' . $brands[2]->slug,
             'is_published' => true,
             'price' => 8500, // 85€

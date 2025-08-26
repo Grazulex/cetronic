@@ -9,9 +9,13 @@ use App\Models\Category;
 use App\Models\CategoryMeta;
 use App\Models\Item;
 use App\Services\CategoryService;
+use App\Services\ItemService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 
 final class ListComponent extends Component
@@ -122,9 +126,8 @@ final class ListComponent extends Component
                         ->with('variants')
                         ->whereNull('master_id');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $items = $this->applyOrdering($query)
-                        ->paginate($this->paginate)
-                        ->withQueryString();
+                    $query = $this->addPriceJoinsIfNeeded($query);
+                    $items = $this->applyOrderingAndPagination($query);
                 } else {
                     $query = Item::where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
@@ -144,9 +147,8 @@ final class ListComponent extends Component
                         ->with('brand')
                         ->with('variants');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $items = $this->applyOrdering($query)
-                        ->paginate($this->paginate)
-                        ->withQueryString();
+                    $query = $this->addPriceJoinsIfNeeded($query);
+                    $items = $this->applyOrderingAndPagination($query);
                 }
             } else {
                 if ( ! $hasVariant) {
@@ -168,9 +170,8 @@ final class ListComponent extends Component
                         ->with('variants')
                         ->whereNull('master_id');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $items = $this->applyOrdering($query)
-                        ->paginate($this->paginate)
-                        ->withQueryString();
+                    $query = $this->addPriceJoinsIfNeeded($query);
+                    $items = $this->applyOrderingAndPagination($query);
                 } else {
                     $items = Item::where($search, $model->id)
                         ->enable(auth()->user())
@@ -207,9 +208,8 @@ final class ListComponent extends Component
                         ->with('variants')
                         ->whereNull('master_id');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $items = $this->applyOrdering($query)
-                        ->paginate($this->paginate)
-                        ->withQueryString();
+                    $query = $this->addPriceJoinsIfNeeded($query);
+                    $items = $this->applyOrderingAndPagination($query);
                 }
             }
         } else {
@@ -221,9 +221,8 @@ final class ListComponent extends Component
                 ->with('variants')
                 ->whereNull('master_id');
                 //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-            $items = $this->applyOrdering($query)
-                ->paginate($this->paginate)
-                ->withQueryString();
+            $query = $this->addPriceJoinsIfNeeded($query);
+            $items = $this->applyOrderingAndPagination($query);
         }
 
         $brand = null;
@@ -243,26 +242,114 @@ final class ListComponent extends Component
     }
 
     /**
-     * Apply ordering to the query, handling calculated price ordering
+     * Add price-related joins to query when needed for ordering
+     */
+    private function addPriceJoinsIfNeeded($query)
+    {
+        // Plus besoin de leftJoin, nous utilisons ItemService pour calculer les prix
+        return $query;
+    }
+
+    /**
+     * Apply ordering and pagination to the query
+     */
+    private function applyOrderingAndPagination($query)
+    {
+        if ($this->orderField === 'price') {
+            // Pour le tri par prix, nous récupérons tous les items et les trions en PHP
+            $allItems = $query->get();
+            $user = auth()->user();
+            
+            // Calculer le prix effectif pour chaque item via ItemService
+            $itemsWithPrices = $allItems->map(function ($item) use ($user) {
+                $itemService = new ItemService($item);
+                $prices = $itemService->getPrice($user);
+                $item->calculated_price = $prices['price_end']; // Prix effectif final
+                return $item;
+            });
+            
+            // Trier par prix effectif
+            if ($this->orderDirection === 'desc') {
+                $sortedItems = $itemsWithPrices->sortByDesc(function ($item) {
+                    return $item->calculated_price;
+                });
+            } else {
+                $sortedItems = $itemsWithPrices->sortBy(function ($item) {
+                    return $item->calculated_price;
+                });
+            }
+            
+            // Créer une pagination manuelle
+            return $this->createManualPagination($sortedItems);
+        } else {
+            // Ordre normal pour les autres champs avec pagination standard
+            return $query->orderBy($this->orderField, $this->orderDirection)
+                         ->paginate($this->paginate)
+                         ->withQueryString();
+        }
+    }
+
+    /**
+     * Apply ordering to the query using ItemService for price calculation
      */
     private function applyOrdering($query)
     {
         if ($this->orderField === 'price') {
-            // Pour l'ordre par prix, on utilise une logique similaire à ItemService::getPrice()
-            // On calcule le prix effectif en tenant compte des promos
+            // Pour le tri par prix, nous récupérons tous les items et les trions en PHP
+            $allItems = $query->get();
             $user = auth()->user();
             
-            // Logique simplifiée : on prend le prix le plus avantageux
-            // Entre price et price_promo (si price_promo > 0 et < price)
-            return $query->orderByRaw("
-                CASE 
-                    WHEN price_promo > 0 AND price_promo < price THEN price_promo
-                    ELSE price 
-                END {$this->orderDirection}
-            ");
+            // Calculer le prix effectif pour chaque item via ItemService
+            $itemsWithPrices = $allItems->map(function ($item) use ($user) {
+                $itemService = new ItemService($item);
+                $prices = $itemService->getPrice($user);
+                $item->calculated_price = $prices['price_end']; // Prix effectif final
+                return $item;
+            });
+            
+            // Trier par prix effectif
+            $sortedItems = $itemsWithPrices->sortBy(function ($item) {
+                return $item->calculated_price;
+            });
+            
+            if ($this->orderDirection === 'desc') {
+                $sortedItems = $sortedItems->sortByDesc(function ($item) {
+                    return $item->calculated_price;
+                });
+            }
+            
+            // Créer une pagination manuelle
+            return $this->createManualPagination($sortedItems);
         } else {
             // Ordre normal pour les autres champs
             return $query->orderBy($this->orderField, $this->orderDirection);
         }
+    }
+    
+    /**
+     * Create manual pagination from a sorted collection
+     */
+    private function createManualPagination(Collection $items)
+    {
+        $currentPage = request()->get('page', 1);
+        $perPage = $this->paginate;
+        
+        // Calculer l'offset
+        $offset = ($currentPage - 1) * $perPage;
+        
+        // Prendre seulement les items pour la page actuelle
+        $itemsForCurrentPage = $items->slice($offset, $perPage)->values();
+        
+        // Créer la pagination
+        return new LengthAwarePaginator(
+            $itemsForCurrentPage,
+            $items->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'pageName' => 'page',
+            ]
+        );
     }
 }
