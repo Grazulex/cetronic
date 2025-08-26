@@ -40,6 +40,7 @@ final class User extends Authenticatable implements FilamentUser, HasLocalePrefe
         'receive_cart_notification',
         'language',
         'logged_at',
+        'customer_type_id',
     ];
 
     protected $hidden = [
@@ -99,6 +100,11 @@ final class User extends Authenticatable implements FilamentUser, HasLocalePrefe
     public function agent(): BelongsTo
     {
         return $this->belongsTo(User::class, 'agent_id');
+    }
+
+    public function customerType(): BelongsTo
+    {
+        return $this->belongsTo(CustomerType::class);
     }
 
     public function can_connect(): bool

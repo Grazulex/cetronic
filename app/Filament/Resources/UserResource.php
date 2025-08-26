@@ -12,6 +12,7 @@ use App\Filament\Resources\UserResource\RelationManagers\DiscountsRelationManage
 use App\Filament\Resources\UserResource\RelationManagers\LocationsRelationManager;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\CustomerType;
 use App\Models\User;
 use App\Services\UserService;
 use Filament\Forms;
@@ -45,6 +46,7 @@ final class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->with('customerType')
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
@@ -69,6 +71,10 @@ final class UserResource extends Resource
                             ->searchable()
                             ->sortable(),
                         TextColumn::make('role')
+                            ->searchable()
+                            ->sortable(),
+                        TextColumn::make('customerType.name')
+                            ->label('Type de client')
                             ->searchable()
                             ->sortable(),
                     ]),
@@ -106,6 +112,10 @@ final class UserResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('customer_type_id')
+                    ->label('Type de client')
+                    ->options(CustomerType::where('is_active', true)->pluck('name', 'id'))
+                    ->searchable(),
             ])
             ->actions(actions: [
                 Tables\Actions\EditAction::make(),
@@ -179,6 +189,11 @@ final class UserResource extends Resource
                         Forms\Components\Select::make('language')
                             ->options(['fr' => 'Français', 'en' => 'English', 'nl' => 'Nederlands'])
                             ->searchable(),
+                        Forms\Components\Select::make('customer_type_id')
+                            ->label('Type de client')
+                            ->options(CustomerType::where('is_active', true)->pluck('name', 'id'))
+                            ->searchable()
+                            ->nullable(),
                     ])->columns(2),
                 Forms\Components\Section::make('Shipping')->schema([
                     Forms\Components\TextInput::make('franco')
