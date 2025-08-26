@@ -137,18 +137,34 @@ final class ItemService
                 $price_end = ($price_promo > 0) ? $price_promo - ($price_promo * ($rule->reduction / 100)) : $price_start - ($price_start * ($rule->reduction / 100));
             }
 
+            // Si l'item a un price_fix et que not_show_promo = false, le price_fix a la priorité
+            $final_price_end = $price_end;
+            if ($this->item->price_fix > 0 && !$rule->not_show_promo) {
+                $final_price_end = $this->item->price_fix;
+            } else {
+                $final_price_end = ($price_end > 0) ? $price_end : (($price_promo > 0) ? $price_promo : $price_start);
+            }
 
             return collect([
                 'price_start' => $price_start,
                 'price_promo' => $price_promo,
-                'price_end'   => ($price_end > 0) ? $price_end : (($price_promo > 0) ? $price_promo : $price_start),
+                'price_end'   => $final_price_end,
                 'sale'        => $this->item->sale_price,
             ]);
         }
+        
+        // Pas de règle UserBrand trouvée - comportement par défaut
+        $default_price_end = ($this->item->price_promo > 0) ? $this->item->price_promo : $this->getDefaultPrice();
+        
+        // Si l'item a un price_fix, il a la priorité sur le prix par défaut
+        if ($this->item->price_fix > 0) {
+            $default_price_end = $this->item->price_fix;
+        }
+        
         return collect([
             'price_start' => $this->getDefaultPrice(),
             'price_promo' => $this->item->price_promo,
-            'price_end'   => ($this->item->price_promo > 0) ? $this->item->price_promo : $this->getDefaultPrice(),
+            'price_end'   => $default_price_end,
             'sale'        => $this->item->sale_price,
         ]);
 
@@ -167,10 +183,18 @@ final class ItemService
 
     private function getPricesForGuest(): \Illuminate\Support\Collection
     {
+        // Comportement par défaut pour les invités
+        $guest_price_end = ($this->item->price_promo > 0) ? $this->item->price_promo : $this->getDefaultPrice();
+        
+        // Si l'item a un price_fix, il a la priorité sur le prix par défaut
+        if ($this->item->price_fix > 0) {
+            $guest_price_end = $this->item->price_fix;
+        }
+        
         return collect([
             'price_start' => $this->getDefaultPrice(),
             'price_promo' => $this->item->price_promo,
-            'price_end'   => ($this->item->price_promo > 0) ? $this->item->price_promo : $this->getDefaultPrice(),
+            'price_end'   => $guest_price_end,
             'sale'        => 0,
         ]);
     }
