@@ -340,8 +340,8 @@ final class ListComponent extends Component
         // Prendre seulement les items pour la page actuelle
         $itemsForCurrentPage = $items->slice($offset, $perPage)->values();
         
-        // Créer la pagination
-        return new LengthAwarePaginator(
+        // Créer la pagination avec conservation de tous les paramètres
+        $paginator = new LengthAwarePaginator(
             $itemsForCurrentPage,
             $items->count(),
             $perPage,
@@ -351,5 +351,8 @@ final class ListComponent extends Component
                 'pageName' => 'page',
             ]
         );
+        
+        // Conserver tous les paramètres de query string
+        return $paginator->withQueryString();
     }
 }
