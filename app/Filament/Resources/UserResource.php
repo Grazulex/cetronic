@@ -303,7 +303,7 @@ final class UserResource extends Resource
                 Forms\Components\Section::make('Activations')->schema([
                     Forms\Components\Select::make('agent_id')
                         ->label('Agent')
-                        ->options(User::pluck('name', 'id'))
+                        ->options(User::where('role', 'agent')->pluck('name', 'id'))
                         ->searchable(),
                     Forms\Components\Toggle::make('is_actif')
                         ->required(),
