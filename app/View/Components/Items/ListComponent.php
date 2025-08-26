@@ -103,7 +103,7 @@ final class ListComponent extends Component
         if (count($this->selected) > 0 || '' !== $this->new) {
             if ('1' === $this->new) {
                 if ( ! $hasVariant) {
-                    $items = Item::where($search, $model->id)
+                    $query = Item::where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
                         ->where('is_new', true)
                         ->enable(auth()->user())
@@ -120,13 +120,13 @@ final class ListComponent extends Component
                         ->with('category')
                         ->with('brand')
                         ->with('variants')
-                        ->whereNull('master_id')
+                        ->whereNull('master_id');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                        ->orderBy($this->orderField, $this->orderDirection)
+                    $items = $this->applyOrdering($query)
                         ->paginate($this->paginate)
                         ->withQueryString();
                 } else {
-                    $items = Item::where($search, $model->id)
+                    $query = Item::where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
                         ->where('is_new', true)
                         ->enable(auth()->user())
@@ -142,15 +142,15 @@ final class ListComponent extends Component
                         })
                         ->with('category')
                         ->with('brand')
-                        ->with('variants')
+                        ->with('variants');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                        ->orderBy($this->orderField, $this->orderDirection)
+                    $items = $this->applyOrdering($query)
                         ->paginate($this->paginate)
                         ->withQueryString();
                 }
             } else {
                 if ( ! $hasVariant) {
-                    $items = Item::where($search, $model->id)
+                    $query = Item::where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
                         ->enable(auth()->user())
                         ->whereHas('metas', function ($query): void {
@@ -166,9 +166,9 @@ final class ListComponent extends Component
                         ->with('category')
                         ->with('brand')
                         ->with('variants')
-                        ->whereNull('master_id')
+                        ->whereNull('master_id');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                        ->orderBy($this->orderField, $this->orderDirection)
+                    $items = $this->applyOrdering($query)
                         ->paginate($this->paginate)
                         ->withQueryString();
                 } else {
@@ -198,30 +198,30 @@ final class ListComponent extends Component
                         }
                     }
 
-                    $items = Item::whereIn('id', $showMaster)
+                    $query = Item::whereIn('id', $showMaster)
                         ->where($search, $model->id)
                         ->where('category_id', $mainCategory->id)
                         ->where('is_published', true)
                         ->with('category')
                         ->with('brand')
                         ->with('variants')
-                        ->whereNull('master_id')
+                        ->whereNull('master_id');
                         //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                        ->orderBy($this->orderField, $this->orderDirection)
+                    $items = $this->applyOrdering($query)
                         ->paginate($this->paginate)
                         ->withQueryString();
                 }
             }
         } else {
-            $items = Item::where($search, $model->id)
+            $query = Item::where($search, $model->id)
                 ->where('category_id', $mainCategory->id)
                 ->enable(auth()->user())
                 ->with('category')
                 ->with('brand')
                 ->with('variants')
-                ->whereNull('master_id')
+                ->whereNull('master_id');
                 //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                ->orderBy($this->orderField, $this->orderDirection)
+            $items = $this->applyOrdering($query)
                 ->paginate($this->paginate)
                 ->withQueryString();
         }
@@ -240,5 +240,29 @@ final class ListComponent extends Component
         $paginate = $this->paginate;
 
         return view('components.items.list-component', compact('items', 'model', 'metas', 'selected', 'order', 'new', 'paginate'));
+    }
+
+    /**
+     * Apply ordering to the query, handling calculated price ordering
+     */
+    private function applyOrdering($query)
+    {
+        if ($this->orderField === 'price') {
+            // Pour l'ordre par prix, on utilise une logique similaire à ItemService::getPrice()
+            // On calcule le prix effectif en tenant compte des promos
+            $user = auth()->user();
+            
+            // Logique simplifiée : on prend le prix le plus avantageux
+            // Entre price et price_promo (si price_promo > 0 et < price)
+            return $query->orderByRaw("
+                CASE 
+                    WHEN price_promo > 0 AND price_promo < price THEN price_promo
+                    ELSE price 
+                END {$this->orderDirection}
+            ");
+        } else {
+            // Ordre normal pour les autres champs
+            return $query->orderBy($this->orderField, $this->orderDirection);
+        }
     }
 }

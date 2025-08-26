@@ -111,10 +111,11 @@ final class DatabaseSeeder extends Seeder
                 }
 
                 $faker = Factory::create();
-                $imageUrl = $faker->imageUrl(640, 480, null, false);
+                // Commented out to avoid URL download issues during seeding
+                // $imageUrl = $faker->imageUrl(640, 480, null, false);
 
-                $item->addMediaFromUrl($imageUrl)
-                    ->toMediaCollection('default', 'items');
+                // $item->addMediaFromUrl($imageUrl)
+                //     ->toMediaCollection('default', 'items');
             }
         }
 

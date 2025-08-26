@@ -35,7 +35,7 @@
     "name": "laravel/laravel",
     "prefer-stable": true,
     "require": {
-        "php": "^8.2.0",
+        "php": "^8.3.0",
         "ext-zip": "*",
         "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "^3.6",
