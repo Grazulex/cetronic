@@ -3,93 +3,58 @@
 <head>
     <link rel="stylesheet" href="{{ base_path('public/Css/pdf.css') }}">
     <link rel="stylesheet" href="{{ base_path('public/Css/simple-grid.css') }}">
-    <style>
-        .page-number {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 8px;
-            color: #ccc;
-            font-family: Arial, sans-serif;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
     @php
+        $rowCount = 0;
+        $nextPage = 0;
         $oldGroup = '';
-        $isFirstProduct = true;
-        $currentPage = 1;
-
-        // Calculer le nombre total de pages
-        $totalPages = 0;
-        $tempGroup = '';
-        $tempCount = 0;
-        foreach($products as $tempProduct) {
-            if ($tempGroup != $tempProduct->catalog_group) {
-                if ($tempCount > 0) {
-                    $totalPages += ceil($tempCount / 6);
-                }
-                $tempGroup = $tempProduct->catalog_group;
-                $tempCount = 1;
-            } else {
-                $tempCount++;
-            }
-        }
-        if ($tempCount > 0) {
-            $totalPages += ceil($tempCount / 6);
-        }
     @endphp
-
-    {{-- Numéro de page pour la première page --}}
-    @if ($isFirstProduct)
-        <div class="page-number">{{ $currentPage }}/{{ $totalPages }}</div>
-    @endif
-
-    @foreach($products as $index => $product)
-        {{-- Nouveau groupe = nouvelle page --}}
-        @if (!$isFirstProduct && $oldGroup != $product->catalog_group)
-            </div>
-            <div class="page-break"></div>
-            <div class="page-header"></div>
-            @php $currentPage++; @endphp
-            <div class="page-number">{{ $currentPage }}/{{ $totalPages }}</div>
-            <div class="row">
-        @endif
-
-        {{-- Nouvelle page après 6 produits (dans le même groupe) --}}
-        @if (!$isFirstProduct && $oldGroup == $product->catalog_group && $index % 6 == 0)
-            </div>
-            <div class="page-break"></div>
-            <div class="page-header"></div>
-            @php $currentPage++; @endphp
-            <div class="page-number">{{ $currentPage }}/{{ $totalPages }}</div>
-            <div class="row">
-        @endif
-
-        {{-- Commencer une nouvelle rangée --}}
-        @if ($isFirstProduct || $oldGroup != $product->catalog_group)
-            <div class="row">
-        @endif
-
-        <div class="col-2 item">
-            <div class="image"><img src="{{$product->first_media_path}}"></div>
-            <div class="product-data">
-                <div class="sku"><b>{{$product->reference}} - {{$product->reseller_price}}€</b></div>
-                <div class="meta">
-                    @foreach($product->metas as $meta)
-                        <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
-                    @endforeach
-                    <div><b>Group: {{ $product->catalog_group }}</b></div>
+    <div class="row">
+        @foreach($products as $product)
+            @if ($rowCount > 0 && $oldGroup != $product->catalog_group)
+                @php
+                    $rowCount = 0;
+                    $nextPage++;
+                @endphp
+                <div class="page-break"></div>
+                <div class="page-header"></div>
+            @endif
+            <div class="col-2 item">
+                <div class="image"><img src="{{$product->first_media_path}}"></div>
+                <div class="product-data">
+                    <div class="sku"><b>{{$product->reference}} - {{$product->reseller_price}}€</b></div>
+                    <div class="meta">
+                        @foreach($product->metas as $meta)
+                            <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
+                        @endforeach
+                        <div><b>Group: {{ $product->catalog_group }}</b></div>
+                    </div>
                 </div>
             </div>
-        </div>
-
+            @php
+                $rowCount++;
+            @endphp
+            @if ($rowCount == 6)
+                @php
+                    $nextPage++;
+                    $rowCount = 0;
+                @endphp
+    </div>
+    @if ($nextPage == 2)
+        <div class="page-break"></div>
+        <div class="page-header"></div>
+        @php
+            $nextPage = 0;
+        @endphp
+    @endif
+    <div class="row">
+        @endif
         @php
             $oldGroup = $product->catalog_group;
-            $isFirstProduct = false;
         @endphp
-    @endforeach
+        @endforeach
     </div>
 </div>
 </body>
