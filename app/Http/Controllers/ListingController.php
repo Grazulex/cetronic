@@ -66,7 +66,7 @@ final class ListingController extends Controller
             })
             ->first();
 
-        if (!$category) {
+        if ( ! $category) {
             return redirect()->route('home');
         }
 
@@ -76,7 +76,7 @@ final class ListingController extends Controller
         } else {
             $categoryName = $category->name;
         }
-        
+
         $name .= ' - ' . $categoryName;
         $description = null;
         $type = 'promo';
@@ -93,6 +93,12 @@ final class ListingController extends Controller
 
         $items = Item::where('reference', 'LIKE', '%' . $search . '%')
             ->enable(auth()->user())
+            ->whereHas('brand', function ($query): void {
+                $query->enabled(auth()->user());
+            })
+            ->whereHas('category', function ($query): void {
+                $query->enabled();
+            })
             ->with('category')
             ->with('brand')
             ->with('variants')

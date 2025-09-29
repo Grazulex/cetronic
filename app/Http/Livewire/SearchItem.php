@@ -16,6 +16,12 @@ final class SearchItem extends Component
         if ($this->term && mb_strlen($this->term) > 2) {
             $items = Item::where('reference', 'LIKE', "%{$this->term}%")
                 ->enable(auth()->user())
+                ->whereHas('brand', function ($query): void {
+                    $query->enabled(auth()->user());
+                })
+                ->whereHas('category', function ($query): void {
+                    $query->enabled();
+                })
                 ->with('category')
                 ->with('brand')
                 ->with('variants')
