@@ -15,14 +15,16 @@ class MergeCatalogPdfsJob implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $timeout = 600; // 10 minutes pour la fusion
-    public $queue = 'catalog'; // Queue dédiée pour le suivi dans Horizon
 
     /**
      * @param string $catalogName Le nom du catalogue (ex: "Hommes", "Femmes", etc.)
      */
     public function __construct(
         public string $catalogName
-    ) {}
+    ) {
+        // Définir la queue via la méthode du trait Queueable
+        $this->onQueue('catalog');
+    }
 
     public function handle(): void
     {

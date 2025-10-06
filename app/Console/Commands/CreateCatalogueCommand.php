@@ -69,6 +69,7 @@ class CreateCatalogueCommand extends Command
         }
 
         // Créer un batch avec tous les jobs + le job de merge à la fin
+        // Note: La queue 'catalog' est définie dans le constructeur de chaque job
         $batch = Bus::batch($jobs)
             ->then(function () {
                 // Une fois tous les jobs terminés, lancer le merge
@@ -81,7 +82,6 @@ class CreateCatalogueCommand extends Command
                 \Log::info("Batch de génération du catalogue terminé");
             })
             ->name("Catalogue Complet")
-            ->onQueue('catalog') // Queue dédiée pour isoler dans Horizon
             ->dispatch();
 
         $this->info("✅ Batch créé avec ID: {$batch->id}");

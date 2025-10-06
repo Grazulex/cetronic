@@ -18,7 +18,6 @@ class GenerateCatalogGroupJob implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $timeout = 300; // 5 minutes max par groupe
-    public $queue = 'catalog'; // Queue dédiée pour le suivi dans Horizon
 
     /**
      * @param string $catalogGroup Le numéro du groupe (ex: "010", "015", etc.)
@@ -29,7 +28,10 @@ class GenerateCatalogGroupJob implements ShouldQueue
         public string $catalogGroup,
         public ?string $genderFilter,
         public string $catalogName
-    ) {}
+    ) {
+        // Définir la queue via la méthode du trait Queueable
+        $this->onQueue('catalog');
+    }
 
     public function handle(): void
     {
