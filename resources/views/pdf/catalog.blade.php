@@ -22,15 +22,19 @@
                 <div class="page-header"></div>
             @endif
             <div class="col-2 item">
-                <div class="image"><img src="{{$product->first_media_path}}"></div>
+                @if($product->first_media_path)
+                    <div class="image"><img src="{{$product->first_media_path}}" loading="lazy"></div>
+                @endif
                 <div class="product-data">
                     <div class="sku"><b>{{$product->reference}} - {{$product->reseller_price}}€</b></div>
-                    <div class="meta">
-                        @foreach($product->metas as $meta)
-                            <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
-                        @endforeach
-                        <div><b>Group: {{ $product->catalog_group }}</b></div>
-                    </div>
+                    @if($product->metas->isNotEmpty())
+                        <div class="meta">
+                            @foreach($product->metas as $meta)
+                                <div><b>{{ucfirst($meta->meta->name)}}: </b>{{$meta->value}}</div>
+                            @endforeach
+                            <div><b>Group: {{ $product->catalog_group }}</b></div>
+                        </div>
+                    @endif
                 </div>
             </div>
             @php
