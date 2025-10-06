@@ -20,11 +20,22 @@ final class SendMailActifUser implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public User $user) {}
+    /**
+     * @param int $userId L'ID du user (au lieu du modèle complet pour éviter les erreurs de sérialisation)
+     */
+    public function __construct(public int $userId) {}
 
     public function handle(): void
     {
-        Mail::to(users: $this->user)
-            ->send(mailable: new ActifUser(user: $this->user));
+        // Recharger le user depuis la DB
+        $user = User::find($this->userId);
+
+        if (!$user) {
+            \Log::warning("User {$this->userId} not found for SendMailActifUser");
+            return;
+        }
+
+        Mail::to(users: $user)
+            ->send(mailable: new ActifUser(user: $user));
     }
 }

@@ -87,6 +87,7 @@ return [
 
     'waits' => [
         'redis:default' => 60,
+        'redis:catalog' => 120, // Alertes après 2 minutes d'attente pour la queue catalog
     ],
 
     /*
@@ -179,6 +180,18 @@ return [
             'timeout' => 9000,
             'nice' => 0,
         ],
+        'supervisor-catalog' => [
+            'connection' => 'redis',
+            'queue' => ['catalog'],
+            'balance' => 'auto',
+            'maxProcesses' => 5,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 512,
+            'tries' => 3,
+            'timeout' => 600,
+            'nice' => 0,
+        ],
     ],
 
     'environments' => [
@@ -188,11 +201,19 @@ return [
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],
+            'supervisor-catalog' => [
+                'maxProcesses' => 10, // 10 jobs en parallèle pour générer le catalogue
+                'balanceMaxShift' => 1,
+                'balanceCooldown' => 3,
+            ],
         ],
 
         'local' => [
             'supervisor-1' => [
                 'maxProcesses' => 3,
+            ],
+            'supervisor-catalog' => [
+                'maxProcesses' => 3, // 3 jobs en parallèle en local
             ],
         ],
     ],

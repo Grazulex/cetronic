@@ -4,24 +4,16 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Jobs\GenerateCatalogGroupJob;
+use App\Jobs\MergeCatalogPdfsJob;
 use App\Models\Item;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Bus;
 
 abstract class AbstractCatalogueCommand extends Command
 {
-    public const STORAGE_PDF_DIR = 'app/public/pdf/';
-    public const FILE_NAME_PREFIX = 'catalog_';
-    public const FILE_NAME_POSTFIX = '.pdf';
-
-    public $timeout = 0; // Pas de timeout
-
-    protected $signature = '{--skip-merge : Ne pas fusionner les PDFs (garde les fichiers séparés)}
-                            {--merge-only : Fusionner uniquement les PDFs existants}
-                            {--resume= : Reprendre à partir d\'un groupe spécifique}
-                            {--only= : Générer uniquement certains groupes (ex: 010,020,030)}';
+    protected $signature = '{--queue : Utiliser les queues pour la génération (recommandé sur Forge)}';
 
     /**
      * Retourne le nom du fichier final (ex: "Hommes", "Femmes", "Enfants", "Unisex")
@@ -35,17 +27,7 @@ abstract class AbstractCatalogueCommand extends Command
 
     public function handle(): void
     {
-        set_time_limit(0);
-        ini_set('max_execution_time', '0');
-
-        // Mode fusion uniquement
-        if ($this->option('merge-only')) {
-            $this->info('Mode fusion uniquement...');
-            $this->mergeExistingPdfs();
-            return;
-        }
-
-        $this->info("Début de la génération du catalogue : {$this->getFileName()}");
+        $this->info("🚀 Génération du catalogue : {$this->getFileName()}");
 
         // Construire la requête de base avec filtre de genre
         $baseQuery = Item::where('is_published', 1)
@@ -72,154 +54,67 @@ abstract class AbstractCatalogueCommand extends Command
             ->pluck('catalog_group');
 
         if ($catalogGroups->isEmpty()) {
-            $this->error('Aucun groupe de catalogue trouvé pour ce genre');
+            $this->error('❌ Aucun groupe de catalogue trouvé pour ce genre');
             return;
         }
 
-        // Filtrer selon les options
-        if ($only = $this->option('only')) {
-            $onlyGroups = explode(',', $only);
-            $catalogGroups = $catalogGroups->filter(fn($g) => in_array($g, $onlyGroups));
-            $this->info("Mode filtré : " . count($catalogGroups) . " groupes sélectionnés");
-        }
+        $this->info("📊 {$catalogGroups->count()} groupes trouvés");
 
-        if ($resume = $this->option('resume')) {
-            $resumeIndex = $catalogGroups->search($resume);
-            if ($resumeIndex !== false) {
-                $catalogGroups = $catalogGroups->slice($resumeIndex);
-                $this->info("Reprise à partir du groupe : {$resume}");
-            }
-        }
-
-        if (! Storage::directories('public/pdf')) {
-            Storage::makeDirectory('public/pdf');
-        }
-
-        $pdfFiles = [];
-        $groupCount = $catalogGroups->count();
-        $currentGroup = 0;
-
-        // Générer un PDF par groupe de catalogue
-        foreach ($catalogGroups as $group) {
-            $currentGroup++;
-            $startTime = microtime(true);
-
-            $this->info("Traitement du groupe {$currentGroup}/{$groupCount}: {$group}");
-
-            // Vérifier si le fichier existe déjà (pour reprise)
-            $fileName = self::FILE_NAME_PREFIX . $this->getFileName() . '_group_' . $group . self::FILE_NAME_POSTFIX;
-            $filePath = storage_path(self::STORAGE_PDF_DIR . $fileName);
-
-            if (file_exists($filePath) && $this->option('resume')) {
-                $this->warn("  → Fichier existant, ignoré");
-                $pdfFiles[] = $filePath;
-                continue;
-            }
-
-            // Construire la requête pour ce groupe
-            $query = (clone $baseQuery)
-                ->where('catalog_group', $group)
-                ->select(['id', 'reference', 'catalog_group', 'reseller_price'])
-                ->with([
-                    'brand:id,name',
-                    'metas' => fn($q) => $q->select(['id', 'item_id', 'meta_id', 'value'])->with('meta:id,name'),
-                    'media'
-                ])
-                ->orderBy('reference');
-
-            $products = $query->get();
-
-            if ($products->isEmpty()) {
-                $this->warn("  → Aucun produit, ignoré");
-                continue;
-            }
-
-            $pdf = Pdf::loadView(
-                'pdf.catalog',
-                compact('products'),
-            )->setPaper('a4', 'landscape');
-
-            $pdf->save($filePath);
-            $pdfFiles[] = $filePath;
-
-            $elapsed = round(microtime(true) - $startTime, 2);
-            $memoryUsage = round(memory_get_usage(true) / 1024 / 1024, 2);
-
-            // Libérer la mémoire
-            unset($products, $pdf, $query);
-            gc_collect_cycles();
-
-            $this->info("  ✓ Généré en {$elapsed}s | Mémoire: {$memoryUsage}MB");
-        }
-
-        // Fusionner tous les PDFs en un seul (sauf si --skip-merge)
-        if (!$this->option('skip-merge')) {
-            $this->info('Fusion des PDFs...');
-            $this->mergePdfs($pdfFiles);
-
-            // Nettoyer les fichiers temporaires
-            $this->info('Nettoyage des fichiers temporaires...');
-            foreach ($pdfFiles as $file) {
-                if (file_exists($file)) {
-                    unlink($file);
-                }
-            }
+        // Si option --queue, utiliser les jobs
+        if ($this->option('queue')) {
+            $this->dispatchJobs($catalogGroups);
         } else {
-            $this->info('PDFs conservés séparément (--skip-merge)');
-            $this->info("Pour fusionner plus tard : php artisan {$this->getName()} --merge-only");
-        }
+            $this->warn('⚠️  Mode synchrone non recommandé sur Forge (timeout 5min)');
+            $this->warn('   Utilisez --queue pour éviter les timeouts');
 
-        $this->info('✓ Catalogue généré avec succès !');
+            if (!$this->confirm('Continuer en mode synchrone ?', false)) {
+                $this->info('Annulé. Relancez avec --queue');
+                return;
+            }
+
+            $this->error('Mode synchrone désactivé. Utilisez --queue');
+        }
     }
 
     /**
-     * Fusionne les PDFs existants par groupe
+     * Dispatch les jobs dans une batch Laravel
      */
-    private function mergeExistingPdfs(): void
+    private function dispatchJobs($catalogGroups): void
     {
-        $pdfDir = storage_path(self::STORAGE_PDF_DIR);
-        $pattern = $pdfDir . self::FILE_NAME_PREFIX . $this->getFileName() . '_group_*.pdf';
-        $pdfFiles = glob($pattern);
+        $this->info("📤 Création des jobs...");
 
-        if (empty($pdfFiles)) {
-            $this->error('Aucun fichier PDF de groupe trouvé à fusionner');
-            return;
+        $jobs = [];
+
+        // Créer un job par groupe
+        foreach ($catalogGroups as $group) {
+            $jobs[] = new GenerateCatalogGroupJob(
+                catalogGroup: $group,
+                genderFilter: $this->getGenderFilter(),
+                catalogName: $this->getFileName()
+            );
         }
 
-        // Trier par nom de groupe
-        usort($pdfFiles, function($a, $b) {
-            preg_match('/group_(\d+)\.pdf$/', $a, $matchA);
-            preg_match('/group_(\d+)\.pdf$/', $b, $matchB);
-            return ($matchA[1] ?? 0) <=> ($matchB[1] ?? 0);
-        });
+        // Créer un batch avec tous les jobs + le job de merge à la fin
+        $batch = Bus::batch($jobs)
+            ->then(function () {
+                // Une fois tous les jobs terminés, lancer le merge
+                MergeCatalogPdfsJob::dispatch($this->getFileName());
+            })
+            ->catch(function () {
+                \Log::error("Échec de la génération du catalogue {$this->getFileName()}");
+            })
+            ->finally(function () {
+                \Log::info("Batch terminé pour {$this->getFileName()}");
+            })
+            ->name("Catalogue {$this->getFileName()}")
+            ->onQueue('default')
+            ->dispatch();
 
-        $this->info(count($pdfFiles) . ' fichiers à fusionner...');
-        $this->mergePdfs($pdfFiles);
-        $this->info('✓ Fusion terminée !');
-    }
-
-    /**
-     * Fusionne plusieurs fichiers PDF en un seul
-     */
-    private function mergePdfs(array $pdfFiles): void
-    {
-        $finalFileName = self::FILE_NAME_PREFIX . $this->getFileName() . self::FILE_NAME_POSTFIX;
-        $finalPath = storage_path(self::STORAGE_PDF_DIR . $finalFileName);
-
-        // Utiliser pdftk ou ghostscript pour fusionner
-        $command = 'pdftk ' . implode(' ', array_map('escapeshellarg', $pdfFiles)) . ' cat output ' . escapeshellarg($finalPath);
-
-        // Alternative avec ghostscript si pdftk n'est pas disponible
-        if (! shell_exec('which pdftk')) {
-            $this->warn('pdftk non trouvé, utilisation de ghostscript...');
-            $command = 'gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=' . escapeshellarg($finalPath) . ' ' . implode(' ', array_map('escapeshellarg', $pdfFiles));
-        }
-
-        exec($command, $output, $returnCode);
-
-        if ($returnCode !== 0) {
-            $this->error('Erreur lors de la fusion des PDFs');
-            throw new \RuntimeException('Échec de la fusion des PDFs');
-        }
+        $this->info("✅ Batch créé avec ID: {$batch->id}");
+        $this->info("📊 {$catalogGroups->count()} jobs de génération + 1 job de fusion");
+        $this->info("🔍 Suivre la progression dans Horizon");
+        $this->line("");
+        $this->line("   Horizon URL: " . config('app.url') . '/horizon');
+        $this->line("   Batch ID: {$batch->id}");
     }
 }

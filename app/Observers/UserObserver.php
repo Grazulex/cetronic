@@ -23,7 +23,7 @@ final class UserObserver
     public function updating(User $user): void
     {
         if ($user->isDirty('is_actif') && $user->is_actif) {
-            SendMailActifUser::dispatch($user);
+            SendMailActifUser::dispatch($user->id); // Passer l'ID au lieu du modèle
         }
     }
 }
