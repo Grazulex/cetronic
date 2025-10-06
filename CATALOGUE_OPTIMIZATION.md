@@ -66,12 +66,45 @@ RUN apt-get update && apt-get install -y \
 
 ## Utilisation
 
+### Génération complète
 ```bash
-# Exécution normale
+# Générer tous les groupes et fusionner (peut être trop long)
 php artisan app:create-catalogue-homme
 
+# Générer sans fusionner (RECOMMANDÉ pour éviter les timeouts)
+php artisan app:create-catalogue-homme --skip-merge
+
 # Avec Sail
-./vendor/bin/sail artisan app:create-catalogue-homme
+./vendor/bin/sail artisan app:create-catalogue-homme --skip-merge
+```
+
+### En cas de timeout (code 143)
+Si la commande est tuée avant la fin, utilisez l'option `--resume` :
+
+```bash
+# Reprendre à partir du groupe 358 (où elle s'est arrêtée)
+php artisan app:create-catalogue-homme --skip-merge --resume=358
+
+# Fusionner les PDFs une fois TOUS générés
+php artisan app:create-catalogue-homme --merge-only
+```
+
+### Générer uniquement certains groupes
+```bash
+# Générer seulement les groupes 010, 020 et 030
+php artisan app:create-catalogue-homme --only=010,020,030
+```
+
+### Workflow complet en cas de timeout
+```bash
+# 1. Première exécution (s'arrête au groupe 31)
+php artisan app:create-catalogue-homme --skip-merge
+
+# 2. Reprendre là où ça s'est arrêté
+php artisan app:create-catalogue-homme --skip-merge --resume=358
+
+# 3. Une fois TOUS les groupes générés, fusionner
+php artisan app:create-catalogue-homme --merge-only
 ```
 
 ## Avantages
@@ -79,8 +112,10 @@ php artisan app:create-catalogue-homme
 - ✅ **Utilisation mémoire réduite** de 90%+
 - ✅ **Pas de limite mémoire PHP nécessaire** (peut revenir à 512M ou 1G)
 - ✅ **Progression visible** pendant la génération
+- ✅ **Résilience aux timeouts** : reprise possible avec `--resume`
 - ✅ **Résilience** : en cas d'échec sur un groupe, les autres continuent
 - ✅ **PDFs partiels disponibles** pour debug si besoin
+- ✅ **Mode skip-merge** : évite les timeouts en séparant génération et fusion
 
 ## Performance estimée
 
