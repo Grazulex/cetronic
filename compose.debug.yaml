@@ -1,0 +1,6 @@
+services:
+  cetronic:
+    image: cetronic
+    build:
+      context: .
+      dockerfile: ./Dockerfile

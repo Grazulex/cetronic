@@ -1,0 +1,64 @@
+{
+	"name": "Cetronic Laravel",
+	"dockerComposeFile": "../docker-compose.yml",
+	"service": "php",
+	"workspaceFolder": "/var/www/html",
+
+	// Extensions VSCode à installer automatiquement dans le conteneur
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"amiralizadeh9480.laravel-extra-intellisense",
+				"onecentlin.laravel-blade",
+				"mikestead.dotenv",
+				"editorconfig.editorconfig"
+			],
+			"settings": {
+				"php.validate.enable": true,
+				"php.validate.executablePath": "/usr/local/bin/php",
+				"intelephense.environment.phpVersion": "8.3.0",
+				"intelephense.environment.documentRoot": "/var/www/html/public",
+				"intelephense.files.exclude": [
+					"**/node_modules/**",
+					"**/vendor/**/{Tests,tests}/**"
+				],
+				"terminal.integrated.defaultProfile.linux": "bash"
+			}
+		}
+	},
+
+	// Commandes à exécuter après la création du conteneur
+	"postCreateCommand": "composer install && php artisan key:generate",
+
+	// Ports à forwarder
+	"forwardPorts": [8000, 3306, 6379, 8025, 8080],
+
+	// Configuration des ports
+	"portsAttributes": {
+		"8000": {
+			"label": "Laravel App",
+			"onAutoForward": "notify"
+		},
+		"3306": {
+			"label": "MySQL"
+		},
+		"6379": {
+			"label": "Redis"
+		},
+		"8025": {
+			"label": "Mailpit"
+		},
+		"8080": {
+			"label": "PhpMyAdmin"
+		}
+	},
+
+	// Utilisateur pour le conteneur
+	"remoteUser": "root",
+
+	// Variables d'environnement
+	"remoteEnv": {
+		"PHP_IDE_CONFIG": "serverName=Docker"
+	}
+}

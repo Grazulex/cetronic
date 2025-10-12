@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/home/jean-marc-strauven/Dev/cetronic/.vscode/docker-php.sh:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
