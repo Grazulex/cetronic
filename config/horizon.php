@@ -187,9 +187,9 @@ return [
             'maxProcesses' => 5,
             'maxTime' => 0,
             'maxJobs' => 0,
-            'memory' => 512,
-            'tries' => 3,
-            'timeout' => 600,
+            'memory' => 1024, // 1GB pour les gros catalogues
+            'tries' => 2,
+            'timeout' => 1500, // 25 minutes (plus que le job timeout de 20min)
             'nice' => 0,
         ],
     ],

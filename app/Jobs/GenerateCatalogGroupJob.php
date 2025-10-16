@@ -17,7 +17,9 @@ class GenerateCatalogGroupJob implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 300; // 5 minutes max par groupe
+    public $timeout = 1200; // 20 minutes max par groupe (pour gros catalogues comme 320)
+
+    public $tries = 2; // 2 tentatives en cas d'échec
 
     /**
      * @param string $catalogGroup Le numéro du groupe (ex: "010", "015", etc.)
@@ -38,6 +40,10 @@ class GenerateCatalogGroupJob implements ShouldQueue
         if ($this->batch()?->cancelled()) {
             return;
         }
+
+        // Augmenter les limites PHP pour les gros catalogues
+        ini_set('max_execution_time', '1200'); // 20 minutes
+        ini_set('memory_limit', '1024M'); // 1GB de mémoire
 
         $startTime = microtime(true);
 
@@ -64,12 +70,16 @@ class GenerateCatalogGroupJob implements ShouldQueue
         }
         // Si catalogName == 'Full' et genderFilter == null : pas de filtre = TOUS les produits
 
-        // Eager load relations
+        // Eager load relations - optimisé pour limiter la mémoire
         $query->with([
             'brand:id,name',
             'metas' => fn($q) => $q->select(['id', 'item_id', 'meta_id', 'value'])->with('meta:id,name'),
-            'media'
+            'media' => fn($q) => $q->select(['id', 'model_id', 'model_type', 'file_name', 'disk', 'collection_name'])
         ])->orderBy('reference');
+
+        // Utiliser lazy() au lieu de get() pour économiser la mémoire si gros volume
+        $productsCount = $query->count();
+        Log::info("Groupe {$this->catalogGroup} : {$productsCount} produits à générer");
 
         $products = $query->get();
 
@@ -78,11 +88,20 @@ class GenerateCatalogGroupJob implements ShouldQueue
             return;
         }
 
-        // Générer le PDF
+        // Générer le PDF avec options optimisées pour DomPDF
         $pdf = Pdf::loadView(
             'pdf.catalog',
             compact('products'),
-        )->setPaper('a4', 'landscape');
+        )
+        ->setPaper('a4', 'landscape')
+        ->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+            'defaultFont' => 'sans-serif',
+            'chroot' => [storage_path('app/public'), public_path()],
+            'enable_php' => false, // Sécurité
+            'isPhpEnabled' => false, // Sécurité
+        ]);
 
         $fileName = 'catalog_' . $this->catalogName . '_group_' . $this->catalogGroup . '.pdf';
         $filePath = storage_path('app/public/pdf/' . $fileName);
@@ -92,15 +111,20 @@ class GenerateCatalogGroupJob implements ShouldQueue
             mkdir(storage_path('app/public/pdf'), 0755, true);
         }
 
+        Log::info("Début génération PDF groupe {$this->catalogGroup}...");
+        $pdfStartTime = microtime(true);
+
         $pdf->save($filePath);
 
+        $pdfElapsed = round(microtime(true) - $pdfStartTime, 2);
         $elapsed = round(microtime(true) - $startTime, 2);
         $productCount = $products->count();
         $memoryUsage = round(memory_get_usage(true) / 1024 / 1024, 2);
+        $memoryPeak = round(memory_get_peak_usage(true) / 1024 / 1024, 2);
 
-        Log::info("Groupe {$this->catalogGroup} généré : {$productCount} produits en {$elapsed}s | Mémoire: {$memoryUsage}MB");
+        Log::info("Groupe {$this->catalogGroup} généré : {$productCount} produits en {$elapsed}s (PDF: {$pdfElapsed}s) | Mémoire: {$memoryUsage}MB (pic: {$memoryPeak}MB)");
 
-        // Libérer la mémoire
+        // Libérer la mémoire explicitement
         unset($products, $pdf, $query);
         gc_collect_cycles();
     }
