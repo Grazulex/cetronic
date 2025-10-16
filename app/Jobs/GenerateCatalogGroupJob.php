@@ -74,7 +74,7 @@ class GenerateCatalogGroupJob implements ShouldQueue
         $query->with([
             'brand:id,name',
             'metas' => fn($q) => $q->select(['id', 'item_id', 'meta_id', 'value'])->with('meta:id,name'),
-            'media' => fn($q) => $q->select(['id', 'model_id', 'model_type', 'file_name', 'disk', 'collection_name'])
+            'media' // Spatie Media Library a besoin de toutes les colonnes pour getFirstMediaPath()
         ])->orderBy('reference');
 
         // Utiliser lazy() au lieu de get() pour économiser la mémoire si gros volume
