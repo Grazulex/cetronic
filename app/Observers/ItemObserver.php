@@ -32,6 +32,10 @@ final class ItemObserver
             $item->slug = Str::slug($item->brand_id . '_' . $item->category_id . '-' . $item->reference);
         }
 
+        // Protection contre les envois massifs d'emails lors d'imports
+        // Utilisation: config(['items.skip_notifications' => true]) avant l'import
+        $skipNotifications = config('items.skip_notifications', false);
+
         if (
             $item->isDirty('price') ||
             $item->isDirty('price_b2b') ||
@@ -40,14 +44,20 @@ final class ItemObserver
             $item->isDirty('price_special2') ||
             $item->isDirty('price_special3')
         ) {
-            ProcessUpdatePriceCart::dispatch($item);
+            if (!$skipNotifications) {
+                ProcessUpdatePriceCart::dispatch($item);
+            }
         }
 
         if ($item->isDirty('is_published')) {
             if ( ! $item->is_published) {
-                ProcessRemoveItemCart::dispatch($item);
+                if (!$skipNotifications) {
+                    ProcessRemoveItemCart::dispatch($item);
+                }
             } else {
-                ProcessAddItemCart::dispatch($item);
+                if (!$skipNotifications) {
+                    ProcessAddItemCart::dispatch($item);
+                }
             }
         }
     }
