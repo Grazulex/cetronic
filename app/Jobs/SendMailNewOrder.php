@@ -24,14 +24,25 @@ final class SendMailNewOrder implements ShouldQueue
 
     public function handle(): void
     {
-        if ($this->order->user->agent && $this->order->user->agent->email) {
-            $cc = [config(key: 'mail.from.address'),'geoffrey@cetronicbenelux.com', $this->order->user->agent->email];
-        } else {
-            $cc = [config(key: 'mail.from.address'),'geoffrey@cetronicbenelux.com'];
+        // Envoyer l'email au client
+        Mail::to(users: $this->order->user)
+            ->send(mailable: new NewOrder(order: $this->order));
+
+        // Envoyer une copie séparée aux adresses Cetronic
+        $cetronicEmails = [
+            config(key: 'mail.from.address'),
+            'geoffrey@cetronicbenelux.com',
+        ];
+
+        foreach ($cetronicEmails as $email) {
+            Mail::to(users: $email)
+                ->send(mailable: new NewOrder(order: $this->order));
         }
 
-        Mail::to(users: $this->order->user)
-            ->cc(users: $cc)
-            ->send(mailable: new NewOrder(order: $this->order));
+        // Envoyer à l'agent si présent
+        if ($this->order->user->agent && $this->order->user->agent->email) {
+            Mail::to(users: $this->order->user->agent->email)
+                ->send(mailable: new NewOrder(order: $this->order));
+        }
     }
 }

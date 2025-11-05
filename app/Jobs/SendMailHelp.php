@@ -23,8 +23,15 @@ final class SendMailHelp implements ShouldQueue
 
     public function handle(): void
     {
-        Mail::to(users:'info@cetronicbenelux.com')
-            ->cc(users:'admin@jnkconsult.be')
-            ->send(mailable: new NewHelp(datas: $this->data));
+        // Envoyer à chaque destinataire séparément pour un meilleur suivi
+        $recipients = [
+            'info@cetronicbenelux.com',
+            'admin@jnkconsult.be',
+        ];
+
+        foreach ($recipients as $email) {
+            Mail::to(users: $email)
+                ->send(mailable: new NewHelp(datas: $this->data));
+        }
     }
 }
