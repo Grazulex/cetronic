@@ -24,9 +24,17 @@ final class SendMailNewOrder implements ShouldQueue
 
     public function handle(): void
     {
+        // Augmenter les limites pour la génération de PDF
+        ini_set('max_execution_time', '300'); // 5 minutes
+        ini_set('memory_limit', '512M'); // 512 MB de mémoire
+
+        // Générer le PDF une seule fois pour tous les emails
+        $orderService = new \App\Services\OrderService();
+        $pdfContent = $orderService->getPdf(order: $this->order);
+
         // Envoyer l'email au client
         Mail::to(users: $this->order->user)
-            ->send(mailable: new NewOrder(order: $this->order));
+            ->send(mailable: new NewOrder(order: $this->order, pdfContent: $pdfContent));
 
         // Envoyer une copie séparée aux adresses Cetronic
         $cetronicEmails = [
@@ -36,13 +44,13 @@ final class SendMailNewOrder implements ShouldQueue
 
         foreach ($cetronicEmails as $email) {
             Mail::to(users: $email)
-                ->send(mailable: new NewOrder(order: $this->order));
+                ->send(mailable: new NewOrder(order: $this->order, pdfContent: $pdfContent));
         }
 
         // Envoyer à l'agent si présent
         if ($this->order->user->agent && $this->order->user->agent->email) {
             Mail::to(users: $this->order->user->agent->email)
-                ->send(mailable: new NewOrder(order: $this->order));
+                ->send(mailable: new NewOrder(order: $this->order, pdfContent: $pdfContent));
         }
     }
 }

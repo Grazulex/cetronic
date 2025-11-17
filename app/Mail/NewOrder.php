@@ -19,7 +19,10 @@ final class NewOrder extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public function __construct(protected Order $order) {}
+    public function __construct(
+        protected Order $order,
+        protected ?string $pdfContent = null
+    ) {}
 
     public function envelope(): Envelope
     {
@@ -44,11 +47,14 @@ final class NewOrder extends Mailable
 
     public function attachments(): array
     {
-        $orderService = new OrderService();
-        $pdf = $orderService->getPdf(order: $this->order);
+        // Utiliser le PDF pré-généré si disponible, sinon le générer
+        if ($this->pdfContent === null) {
+            $orderService = new OrderService();
+            $this->pdfContent = $orderService->getPdf(order: $this->order);
+        }
 
         return [
-            Attachment::fromData(fn() => $pdf->content(), name: $this->order->reference . '.pdf')
+            Attachment::fromData(fn() => $this->pdfContent, name: $this->order->reference . '.pdf')
                 ->withMime(mime: 'application/pdf'),
         ];
     }

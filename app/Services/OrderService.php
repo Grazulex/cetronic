@@ -77,13 +77,13 @@ final class OrderService
         return public_path('/storage/orders/' . $filename);
     }
 
-    public function getPdf(Order $order): Response
+    public function getPdf(Order $order): string
     {
         App::setLocale($order->user->language);
         $pdf = Pdf::loadView('pdf/order', ['order' => $order]);
         App::setLocale('en');
 
-        return $pdf->stream();
+        return $pdf->output();
     }
 
     public function getNewOrderReference(): string
