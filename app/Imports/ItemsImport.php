@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Imports;
 
+use App\Actions\Item\LogItemPublishChangeAction;
 use App\Models\Brand;
 use App\Models\CategoryMeta;
 use App\Models\Item;
@@ -108,6 +109,11 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 $multi = $row['multiple_quantity'];
             }
 
+            // Récupérer l'ancienne valeur avant updateOrCreate
+            $existingItem = Item::where('reference', $row['reference'])->first();
+            $oldValue = $existingItem ? (bool) $existingItem->is_published : true; // true = valeur par défaut
+            $newValue = 1 === $row['is_published'];
+
             $item = Item::updateOrCreate(
                 ['reference' => $row['reference']],
                 [
@@ -115,7 +121,7 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'brand_id' => $brand->id,
                     'category_id' => $this->category_id,
                     'master_id' => Item::where('reference', $row['master_reference'])->first()->id ?? null,
-                    'is_published' => 1 === $row['is_published'],
+                    'is_published' => $newValue,
                     'is_new' => 1 === $row['is_new'],
                     'price' => (float) ($row['price']),
                     'price_b2b' => (float) ($row['price_b2b']),
@@ -130,6 +136,19 @@ final class ItemsImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                     'catalog_group' => ($row['catalog_group']) ?: null,
                 ],
             );
+
+            // Logger le changement de is_published
+            if ($oldValue !== $newValue) {
+                app(LogItemPublishChangeAction::class)->handle(
+                    item: $item,
+                    oldValue: $oldValue,
+                    newValue: $newValue,
+                    action: 'excel_import',
+                    userId: auth()->id(),
+                    reason: 'Import Excel',
+                    metadata: ['reference' => $row['reference']]
+                );
+            }
 
             $this->createMetas($metas, $item, $row);
         }

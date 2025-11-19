@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Actions\Item\LogItemPublishChangeAction;
 use App\Enum\UserRoleEnum;
 use App\Models\Brand;
 use App\Models\Category;
@@ -53,24 +54,70 @@ final class ImportPictures extends Page implements HasForms
                 $reference = explode(separator: '_', string: $reference)[0];
             }
             $item = Item::withTrashed()->where('reference', $reference)->first();
+            $logAction = app(LogItemPublishChangeAction::class);
+
             if ( ! $item) {
+                // Création d'un nouvel item
+                $newValue = (bool) $brand->is_upload_actif;
                 $item = Item::create([
                     'reference' => $reference,
                     'description' => '',
                     'brand_id' => $this->brand_id,
                     'category_id' => $this->category_id,
-                    'is_published' => $brand->is_upload_actif,
+                    'is_published' => $newValue,
                 ]);
+
+                // Logger si différent de la valeur par défaut (true)
+                if ($newValue === false) {
+                    $logAction->handle(
+                        item: $item,
+                        oldValue: true,
+                        newValue: false,
+                        action: 'image_import',
+                        userId: auth()->id(),
+                        reason: 'brand.is_upload_actif = false',
+                        metadata: ['reference' => $reference, 'brand' => $brand->name]
+                    );
+                }
             } else {
+                // Mise à jour d'un item existant
+                $oldValue = (bool) $item->is_published;
+                $newValue = (bool) $brand->is_upload_actif;
+
                 $item->update([
                     'brand_id' => $this->brand_id,
                     'category_id' => $this->category_id,
-                    'is_published' => $brand->is_upload_actif,
+                    'is_published' => $newValue,
                 ]);
-                if ($item->is_new) {
+
+                // Logger le changement initial
+                if ($oldValue !== $newValue) {
+                    $logAction->handle(
+                        item: $item,
+                        oldValue: $oldValue,
+                        newValue: $newValue,
+                        action: 'image_import',
+                        userId: auth()->id(),
+                        reason: 'brand.is_upload_actif',
+                        metadata: ['reference' => $reference, 'brand' => $brand->name]
+                    );
+                }
+
+                // Si is_new, forcer is_published à true
+                if ($item->is_new && $item->is_published === false) {
                     $item->update([
                         'is_published' => true,
                     ]);
+
+                    $logAction->handle(
+                        item: $item,
+                        oldValue: false,
+                        newValue: true,
+                        action: 'image_import',
+                        userId: auth()->id(),
+                        reason: 'is_new override',
+                        metadata: ['reference' => $reference, 'brand' => $brand->name]
+                    );
                 }
             }
 

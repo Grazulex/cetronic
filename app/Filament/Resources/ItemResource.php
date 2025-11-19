@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources;
 
+use App\Actions\Item\LogItemPublishChangeAction;
 use App\Enum\UserRoleEnum;
 use App\Filament\Resources\ItemResource\Pages\CreateItem;
 use App\Filament\Resources\ItemResource\Pages\EditItem;
@@ -254,9 +255,20 @@ final class ItemResource extends Resource
                     ->label(__('Published selection'))
                     ->icon('heroicon-s-check-circle')
                     ->action(function (Collection $records): void {
+                        $logAction = app(LogItemPublishChangeAction::class);
                         foreach ($records as $record) {
+                            $oldValue = (bool) $record->is_published;
                             $record->is_published = true;
                             $record->save();
+
+                            $logAction->handle(
+                                item: $record,
+                                oldValue: $oldValue,
+                                newValue: true,
+                                action: 'bulk_action',
+                                userId: auth()->id(),
+                                reason: 'Publication en masse'
+                            );
                         }
                     })
                     ->deselectRecordsAfterCompletion(),
@@ -264,9 +276,20 @@ final class ItemResource extends Resource
                     ->label(__('Unpublished selection'))
                     ->icon('heroicon-s-x')
                     ->action(function (Collection $records): void {
+                        $logAction = app(LogItemPublishChangeAction::class);
                         foreach ($records as $record) {
+                            $oldValue = (bool) $record->is_published;
                             $record->is_published = false;
                             $record->save();
+
+                            $logAction->handle(
+                                item: $record,
+                                oldValue: $oldValue,
+                                newValue: false,
+                                action: 'bulk_action',
+                                userId: auth()->id(),
+                                reason: 'Dépublication en masse'
+                            );
                         }
                     })
                     ->deselectRecordsAfterCompletion(),
