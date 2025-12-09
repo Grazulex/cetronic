@@ -9,6 +9,7 @@ use App\Actions\OrderItem\CreateOrderItemAction;
 use App\DataObjects\Order\OrderDataObject;
 use App\DataObjects\OrderItem\OrderItemDataObject;
 use App\Enum\CartStatusEnum;
+use App\Jobs\SendMailNewOrder;
 use App\Models\Cart;
 use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -40,6 +41,10 @@ final class OrderService
         }
         $cart->status = CartStatusEnum::SOLD;
         $cart->save();
+
+        // Dispatcher le job d'envoi d'email ICI, APRÈS la création de tous les OrderItems
+        // (et non plus dans OrderObserver::created() pour éviter la race condition)
+        SendMailNewOrder::dispatch($order);
 
         return $order;
     }
