@@ -33,4 +33,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | B2B API
+    |--------------------------------------------------------------------------
+    |
+    | API key for B2B partner signup integration.
+    | Used by external sites (e.g., b2b.cetronicbenelux.com) to create accounts.
+    |
+    */
+    'b2b' => [
+        'api_key' => env('B2B_API_KEY'),
+    ],
+
 ];

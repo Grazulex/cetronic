@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Exports\ItemsExport;
+use App\Http\Controllers\B2bController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Contact\SendContactController;
 use App\Http\Controllers\Help\SendHelpController;
@@ -82,6 +83,13 @@ Route::get('brands/download_zip/{brand}/{catSlug}', function (Brand $brand, stri
         ['Content-type' => 'application/zip'],
     );
 })->name('brand.download.zip');
+
+/*
+|--------------------------------------------------------------------------
+| B2B API Routes
+|--------------------------------------------------------------------------
+*/
+Route::post('b2b/signup', [B2bController::class, 'signup'])->name('b2b.signup');
 
 Route::group(
     [
