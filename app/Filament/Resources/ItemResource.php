@@ -97,9 +97,10 @@ final class ItemResource extends Resource
                     Tab::make('Activations')
                         ->schema([
                             Toggle::make('is_new')->required(),
+                            Toggle::make('is_best_seller'),
                             Toggle::make('is_published')->required(),
                         ])
-                        ->columns(2),
+                        ->columns(3),
                     Tab::make('Pictures')
                         ->schema([
                             SpatieMediaLibraryFileUpload::make('pictures')
@@ -186,6 +187,7 @@ final class ItemResource extends Resource
                     ]),
                     Stack::make([
                         IconColumn::make('is_published')->boolean(),
+                        IconColumn::make('is_best_seller')->boolean(),
                     ]),
                     Stack::make([
                         TextColumn::make('price_b2b')->prefix('b2b: ')->suffix('€')->alignRight(),
@@ -228,6 +230,7 @@ final class ItemResource extends Resource
                 ),
                 TernaryFilter::make('is_published'),
                 TernaryFilter::make('is_new'),
+                TernaryFilter::make('is_best_seller'),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([

@@ -59,6 +59,11 @@ final class ItemService
         return $this->item->is_new;
     }
 
+    public function isBestSeller(): bool
+    {
+        return $this->item->is_best_seller;
+    }
+
     public function getPicturesZip(Item $item): ?string
     {
 

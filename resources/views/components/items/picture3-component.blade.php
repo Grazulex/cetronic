@@ -5,6 +5,10 @@
         </div>
     @endif
 
+    @if ($isBestSeller)
+        @include('components.items.partials.best-seller-badge')
+    @endif
+
     @php
         $carouselId = ($itemCarouselId != null ? $itemCarouselId : 'productCarousel');
         $picturesCount = count($pictures);

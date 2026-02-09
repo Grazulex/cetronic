@@ -13,6 +13,7 @@ return [
     'reset' => 'Filter(s) wissen',
     'badge' => [
         'new' => 'nieuw',
+        'best_seller' => 'Best Seller',
         'sale' => 'promo',
     ],
     'price' => [

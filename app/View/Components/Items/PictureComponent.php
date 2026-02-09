@@ -28,8 +28,9 @@ final class PictureComponent extends Component
         $itemService = new ItemService($this->item);
         $pictures = $itemService->getPictures();
         $isNew = $itemService->isNew();
+        $isBestSeller = $itemService->isBestSeller();
         $slug = $this->slug;
 
-        return view('components.items.picture-component', ['pictures' => $pictures, 'isNew' => $isNew, 'slug' => $slug]);
+        return view('components.items.picture-component', ['pictures' => $pictures, 'isNew' => $isNew, 'isBestSeller' => $isBestSeller, 'slug' => $slug]);
     }
 }

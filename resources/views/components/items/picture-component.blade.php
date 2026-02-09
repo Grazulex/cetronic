@@ -4,6 +4,10 @@
             <p>{{ __('item.badge.new') }}</p>
         </div>
     @endif
+
+    @if ($isBestSeller)
+        @include('components.items.partials.best-seller-badge')
+    @endif
     <div id="owl-example" class="overflow-hidden owl-carousel owl-pictures">
         @foreach ($pictures as $picture)
                 @if ($slug != '')

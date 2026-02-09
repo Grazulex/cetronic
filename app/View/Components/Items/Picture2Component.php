@@ -28,7 +28,8 @@ final class Picture2Component extends Component
         $itemService = new ItemService($this->item);
         $picture = $itemService->getDefaultPicture();
         $isNew = $itemService->isNew();
+        $isBestSeller = $itemService->isBestSeller();
 
-        return view('components.items.picture2-component', ['picture' => $picture, 'isNew' => $isNew]);
+        return view('components.items.picture2-component', ['picture' => $picture, 'isNew' => $isNew, 'isBestSeller' => $isBestSeller]);
     }
 }

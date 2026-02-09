@@ -32,6 +32,7 @@ final class ItemFactory extends Factory
             'description' => fake()->paragraph(),
             'is_published' => true,
             'is_new' => fake()->boolean(),
+            'is_best_seller' => fake()->boolean(20),
             'price' => fake()->randomNumber(2, true),
             'price_b2b' => fake()->randomNumber(2, true),
             'price_promo' => fake()->randomNumber(2, true),

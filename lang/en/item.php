@@ -13,6 +13,7 @@ return [
     'reset' => 'Reset',
     'badge' => [
         'new' => 'New',
+        'best_seller' => 'Best Seller',
         'sale' => 'Sale',
     ],
     'price' => [

@@ -13,6 +13,7 @@ return [
     'reset' => 'Effacer filtre(s)',
     'badge' => [
         'new' => 'nouveau',
+        'best_seller' => 'Best Seller',
         'sale' => 'promo',
     ],
     'price' => [

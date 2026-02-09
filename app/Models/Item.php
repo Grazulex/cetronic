@@ -30,6 +30,7 @@ final class Item extends Model implements HasMedia
         'brand_id',
         'category_id',
         'is_new',
+        'is_best_seller',
         'is_published',
         'price',
         'price_b2b',
@@ -47,6 +48,7 @@ final class Item extends Model implements HasMedia
     protected $casts = [
         'is_published' => 'boolean',
         'is_new' => 'boolean',
+        'is_best_seller' => 'boolean',
     ];
 
     public function getRouteKeyName(): string

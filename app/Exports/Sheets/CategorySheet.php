@@ -18,7 +18,7 @@ final class CategorySheet implements FromArray, WithTitle
         $items = Item::join('brands', 'items.brand_id', '=', 'brands.id')->withoutTrashed()->where('category_id', $this->category->id)->orderBy('brands.name')->orderBy('reference')->select('items.*')->get();
         $metas = $this->category->metas()->where('is_export', true)->orderBy('name')->pluck('name')->toArray();
         $metasId = $this->category->metas()->where('is_export', true)->orderBy('name')->get();
-        $content[] = array_merge(['reference', 'marque'], $metas);
+        $content[] = array_merge(['reference', 'marque', 'is_best_seller'], $metas);
         foreach ($items as $item) {
             if ( ! $item->is_published) {
                 continue;
@@ -32,7 +32,7 @@ final class CategorySheet implements FromArray, WithTitle
                     $itemMetas[] = '';
                 }
             }
-            $content[] = array_merge([$item->reference, $item->brand->name], $itemMetas);
+            $content[] = array_merge([$item->reference, $item->brand->name, $item->is_best_seller ? 1 : 0], $itemMetas);
         }
 
         return $content;
