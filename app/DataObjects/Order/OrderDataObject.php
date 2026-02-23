@@ -9,8 +9,6 @@ use App\Models\Cart;
 use App\Services\CartService;
 use App\Services\OrderService;
 
-use function PHPUnit\Framework\isNull;
-
 final readonly class OrderDataObject
 {
     public function __construct(
@@ -27,7 +25,7 @@ final readonly class OrderDataObject
             'comment' => $this->cart->comment,
             'franco' => $this->cart->user->franco,
             'user_id' => $this->cart->user_id,
-            'agent_id' => ( ! isNull($this->cart->user->agent) ? $this->cart->user->agent->id : null),
+            'agent_id' => $this->cart->user->agent?->id,
             'status' => OrderStatusEnum::OPEN,
             'shipping_company' => $this->cart->shippingLocation->company,
             'shipping_name' => trim(
