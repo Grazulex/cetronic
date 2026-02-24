@@ -24,6 +24,8 @@ final class ListComponent extends Component
 
     private $new = '';
 
+    private $bestSeller = '';
+
     private $order = 'reference_asc';
 
     private int $paginate = 21;
@@ -51,6 +53,12 @@ final class ListComponent extends Component
             $this->new = $request->get('new');
         } else {
             $this->new = null;
+        }
+
+        if ($request->has('best_seller')) {
+            $this->bestSeller = $request->get('best_seller');
+        } else {
+            $this->bestSeller = null;
         }
 
         if ($request->has('order')) {
@@ -106,8 +114,10 @@ final class ListComponent extends Component
             $order = $this->order;
             $paginate = $this->paginate;
 
-            return view('components.items.list-component', compact('items', 'model', 'metas', 'selected', 'order', 'new', 'paginate'));
-            
+            $bestSeller = $this->bestSeller;
+
+            return view('components.items.list-component', compact('items', 'model', 'metas', 'selected', 'order', 'new', 'bestSeller', 'paginate'));
+
         } else if ('brand' === $this->type) {
             $model = Brand::where('slug', $this->slug)->first();
             $search = 'brand_id';
@@ -129,89 +139,66 @@ final class ListComponent extends Component
             }
         }
 
-        if (count($this->selected) > 0 || '' !== $this->new) {
-            if ('1' === $this->new) {
-                if ( ! $hasVariant) {
-                    $query = Item::where($search, $model->id)
-                        ->where('category_id', $mainCategory->id)
-                        ->where('is_new', true)
-                        ->enable(auth()->user());
-                    
-                    // Appliquer les filtres de métadonnées avec logique AND
-                    $query = $this->applyMetadataFilters($query);
-                    
-                    $query = $query->with('category')
-                        ->with('brand')
-                        ->with('variants')
-                        ->whereNull('master_id');
-                        //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $query = $this->addPriceJoinsIfNeeded($query);
-                    $items = $this->applyOrderingAndPagination($query);
-                } else {
-                    $query = Item::where($search, $model->id)
-                        ->where('category_id', $mainCategory->id)
-                        ->where('is_new', true)
-                        ->enable(auth()->user());
-                    
-                    // Appliquer les filtres de métadonnées avec logique AND
-                    $query = $this->applyMetadataFilters($query);
-                    
-                    $query = $query->with('category')
-                        ->with('brand')
-                        ->with('variants');
-                        //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $query = $this->addPriceJoinsIfNeeded($query);
-                    $items = $this->applyOrderingAndPagination($query);
+        $hasFilters = count($this->selected) > 0 || '1' === $this->new || '1' === $this->bestSeller;
+
+        if ($hasFilters) {
+            if ( ! $hasVariant) {
+                $query = Item::where($search, $model->id)
+                    ->where('category_id', $mainCategory->id)
+                    ->enable(auth()->user());
+
+                if ('1' === $this->new) {
+                    $query->where('is_new', true);
                 }
+                if ('1' === $this->bestSeller) {
+                    $query->where('is_best_seller', true);
+                }
+
+                $query = $this->applyMetadataFilters($query);
+
+                $query = $query->with('category')
+                    ->with('brand')
+                    ->with('variants')
+                    ->whereNull('master_id');
+                $query = $this->addPriceJoinsIfNeeded($query);
+                $items = $this->applyOrderingAndPagination($query);
             } else {
-                if ( ! $hasVariant) {
-                    $query = Item::where($search, $model->id)
-                        ->where('category_id', $mainCategory->id)
-                        ->enable(auth()->user());
-                    
-                    // Appliquer les filtres de métadonnées avec logique AND
-                    $query = $this->applyMetadataFilters($query);
-                    
-                    $query = $query->with('category')
-                        ->with('brand')
-                        ->with('variants')
-                        ->whereNull('master_id');
-                        //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $query = $this->addPriceJoinsIfNeeded($query);
-                    $items = $this->applyOrderingAndPagination($query);
-                } else {
-                    $query = Item::where($search, $model->id)
-                        ->enable(auth()->user())
-                        ->where('category_id', $mainCategory->id);
-                    
-                    // Appliquer les filtres de métadonnées avec logique AND
-                    $query = $this->applyMetadataFilters($query);
-                    
-                    $items = $query->with('category')
-                        ->with('brand')
-                        ->with('variants')->get();
+                $query = Item::where($search, $model->id)
+                    ->enable(auth()->user())
+                    ->where('category_id', $mainCategory->id);
 
-                    $showMaster = [];
-                    foreach ($items as $item) {
-                        if (null !== $item->master_id) {
-                            $showMaster[] = $item->master_id;
-                        } else {
-                            $showMaster[] = $item->id;
-                        }
-                    }
-
-                    $query = Item::whereIn('id', $showMaster)
-                        ->where($search, $model->id)
-                        ->where('category_id', $mainCategory->id)
-                        ->where('is_published', true)
-                        ->with('category')
-                        ->with('brand')
-                        ->with('variants')
-                        ->whereNull('master_id');
-                        //->orderByRaw('LENGTH('.$this->orderField.') '.$this->orderDirection)
-                    $query = $this->addPriceJoinsIfNeeded($query);
-                    $items = $this->applyOrderingAndPagination($query);
+                if ('1' === $this->new) {
+                    $query->where('is_new', true);
                 }
+                if ('1' === $this->bestSeller) {
+                    $query->where('is_best_seller', true);
+                }
+
+                $query = $this->applyMetadataFilters($query);
+
+                $items = $query->with('category')
+                    ->with('brand')
+                    ->with('variants')->get();
+
+                $showMaster = [];
+                foreach ($items as $item) {
+                    if (null !== $item->master_id) {
+                        $showMaster[] = $item->master_id;
+                    } else {
+                        $showMaster[] = $item->id;
+                    }
+                }
+
+                $query = Item::whereIn('id', $showMaster)
+                    ->where($search, $model->id)
+                    ->where('category_id', $mainCategory->id)
+                    ->where('is_published', true)
+                    ->with('category')
+                    ->with('brand')
+                    ->with('variants')
+                    ->whereNull('master_id');
+                $query = $this->addPriceJoinsIfNeeded($query);
+                $items = $this->applyOrderingAndPagination($query);
             }
         } else {
             $query = Item::where($search, $model->id)
@@ -242,10 +229,11 @@ final class ListComponent extends Component
 
         $selected = $this->selected;
         $new = $this->new;
+        $bestSeller = $this->bestSeller;
         $order = $this->order;
         $paginate = $this->paginate;
 
-        return view('components.items.list-component', compact('items', 'model', 'metas', 'selected', 'order', 'new', 'paginate'));
+        return view('components.items.list-component', compact('items', 'model', 'metas', 'selected', 'order', 'new', 'bestSeller', 'paginate'));
     }
 
     /**

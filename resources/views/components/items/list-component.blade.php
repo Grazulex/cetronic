@@ -49,8 +49,29 @@
                                 <ul>
                                     <li class="d-flex align-items-center">
                                         <input type="checkbox" class="listing-checkbox" name="new" id="new" value="1"
-                                               @if (isset($new)) checked @endif>
+                                               @if (isset($new) && $new == '1') checked @endif>
                                         <span class="select-bg">{{ __('listing.items.new.yes') }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item listing-accordion-item ">
+                        <h2 class="accordion-header" id="panelsStayOpen-heading99998">
+                            <button class="accordion-button listing-accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse99998"
+                                    aria-expanded="false" aria-controls="panelsStayOpen-collapse99998">
+                                <span class="listing-accordion-head">{{ __('listing.items.best_seller.title') }} </span>
+                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapse99998" class="accordion-collapse collapse show"
+                             aria-labelledby="panelsStayOpen-heading99998">
+                            <div class="accordion-body listing-accordion-body">
+                                <ul>
+                                    <li class="d-flex align-items-center">
+                                        <input type="checkbox" class="listing-checkbox" name="best_seller" id="best_seller" value="1"
+                                               @if (isset($bestSeller) && $bestSeller == '1') checked @endif>
+                                        <span class="select-bg">{{ __('listing.items.best_seller.yes') }}</span>
                                     </li>
                                 </ul>
                             </div>
