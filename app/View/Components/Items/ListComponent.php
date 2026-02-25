@@ -352,20 +352,15 @@ final class ListComponent extends Component
     }
 
     /**
-     * Apply metadata filters using AND logic for everything
-     * Each selected metadata value must be present on the item (strict AND)
+     * Apply metadata filters: AND between meta categories, OR within same category
      */
     private function applyMetadataFilters($query)
     {
         foreach ($this->selected as $meta => $values) {
-            // Pour chaque valeur de métadonnée, créer un whereHas séparé
-            // Cela créé un AND même à l'intérieur de la même métadonnée
-            foreach ($values as $value) {
-                $query->whereHas('metas', function ($q) use ($meta, $value): void {
-                    $q->where('meta_id', $meta)
-                      ->where('value', $value);
-                });
-            }
+            $query->whereHas('metas', function ($q) use ($meta, $values): void {
+                $q->where('meta_id', $meta)
+                  ->whereIn('value', $values);
+            });
         }
         return $query;
     }

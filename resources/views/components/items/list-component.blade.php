@@ -3,37 +3,41 @@
         <div class="col-lg-3">
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 <form action="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}" method="GET">
-                    <h5>{{ __('item.orders') }}</h5>
-                    <select id="order" name="order" class="card-select">
-                        <option value="reference_asc"
-                                @if ($order == 'reference_asc') selected @endif>{{ __('item.reference_asc') }}</option>
-                        <option value="reference_desc"
-                                @if ($order == 'reference_desc') selected @endif>{{ __('item.reference_desc') }}</option>
-                        <option value="price_asc"
-                                @if ($order == 'price_asc') selected @endif>{{ __('item.price_asc') }}</option>
-                        <option value="price_desc"
-                                @if ($order == 'price_desc') selected @endif>{{ __('item.price_desc') }}</option>
-                        <option value="catalogue"
-                                @if ($order == 'catalogue') selected @endif>{{ __('item.catalogue') }}</option>
-                    </select>
-                    <h5>{{ __('item.paginate') }}</h5>
-                    <select id="paginate" name="paginate" class="card-select">
-                        <option value="15" @if ($paginate == '15') selected @endif>15</option>
-                        <option value="21" @if ($paginate == '21') selected @endif>21</option>
-                        <option value="30" @if ($paginate == '30') selected @endif>30</option>
-                        <option value="42" @if ($paginate == '42') selected @endif>42</option>
-                        <option value="60" @if ($paginate == '60') selected @endif>60</option>
-                        <option value="84" @if ($paginate == '84') selected @endif>84</option>
-                    </select>
-                    <h5>{{ __('item.filters') }}</h5>
-                    <div style="text-align: right;">
-                        @if (count($selected)> 0)
-                            <a href="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}"
-                               class="btn btn-sm btn-info">{{ __('item.reset') }}</a>
-                        @endif
-                        <br />
-                        <input type="submit" value="{{ __('item.show') }}" class="small_btn">
-
+                    <div class="mb-3">
+                        <label for="order" class="listing-accordion-head mb-1 d-block">{{ __('item.orders') }}</label>
+                        <select id="order" name="order" class="card-select w-100">
+                            <option value="reference_asc"
+                                    @if ($order == 'reference_asc') selected @endif>{{ __('item.reference_asc') }}</option>
+                            <option value="reference_desc"
+                                    @if ($order == 'reference_desc') selected @endif>{{ __('item.reference_desc') }}</option>
+                            <option value="price_asc"
+                                    @if ($order == 'price_asc') selected @endif>{{ __('item.price_asc') }}</option>
+                            <option value="price_desc"
+                                    @if ($order == 'price_desc') selected @endif>{{ __('item.price_desc') }}</option>
+                            <option value="catalogue"
+                                    @if ($order == 'catalogue') selected @endif>{{ __('item.catalogue') }}</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="paginate" class="listing-accordion-head mb-1 d-block">{{ __('item.paginate') }}</label>
+                        <select id="paginate" name="paginate" class="card-select w-100">
+                            <option value="15" @if ($paginate == '15') selected @endif>15</option>
+                            <option value="21" @if ($paginate == '21') selected @endif>21</option>
+                            <option value="30" @if ($paginate == '30') selected @endif>30</option>
+                            <option value="42" @if ($paginate == '42') selected @endif>42</option>
+                            <option value="60" @if ($paginate == '60') selected @endif>60</option>
+                            <option value="84" @if ($paginate == '84') selected @endif>84</option>
+                        </select>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-3" style="border-bottom: 1px solid #4d4d4d; padding-bottom: 10px;">
+                        <span class="listing-accordion-head">{{ __('item.filters') }}</span>
+                        <div>
+                            @if (count($selected) > 0 || (isset($new) && $new == '1') || (isset($bestSeller) && $bestSeller == '1'))
+                                <a href="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}"
+                                   class="btn btn-sm btn-outline-secondary me-1">{{ __('item.reset') }}</a>
+                            @endif
+                            <input type="submit" value="{{ __('item.show') }}" class="small_btn">
+                        </div>
                     </div>
                     <div class="accordion-item listing-accordion-item ">
                         <h2 class="accordion-header" id="panelsStayOpen-heading99999">
@@ -122,12 +126,14 @@
                             </div>
                         </div>
                     @endforeach
-                    <div style="text-align: right;">
+                    <div class="d-flex align-items-center justify-content-between mt-3">
+                        <div>
+                            @if (count($selected) > 0 || (isset($new) && $new == '1') || (isset($bestSeller) && $bestSeller == '1'))
+                                <a href="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}"
+                                   class="btn btn-sm btn-outline-secondary me-1">{{ __('item.reset') }}</a>
+                            @endif
+                        </div>
                         <input type="submit" value="{{ __('item.show') }}" class="small_btn">
-                        @if (count($selected)> 0)
-                            <a href="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}"
-                               class="btn btn-sm btn-info">{{ __('item.reset') }}</a>
-                        @endif
                     </div>
                 </form>
             </div>

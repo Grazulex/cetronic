@@ -30,6 +30,8 @@ return [
     'updated_at_desc' => 'Date de modification décroissante',
     'show' => 'Afficher',
     'orders' => 'Ordre',
+    'paginate' => 'Par page',
+    'catalogue' => 'Catalogue',
     'stock' => 'En stock',
     'shipping' => [
         'days' => 'Livraison rapide',

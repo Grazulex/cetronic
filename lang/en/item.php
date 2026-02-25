@@ -29,7 +29,9 @@ return [
     'updated_at_asc' => 'Update date ascending',
     'updated_at_desc' => 'Update date descending',
     'show' => 'Show',
-    'orders' => 'Order',
+    'orders' => 'Sort by',
+    'paginate' => 'Per page',
+    'catalogue' => 'Catalogue',
     'stock' => 'In stock',
     'shipping' => [
         'days' => 'Quick delivery',

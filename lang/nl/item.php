@@ -29,7 +29,9 @@ return [
     'updated_at_asc' => 'Oplopende wijzigingsdatum',
     'updated_at_desc' => 'Aflopende wijzigingsdatum',
     'show' => 'Weergeven',
-    'orders' => 'bestellingen',
+    'orders' => 'Volgorde',
+    'paginate' => 'Per pagina',
+    'catalogue' => 'Catalogus',
     'stock' => 'In voorraad',
     'shipping' => [
         'days' => 'Snelle levering',
