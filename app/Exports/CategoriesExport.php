@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryMeta;
 use App\Models\Item;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -18,27 +19,22 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
 {
     use Exportable;
 
-    public function __construct(private readonly Category $category, private readonly ?Brand $brand = null) {}
+    private ?Collection $categoryMetas = null;
 
+    public function __construct(private readonly Category $category, private readonly ?Brand $brand = null) {}
 
     public function query()
     {
-        if ($this->brand) {
-            return Item::query()
-                ->where('category_id', $this->category->id)
-                ->where('brand_id', $this->brand->id)
-                ->withoutTrashed()
-                ->with('category')
-                ->with('brand')
-                ->with('metas');
-        }
-
-        return Item::query()
+        $query = Item::query()
             ->where('category_id', $this->category->id)
             ->withoutTrashed()
-            ->with('category')
-            ->with('brand')
-            ->with('metas');
+            ->with(['category', 'brand', 'master', 'metas']);
+
+        if ($this->brand) {
+            $query->where('brand_id', $this->brand->id);
+        }
+
+        return $query;
     }
 
     public function headings(): array
@@ -67,25 +63,54 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
             'catalog_group',
         ];
 
-        $metas = CategoryMeta::where('category_id', $this->category->id)->get();
-        foreach ($metas as $meta) {
+        foreach ($this->getCategoryMetas() as $meta) {
             $headers[] = $meta->name;
         }
-
 
         return $headers;
     }
 
-
     public function map($row): array
     {
-        $data = [$row->id, $row->reference, $row->category->name, $row->brand->name, ($row->master) ? $row->master->reference : '', $row->description, ($row->is_new) ? '1' : '0', ($row->is_best_seller) ? '1' : '0', ($row->is_published) ? '1' : '0', '', $row->price, $row->price_b2b, $row->price_promo, $row->price_special1, $row->price_special2, $row->price_special3, $row->sale_price, $row->price_fix, $row->reseller_price, $row->multiple_quantity, $row->catalog_group];
+        $data = [
+            $row->id,
+            $row->reference,
+            $row->category->name,
+            $row->brand->name,
+            $row->master?->reference ?? '',
+            $row->description,
+            $row->is_new ? '1' : '0',
+            $row->is_best_seller ? '1' : '0',
+            $row->is_published ? '1' : '0',
+            '',
+            $row->price,
+            $row->price_b2b,
+            $row->price_promo,
+            $row->price_special1,
+            $row->price_special2,
+            $row->price_special3,
+            $row->sale_price,
+            $row->price_fix,
+            $row->reseller_price,
+            $row->multiple_quantity,
+            $row->catalog_group,
+        ];
 
-        $metas = CategoryMeta::where('category_id', $this->category->id)->get();
-        foreach ($metas as $meta) {
-            $data[] = ($row->metas()->where('meta_id', $meta->id)->first()) ? $row->metas()->where('meta_id', $meta->id)->first()->value : '';
+        $metaValues = $row->metas->keyBy('meta_id');
+
+        foreach ($this->getCategoryMetas() as $meta) {
+            $data[] = $metaValues->get($meta->id)?->value ?? '';
         }
 
         return $data;
+    }
+
+    private function getCategoryMetas(): Collection
+    {
+        if ($this->categoryMetas === null) {
+            $this->categoryMetas = CategoryMeta::where('category_id', $this->category->id)->get();
+        }
+
+        return $this->categoryMetas;
     }
 }
