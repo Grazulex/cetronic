@@ -21,13 +21,13 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
 
     private ?Collection $categoryMetas = null;
 
-    public function __construct(private readonly Category $category, private readonly ?Brand $brand = null) {}
+    public function __construct(private readonly Category $category, private readonly ?Brand $brand = null, private readonly bool $includeDeleted = false) {}
 
     public function query()
     {
         $query = Item::query()
             ->where('category_id', $this->category->id)
-            ->withoutTrashed()
+            ->when($this->includeDeleted, fn($q) => $q->withTrashed(), fn($q) => $q->withoutTrashed())
             ->with(['category', 'brand', 'master', 'metas']);
 
         if ($this->brand) {
@@ -50,6 +50,7 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
             'Is Best Seller',
             'Is Published',
             '!!  DELETED !!',
+            ...($this->includeDeleted ? ['Is Deleted'] : []),
             'Price',
             'Price B2B',
             'Price Promo',
@@ -83,6 +84,7 @@ final class CategoriesExport implements FromQuery, WithHeadings, WithMapping, Sh
             $row->is_best_seller ? '1' : '0',
             $row->is_published ? '1' : '0',
             '',
+            ...($this->includeDeleted ? [$row->deleted_at !== null ? 'y' : 'n'] : []),
             $row->price,
             $row->price_b2b,
             $row->price_promo,

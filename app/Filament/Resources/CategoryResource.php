@@ -90,7 +90,12 @@ final class CategoryResource extends Resource
                 EditAction::make(),
                 Action::make('exportCSV')
                     ->label(__('Export XLSX'))
-                    ->action(fn($record) => (new CategoriesExport($record))->download($record->name . '_' . Carbon::now() . '.xlsx'))
+                    ->action(fn($record, array $data) => (new CategoriesExport($record, null, $data['include_deleted'] ?? false))->download($record->name . '_' . Carbon::now() . '.xlsx'))
+                    ->form([
+                        Toggle::make('include_deleted')
+                            ->label(__('Include deleted products'))
+                            ->default(false),
+                    ])
                     ->tooltip(__('Export'))
                     ->icon('heroicon-s-download')
                     ->color('primary'),

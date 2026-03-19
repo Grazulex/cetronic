@@ -64,12 +64,15 @@ final class BrandResource extends Resource
                 EditAction::make(),
                 Action::make('exportCSV')
                     ->label(__('Export XLXS'))
-                    ->action(fn($record, array $data) => (new CategoriesExport(Category::find($data['category_id']), $record))->download($record->name . '_' . Carbon::now() . '.xlsx'))
+                    ->action(fn($record, array $data) => (new CategoriesExport(Category::find($data['category_id']), $record, $data['include_deleted'] ?? false))->download($record->name . '_' . Carbon::now() . '.xlsx'))
                     ->form([
                         Select::make('category_id')
                             ->label('Category')
                             ->options(Category::query()->pluck('name', 'id'))
                             ->required(),
+                        Toggle::make('include_deleted')
+                            ->label(__('Include deleted products'))
+                            ->default(false),
                     ])
                     ->tooltip(__('Export'))
                     ->icon('heroicon-s-download')
