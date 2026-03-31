@@ -57,17 +57,17 @@ class MergeCatalogPdfsJob implements ShouldQueue
         $finalFileName = 'catalog_' . $this->catalogName . '.pdf';
         $finalPath = $pdfDir . $finalFileName;
 
-        // Tenter avec Imagick d'abord
-        if (extension_loaded('imagick')) {
-            try {
-                $this->mergeWithImagick($pdfFiles, $finalPath);
-            } catch (\Exception $e) {
-                Log::warning("Échec fusion Imagick, tentative avec CLI : " . $e->getMessage());
-                $this->mergeWithCli($pdfFiles, $finalPath);
-            }
-        } else {
-            Log::info("Imagick non disponible, utilisation de pdftk/ghostscript");
+        // Utiliser CLI (pdftk/ghostscript) en priorité pour conserver le texte sélectionnable
+        // Imagick rasterise les PDFs en images, ce qui détruit le texte vectoriel
+        try {
             $this->mergeWithCli($pdfFiles, $finalPath);
+        } catch (\Exception $e) {
+            Log::warning("Échec fusion CLI, tentative avec Imagick : " . $e->getMessage());
+            if (extension_loaded('imagick')) {
+                $this->mergeWithImagick($pdfFiles, $finalPath);
+            } else {
+                throw new \RuntimeException("Aucune méthode de fusion disponible : " . $e->getMessage());
+            }
         }
 
         // Nettoyer les fichiers temporaires
