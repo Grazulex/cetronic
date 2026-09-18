@@ -200,9 +200,9 @@ $(function(){
         });
 
         $(".owl-prev").html(
-            '<span class="pe-2"><img class="img-left" src="https://svgshare.com/i/mAe.svg" /> </span>');
+            '<span class="pe-2"><img class="img-left" src="{{ asset('images/icons/arrow-left.svg') }}" /> </span>');
         $(".owl-next").html(
-            '<span class="ps-2"> <img class="img-right" src="https://svgshare.com/i/mBY.svg" /></span>');
+            '<span class="ps-2"> <img class="img-right" src="{{ asset('images/icons/arrow-right.svg') }}" /></span>');
 
     });
 

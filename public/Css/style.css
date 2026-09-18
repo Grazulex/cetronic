@@ -667,7 +667,8 @@ input.text-center.border-0.w-100:focus {
 }
 
 .parallax {
-    background-image: url('https://i.goopics.net/w6xxnf.png');
+    /* Image d'origine perdue (hébergeur i.goopics.net hors service) : à remplacer par une image locale */
+    background-color: #f3efe9;
     min-height: 689px;
     background-attachment: fixed;
     background-position: center;
@@ -785,7 +786,8 @@ span.border-0.bg-body.plus {
     margin-bottom: 80px;
 }
 .section1-bg-img {
-    background-image: url('https://i.goopics.net/2utxkg.png');
+    /* Image d'origine perdue (hébergeur i.goopics.net hors service) : à remplacer par une image locale */
+    background-color: #f3efe9;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -819,7 +821,8 @@ span.border-0.bg-body.plus {
 }
 
 .section2-bg-img {
-    background-image: url('https://i.goopics.net/ta5cm7.png');
+    /* Image d'origine perdue (hébergeur i.goopics.net hors service) : à remplacer par une image locale */
+    background-color: #f3efe9;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -864,7 +867,7 @@ span.border-0.bg-body.plus {
 
 .contact-us {
     margin-top: 108px;
-    background-image: url('https://i.goopics.net/fdco62.png');
+    background-image: url('../images/backgrounds/contact-banner.jpg');
     width: 100%;
     height: 253px;
     background-position: center;

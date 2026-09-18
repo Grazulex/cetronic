@@ -120,7 +120,7 @@ a.dropdown-item.dropdown-languages-link {
     vertical-align: 0 !important;
 }
 button.dropdown-toggle::after {
-    content: url("https://i.goopics.net/ibohg3.png") !important;
+    content: url("../images/backgrounds/nav-caret.png") !important;
 }
 .btn-dropdown-menu:focus {
     box-shadow: none !important;
@@ -139,7 +139,7 @@ a + .nav-caret {
     color: #fdb080;
 }
 .nav-caret--down {
-    content: url("https://i.goopics.net/ibohg3.png");
+    content: url("../images/backgrounds/nav-caret.png");
 }
 
 @media screen and (min-width: 320px) and (max-width: 467px) {

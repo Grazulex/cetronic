@@ -14,13 +14,13 @@
                         </div>
                         <div class="carousel-inner">
                             <div class="carousel-item carousel-about-bg-img active"
-                                style="background: url('https://i.goopics.net/63v9u2.png')">
+                                style="background: url('{{ asset('images/backgrounds/hero-watch.jpg') }}')">
                             </div>
                             <div class="carousel-item carousel-about-bg-img "
-                                style="background: url('https://i.goopics.net/63v9u2.png')">
+                                style="background: url('{{ asset('images/backgrounds/hero-watch.jpg') }}')">
                             </div>
                             <div class="carousel-item carousel-about-bg-img "
-                                style="background: url('https://i.goopics.net/63v9u2.png')">
+                                style="background: url('{{ asset('images/backgrounds/hero-watch.jpg') }}')">
                             </div>
 
                         </div>

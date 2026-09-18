@@ -6,7 +6,7 @@
         </div>
 
         <div class="carousel-inner">
-            <div class="carousel-item cetronic-slide-bg-img active" style="background: url('https://i.goopics.net/63v9u2.png');">
+            <div class="carousel-item cetronic-slide-bg-img active" style="background: url('{{ asset('images/backgrounds/hero-watch.jpg') }}');">
                 <div class="Slide-Contenu">
                     <p class="Slide-description">{{ __('home.slide1.description') }}</p>
                     <p class="Slide-title">{{ __('home.slide1.title') }}</p>
@@ -18,7 +18,7 @@
                     </a>
                 </div>
             </div>
-            <div class="carousel-item cetronic-slide-bg-img" style="background: url('https://i.goopics.net/n9fe9j.png');">
+            <div class="carousel-item cetronic-slide-bg-img" style="background: url('{{ asset('images/backgrounds/hero-watch.jpg') }}');">
                 <div class="Slide-Contenu">
                     <p class="Slide-description">{{ __('home.slide2.description') }}</p>
                     <p class="Slide-title">{{ __('home.slide2.title') }}</p>
