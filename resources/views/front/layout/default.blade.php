@@ -40,11 +40,20 @@
         })(window,document,'script','dataLayer','GTM-5NRD2WG');</script>
     <!-- End Google Tag Manager -->
 
-    {{-- Scripts du consentement cookies : on remplace @cookieconsentscripts() pour charger
-         le script SANS `defer`. Avec `defer`, le bandeau (rendu en fin de body) était cliquable
-         avant que window.LaravelCookieConsent n'existe → "Cannot read properties of undefined (reading 'acceptAll')". --}}
-    @cookieconsentscripts(false)
-    <script src="{{ route('cookieconsent.script') }}?id={{ md5(filemtime(LCC_ROOT . '/dist/script.js')) }}"></script>
+    @cookieconsentscripts()
+    <script>
+        // window.LaravelCookieConsent n'est créé par le package qu'au DOMContentLoaded, c.-à-d. après le
+        // chargement de tous les scripts synchrones (CDN) en bas de page. Le bandeau, lui, est cliquable
+        // dès son rendu : un clic trop tôt plantait ("Cannot read properties of undefined (reading 'acceptAll')").
+        // Tant que l'objet n'existe pas, on court-circuite le listener du package et on laisse le formulaire
+        // se soumettre nativement (POST + redirect back, les cookies sont posés côté serveur).
+        document.addEventListener('submit', function (event) {
+            if (window.LaravelCookieConsent || !event.target.closest('#cookies-policy')) {
+                return;
+            }
+            event.stopImmediatePropagation();
+        }, true);
+    </script>
 </head>
 
 <body>
