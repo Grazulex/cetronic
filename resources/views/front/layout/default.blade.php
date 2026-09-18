@@ -40,7 +40,11 @@
         })(window,document,'script','dataLayer','GTM-5NRD2WG');</script>
     <!-- End Google Tag Manager -->
 
-    @cookieconsentscripts()
+    {{-- Scripts du consentement cookies : on remplace @cookieconsentscripts() pour charger
+         le script SANS `defer`. Avec `defer`, le bandeau (rendu en fin de body) était cliquable
+         avant que window.LaravelCookieConsent n'existe → "Cannot read properties of undefined (reading 'acceptAll')". --}}
+    @cookieconsentscripts(false)
+    <script src="{{ route('cookieconsent.script') }}?id={{ md5(filemtime(LCC_ROOT . '/dist/script.js')) }}"></script>
 </head>
 
 <body>
