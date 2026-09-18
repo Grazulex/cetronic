@@ -80,6 +80,11 @@ final class BrandService
 
     public function getCatalog(Brand $brand, string $catSlug, User $user): Response
     {
+        // Augmenter les limites PHP : DomPDF décode chaque image produit en mémoire
+        // (un PNG de 1,4 Mo ≈ 30 Mo décodé), la limite par défaut de 128 Mo est vite dépassée
+        ini_set('max_execution_time', '300'); // 5 minutes
+        ini_set('memory_limit', '1024M'); // 1GB de mémoire
+
         $mainCategory = Category::where('slug', $catSlug)->first();
         $items = Item::where('brand_id', $brand->id)->where('category_id', $mainCategory->id)->where('is_published', true)->orderBy('reference')->get();
         $pdf = Pdf::loadView('pdf/brand', ['brand' => $brand, 'items' => $items, 'user' => $user])->setPaper('a4', 'landscape');
