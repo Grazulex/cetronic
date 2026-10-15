@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="nos-marques">
-                <div id="owl-example" class="owl-carousel owl-nos-marques">
+                <div class="owl-carousel owl-nos-marques">
                     @foreach ($brands as $brand)
                         <div class="d-flex align-items-center justify-content-center">
                             <x-brands.picture-component :brand="$brand" :key="'picture-' . $brand->id" />

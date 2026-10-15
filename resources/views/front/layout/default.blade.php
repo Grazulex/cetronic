@@ -82,19 +82,16 @@
         @yield('content')
     </main>
 @cookieconsentview()
-</body>
 
 <x-footer-component />
 @livewireScripts
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
 </script>
 
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.11/dist/sweetalert2.all.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.0/owl.carousel.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.9/jquery.lazy.plugins.min.js"></script>
 <script src="{{ asset('js/easyzoom.js') }}"></script>
 <script>
     AOS.init();
@@ -295,10 +292,5 @@ $(function(){
     })
 </script>
 
-<script>
-    $(function() {
-        $('.lazy').Lazy();
-    });
-</script>
-
+</body>
 </html>

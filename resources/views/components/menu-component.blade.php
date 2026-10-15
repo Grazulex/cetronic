@@ -73,7 +73,7 @@
                     </li>
                     @endforeach
                     <li class="nav-item ps-1 d-inline-block d-lg-none">
-                        <span class="nav-link" id="btn-search">
+                        <span class="nav-link">
                             @livewire('search-item')
                         </span>
                     </li>
