@@ -1,0 +1,15 @@
+/*
+ * Feuilles de style du site public, regroupées en un seul fichier versionné.
+ * L'ordre reproduit exactement celui des anciennes balises <link> du layout :
+ * ne pas le modifier sans vérifier le rendu (la cascade en dépend).
+ */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'owl.carousel/dist/assets/owl.carousel.min.css';
+@import 'owl.carousel/dist/assets/owl.theme.default.min.css';
+@import '../../public/Css/nav.css';
+@import '../../public/Css/menu.css';
+@import '../../public/Css/style.css';
+@import '../../public/Css/footer.css';
+@import '../../public/Css/cart.css';
+@import 'aos/dist/aos.css';
+@import '../../public/Css/easyzoom.css';

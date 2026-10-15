@@ -6,19 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @livewireStyles
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.0/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.0/assets/owl.theme.default.min.css">
-    <link rel="stylesheet" href="{{ asset('Css/nav.css') }}" />
-    <link rel="stylesheet" href="{{ asset('Css/menu.css') }}" />
-    <link rel="stylesheet" href="{{ asset('Css/style.css') }}" />
-    <link rel="stylesheet" href="{{ asset('Css/footer.css') }}" />
-    <link rel="stylesheet" href="{{ asset('Css/cart.css') }}" />
+    @vite('resources/css/front.css')
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('Css/easyzoom.css') }}">
 
     <title>Cetronic Benelux - @yield('title')</title>
     <meta name="description" content="Cetronic Benelux - @yield('description')">
