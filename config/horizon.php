@@ -192,6 +192,18 @@ return [
             'timeout' => 1500, // 25 minutes (plus que le job timeout de 20min)
             'nice' => 0,
         ],
+        'supervisor-media' => [
+            'connection' => 'redis',
+            'queue' => ['media'],
+            'balance' => 'false',
+            'maxProcesses' => 1,
+            'maxTime' => 0,
+            'maxJobs' => 0,
+            'memory' => 512,
+            'tries' => 2,
+            'timeout' => 300,
+            'nice' => 10, // priorité CPU basse : les conversions d'images passent après le site
+        ],
     ],
 
     'environments' => [
@@ -205,6 +217,9 @@ return [
                 'maxProcesses' => 10, // 10 jobs en parallèle pour générer le catalogue
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
+            ],
+            'supervisor-media' => [
+                'maxProcesses' => 2, // conversions d'images en douceur
             ],
         ],
 

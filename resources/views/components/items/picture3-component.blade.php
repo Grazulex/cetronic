@@ -26,12 +26,12 @@
                         @if (Route::is('item') )
                 <div class="easyzoom easyzoom--overlay">
                     <a href="{{ $picture->getUrl() }}">
-                        <div class="cetronic-card-img" style="background-image: url('{{ $picture->getUrl() }}')">
+                        <div class="cetronic-card-img" style="background-image: url('{{ $picture->getAvailableUrl(['medium']) }}')">
                         </div>
                     </a>
                 </div>
                         @else
-                            <div class="cetronic-card-img" style="background-image: url('{{ $picture->getUrl() }}')"></div>
+                            <div class="cetronic-card-img" style="background-image: url('{{ $picture->getAvailableUrl(['medium']) }}')"></div>
                         @endif
                 @if ($slug != '')
                     </a>
@@ -50,7 +50,7 @@
                     @foreach ($pictures as $picture)
                         <button type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->index == 0 ? 'active' : ' ' }}" aria-current="{{ $loop->index == 0 ? 'true' : 'false' }}" aria-label="Slide {{ $loop->iteration }}">
                             <!-- <div class="img-container"> -->
-                            <img src="{{ $picture->getUrl() }}" class="img-fluid" alt="" />
+                            <img src="{{ $picture->getAvailableUrl(['thumb']) }}" class="img-fluid" alt="" />
                             <!-- </div> -->
                         </button>
                     @endforeach

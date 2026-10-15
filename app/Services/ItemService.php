@@ -77,7 +77,7 @@ final class ItemService
 
     public function getDefaultPicture(): string
     {
-        return $this->item->getFirstMediaUrl();
+        return $this->item->getFirstMedia()?->getAvailableUrl(['medium']) ?? '';
     }
 
     public function getVariantIfChoice()

@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 final class Item extends Model implements HasMedia
 {
@@ -113,6 +115,20 @@ final class Item extends Model implements HasMedia
     public function orders(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Versions WebP allégées pour l'affichage (l'original reste utilisé pour le zoom, les PDF et les ZIP).
+     */
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->fit(Manipulations::FIT_MAX, 400, 400)
+            ->format(Manipulations::FORMAT_WEBP);
+
+        $this->addMediaConversion('medium')
+            ->fit(Manipulations::FIT_MAX, 800, 800)
+            ->format(Manipulations::FORMAT_WEBP);
     }
 
     public function getFirstMediaPathAttribute()
