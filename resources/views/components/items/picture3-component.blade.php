@@ -50,7 +50,7 @@
                     @foreach ($pictures as $picture)
                         <button type="button" data-bs-target="#{{ $carouselId }}" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->index == 0 ? 'active' : ' ' }}" aria-current="{{ $loop->index == 0 ? 'true' : 'false' }}" aria-label="Slide {{ $loop->iteration }}">
                             <!-- <div class="img-container"> -->
-                            <img src="{{ $picture->getAvailableUrl(['thumb']) }}" class="img-fluid" alt="" />
+                            <img src="{{ $picture->getAvailableUrl(['thumb']) }}" class="img-fluid" alt="" loading="lazy" />
                             <!-- </div> -->
                         </button>
                     @endforeach

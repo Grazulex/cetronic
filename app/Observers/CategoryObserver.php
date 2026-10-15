@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use App\Models\Category;
+use App\Services\CategoryService;
 use Str;
 
 final class CategoryObserver
@@ -18,6 +19,13 @@ final class CategoryObserver
     {
         if ($category->isDirty('name')) {
             $category->slug = Str::slug($category->name);
+        }
+    }
+
+    public function saved(Category $category): void
+    {
+        if ($category->wasChanged('picture') || $category->wasRecentlyCreated) {
+            (new CategoryService())->generateWebpPicture($category);
         }
     }
 }

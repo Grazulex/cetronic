@@ -11,7 +11,10 @@ use App\Models\ItemMeta;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use Throwable;
 
 final class CategoryService
 {
@@ -149,9 +152,44 @@ final class CategoryService
         $defaultPicture = 'public/categories/default.jpg';
 
         if ($category->picture) {
-            $defaultPicture = Storage::url(path: $category->picture);
+            $webpPicture = self::webpPath($category->picture);
+            $defaultPicture = Storage::url(path: Storage::disk('public')->exists($webpPicture) ? $webpPicture : $category->picture);
         }
 
         return $defaultPicture;
+    }
+
+    /**
+     * Crée une version WebP (même dimensions) de l'image de la catégorie, servie à la place de l'original.
+     */
+    public function generateWebpPicture(Category $category): bool
+    {
+        $disk = Storage::disk('public');
+
+        if ( ! $category->picture || ! $disk->exists($category->picture)) {
+            return false;
+        }
+
+        $webpPicture = self::webpPath($category->picture);
+        if ($webpPicture === $category->picture) {
+            return false;
+        }
+
+        try {
+            Image::make($disk->path($category->picture))
+                ->encode('webp', 85)
+                ->save($disk->path($webpPicture));
+        } catch (Throwable $exception) {
+            Log::warning('Category webp picture generation failed', ['category' => $category->id, 'error' => $exception->getMessage()]);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function webpPath(string $path): string
+    {
+        return preg_replace('/\.[^.\/]+$/', '', $path) . '.webp';
     }
 }
