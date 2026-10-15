@@ -88,6 +88,7 @@ return [
     'waits' => [
         'redis:default' => 60,
         'redis:catalog' => 120, // Alertes après 2 minutes d'attente pour la queue catalog
+        'redis:media' => 7200, // Conversions d'images en masse : une longue attente est normale
     ],
 
     /*
