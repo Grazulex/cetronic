@@ -188,14 +188,9 @@ final class ItemService
 
     private function getPricesForGuest(): \Illuminate\Support\Collection
     {
-        // Comportement par défaut pour les invités
+        // Le price_fix n'est jamais affiché aux invités (réservé aux utilisateurs connectés)
         $guest_price_end = ($this->item->price_promo > 0) ? $this->item->price_promo : $this->getDefaultPrice();
-        
-        // Si l'item a un price_fix, il a la priorité sur le prix par défaut
-        if ($this->item->price_fix > 0) {
-            $guest_price_end = $this->item->price_fix;
-        }
-        
+
         return collect([
             'price_start' => $this->getDefaultPrice(),
             'price_promo' => $this->item->price_promo,

@@ -144,20 +144,33 @@ it('should use price_fix as price_end when user has NO rule', function (): void 
     }
 });
 
-it('should use price_fix as price_end for guests', function (): void {
+it('should NOT use price_fix as price_end for guests', function (): void {
     $items = createItemsWithPriceFix();
-    
-    // Pas d'utilisateur connecté (guest)
+
+    // Pas d'utilisateur connecté (guest) : le price_fix ne doit jamais être affiché
 
     foreach ($items as $item) {
         $itemService = new ItemService($item);
         $prices = $itemService->getPrice(); // Pas d'utilisateur
-        
-        // Le price_fix devrait être utilisé comme price_end pour les invités
-        expect((int) ($prices['price_end'] * 100))->toBe((int) ($item->price_fix * 100));
+
+        expect((int) ($prices['price_end'] * 100))->not->toBe((int) ($item->price_fix * 100));
+        expect((int) ($prices['price_end'] * 100))->toBe((int) ($item->price_promo * 100));
         expect((int) ($prices['price_start'] * 100))->toBe((int) ($item->price * 100));
         expect((int) ($prices['price_promo'] * 100))->toBe((int) ($item->price_promo * 100));
         expect((int) ($prices['sale'] * 100))->toBe(0); // Sale toujours 0 pour guests
+    }
+});
+
+it('should use price as price_end for guests when item has price_fix but no price_promo', function (): void {
+    $items = createItemsWithPriceFix();
+
+    foreach ($items as $item) {
+        $item->update(['price_promo' => 0]);
+
+        $prices = (new ItemService($item->fresh()))->getPrice();
+
+        expect((int) ($prices['price_end'] * 100))->toBe((int) ($item->price * 100));
+        expect((int) ($prices['price_end'] * 100))->not->toBe((int) ($item->price_fix * 100));
     }
 });
 

@@ -123,6 +123,11 @@ final class BrandService
      */
     public function getCategoriesWithPromos(?User $user = null): array
     {
+        // Les promos (price_fix) ne sont jamais visibles pour les invités
+        if (null === $user) {
+            return [];
+        }
+
         $data = [];
         $categoryService = new CategoryService();
         $categories = $categoryService->getCategories(user: $user);
