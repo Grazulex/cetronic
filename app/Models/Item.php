@@ -97,6 +97,16 @@ final class Item extends Model implements HasMedia
         return $query->whereDoesntHave('disables', fn($query) => $query->where('user_id', $user->id)->where('is_enable', true))
             ->where('is_published', true);
     }
+
+    public function scopeMatchingTerm(Builder $query, string $term): Builder
+    {
+        return $query->where(function (Builder $query) use ($term): void {
+            $query->where('reference', 'LIKE', "%{$term}%")
+                ->orWhereHas('variants', fn(Builder $query) => $query->where('reference', 'LIKE', "%{$term}%"))
+                ->orWhereHas('brand', fn(Builder $query) => $query->where('name', 'LIKE', "%{$term}%"));
+        });
+    }
+
     public function scopeActive(Builder $query): void
     {
         $query->where('is_published', true);

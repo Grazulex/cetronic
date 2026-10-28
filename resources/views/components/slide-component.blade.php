@@ -10,7 +10,7 @@
                 <div class="Slide-Contenu">
                     <p class="Slide-description">{{ __('home.slide1.description') }}</p>
                     <p class="Slide-title">{{ __('home.slide1.title') }}</p>
-                    <a href="{{ route('list', ['cat' => __('home.slide1.route'), 'type' => 'category', 'slug' => __('home.slide1.route')]) }}"><button class="slide-btn">{{ __('home.slide1.action') }}</button></a>
+                    <a href="{{ route('list', ['cat' => 'watches', 'type' => 'category', 'slug' => 'watches']) }}"><button class="slide-btn">{{ __('home.slide1.action') }}</button></a>
                 </div>
                 <div class="scrolldown">
                     <a href="#x-home-item-promo-component" aria-label="link">
@@ -22,7 +22,7 @@
                 <div class="Slide-Contenu">
                     <p class="Slide-description">{{ __('home.slide2.description') }}</p>
                     <p class="Slide-title">{{ __('home.slide2.title') }}</p>
-                    <a href="{{ route('list', ['cat' => __('home.slide2.route'), 'type' => 'category', 'slug' => __('home.slide2.route')]) }}"><button class="slide-btn">{{ __('home.slide2.action') }}</button></a>
+                    <a href="{{ route('list', ['cat' => 'bracelets', 'type' => 'category', 'slug' => 'bracelets']) }}"><button class="slide-btn">{{ __('home.slide2.action') }}</button></a>
                 </div>
                 <div class="scrolldown">
                     <a href="#x-home-item-promo-component" aria-label="link">

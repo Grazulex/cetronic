@@ -16,6 +16,9 @@
             </div>
 
             <div class="row">
+               @if ($items->isEmpty())
+                  <p class="text-center">{{ __('listing.search.no_result') }}</p>
+               @endif
                @foreach ($items as $item)
                   <div class="col-xl-4">
                         <x-items.item-component :item="$item" :key="'item-' . $item->id" />

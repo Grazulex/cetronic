@@ -138,9 +138,10 @@
                                 <label class="champ-form-commande" for="country">{{ __('user.country') }}</label>
 
                                 <select class="form-control login-form" name="country" id="country">
+                                    <option value="" disabled {{ old('country') ? '' : 'selected' }}>{{ __('user.choose_country') }}</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->value }}"
-                                            {{ isset($location) && $location->country == $country ? 'selected' : '' }}>
+                                            {{ old('country') === $country->value ? 'selected' : '' }}>
                                             {{ $country->name }}</option>
                                     @endforeach
                                 </select>

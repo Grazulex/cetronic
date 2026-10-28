@@ -91,7 +91,7 @@ final class ListingController extends Controller
     {
         $search = $request->get('search-input');
 
-        $items = Item::where('reference', 'LIKE', '%' . $search . '%')
+        $items = Item::matchingTerm((string) $search)
             ->enable(auth()->user())
             ->whereHas('brand', function ($query): void {
                 $query->enabled(auth()->user());
@@ -108,15 +108,11 @@ final class ListingController extends Controller
             ->orderBy('reference')
             ->paginate(21);
 
-        if (count($items) > 1) {
-            return view('front.pages.search', compact('search', 'items'));
-        }
-        if (1 === count($items)) {
+        if (1 === $items->total()) {
             return redirect()->route('item', ['item' => $items->first()->slug]);
         }
-        return redirect()->route('home');
 
-
+        return view('front.pages.search', compact('search', 'items'));
     }
 
 }

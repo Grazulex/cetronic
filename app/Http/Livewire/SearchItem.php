@@ -14,7 +14,7 @@ final class SearchItem extends Component
     public function render()
     {
         if ($this->term && mb_strlen($this->term) > 2) {
-            $items = Item::where('reference', 'LIKE', "%{$this->term}%")
+            $items = Item::matchingTerm($this->term)
                 ->enable(auth()->user())
                 ->whereHas('brand', function ($query): void {
                     $query->enabled(auth()->user());

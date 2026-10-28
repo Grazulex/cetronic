@@ -37,6 +37,8 @@
                         <p><a class="text-decoration-none" href="tel:{{ __('home.footer.column4.phone') }}">{{ __('home.footer.column4.phone') }}</a></p>
                         <p><a class="text-decoration-none"
                                 href="mailto:{{ __('home.footer.column4.email') }}">{{ __('home.footer.column4.email') }}</a></p>
+                        <p>{{ __('home.footer.column4.address') }}</p>
+                        <p>{{ __('home.footer.column4.vat') }}</p>
                         <!--<p>
                             <x-social-media-component />
                         </p>-->

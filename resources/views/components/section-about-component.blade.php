@@ -34,7 +34,7 @@
                         <div class="about-text">
                             {!! __('about.section1.description') !!}
                         </div>
-                        <a href="#" class="cetronic-about-btn">{{ __('about.section1.action') }}</a>
+                        <a href="{{ route('about') }}" class="cetronic-about-btn">{{ __('about.section1.action') }}</a>
                     </div>
                 </div>
             </div>
