@@ -4,28 +4,30 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\UserResource\Pages;
 
+use App\DataObjects\Stats\SalesFilters;
+use App\Enum\SalesGroupByEnum;
 use App\Filament\Resources\UserResource;
+use App\Models\OrderItem;
 use App\Models\User;
-use Filament\Resources\Pages\Page;
+use App\Services\SalesStatsService;
 use Filament\Pages\Actions\Action;
-use Illuminate\Support\Facades\DB;
+use Filament\Resources\Pages\Page;
 
 class CustomerStats extends Page
 {
+    public User $record;
     protected static string $resource = UserResource::class;
 
     protected static string $view = 'filament.resources.user-resource.pages.customer-stats';
-    
+
     protected static ?string $title = 'Statistiques Client';
-    
-    public User $record;
 
     public function mount($record): void
     {
         $this->record = $record;
-        
+
         // Vérifier que c'est bien un client
-        if ($this->record->role !== \App\Enum\UserRoleEnum::CUSTOMER) {
+        if (\App\Enum\UserRoleEnum::CUSTOMER !== $this->record->role) {
             abort(403, 'Cette page est réservée aux clients.');
         }
     }
@@ -47,9 +49,28 @@ class CustomerStats extends Page
 
     protected function getViewData(): array
     {
+        $service = app(SalesStatsService::class);
+        $filters = new SalesFilters(userId: $this->record->id);
+        [$chartFrom] = SalesFilters::periodRange('last_12_months');
+
+        $orders = $this->record->orders()->get();
+        $lines = OrderItem::query()
+            ->whereIn('order_id', $orders->modelKeys())
+            ->selectRaw('order_id, COUNT(*) as products, SUM(quantity) as quantity')
+            ->groupBy('order_id')
+            ->toBase()
+            ->get()
+            ->keyBy('order_id');
+
         return [
             'record' => $this->record,
-            'DB' => DB::class,
+            'summary' => $service->summary($filters),
+            'lastOrder' => $orders->first(),
+            'chartFilters' => ['user_id' => $this->record->id, 'from' => $chartFrom, 'to' => now()->toDateString()],
+            'brandStats' => $service->breakdownQuery($filters, SalesGroupByEnum::BRAND)->orderByDesc('revenue')->toBase()->get(),
+            'categoryStats' => $service->breakdownQuery($filters, SalesGroupByEnum::CATEGORY)->orderByDesc('revenue')->toBase()->get(),
+            'orders' => $orders,
+            'orderLines' => $lines,
         ];
     }
 }

@@ -20,6 +20,7 @@ use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\View;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -160,6 +161,11 @@ final class ItemResource extends Resource
                                 ->suffix('€'),
                         ])
                         ->columns(4),
+                    Tab::make('Ventes')
+                        ->schema([
+                            View::make('filament.resources.item-resource.sales-tab'),
+                        ])
+                        ->visible(fn (?Item $record): bool => null !== $record),
                 ])->columnSpan('full'),
         ]);
     }

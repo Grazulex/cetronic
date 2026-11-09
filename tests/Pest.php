@@ -86,3 +86,22 @@ uses(
     Tests\TestCase::class,
     Illuminate\Foundation\Testing\RefreshDatabase::class,
 )->in('Feature');
+
+/**
+ * Creates one order holding one line. The unit price is given in euros.
+ *
+ * @param  array<string, mixed>  $order
+ */
+function createSale(Item $item, int $quantity, float $unitPrice, string $date, array $order = [], string $name = 'Line'): App\Models\Order
+{
+    $order = App\Models\Order::factory()->create(array_merge(['created_at' => Illuminate\Support\Carbon::parse($date)], $order));
+    App\Models\OrderItem::factory()->create([
+        'order_id' => $order->id,
+        'item_id' => $item->id,
+        'quantity' => $quantity,
+        'price_paid' => $unitPrice,
+        'name' => $name,
+    ]);
+
+    return $order;
+}
