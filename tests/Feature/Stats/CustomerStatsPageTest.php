@@ -60,6 +60,16 @@ it('shows the monthly evolution of the customer', function (): void {
         ->assertSee('Évolution mensuelle');
 });
 
+it('charts the whole history of the customer, like the key figures', function (): void {
+    loginAsAdmin();
+    createSale($this->item, 1, 100, '2023-08-01', ['user_id' => $this->customer->id]);
+
+    $this->get(customerStatsUrl($this->customer))
+        ->assertOk()
+        ->assertSee('08\/2023', false)
+        ->assertSee('11\/2026', false);
+});
+
 it('breaks the customer sales down per brand and category', function (): void {
     loginAsAdmin();
     createSale($this->item, 3, 10, '2026-03-01', ['user_id' => $this->customer->id]);

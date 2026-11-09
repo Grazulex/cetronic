@@ -45,7 +45,7 @@
             @endforeach
         </div>
 
-        {{-- Évolution sur les 12 derniers mois --}}
+        {{-- Évolution mensuelle depuis la première commande --}}
         @livewire(\App\Http\Livewire\Admin\SalesChart::class, ['filters' => $chartFilters], key('customer-sales-chart-' . $record->id))
 
         {{-- Répartition par marque puis par catégorie --}}

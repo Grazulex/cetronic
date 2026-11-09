@@ -51,7 +51,6 @@ class CustomerStats extends Page
     {
         $service = app(SalesStatsService::class);
         $filters = new SalesFilters(userId: $this->record->id);
-        [$chartFrom] = SalesFilters::periodRange('last_12_months');
 
         $orders = $this->record->orders()->get();
         $lines = OrderItem::query()
@@ -66,7 +65,8 @@ class CustomerStats extends Page
             'record' => $this->record,
             'summary' => $service->summary($filters),
             'lastOrder' => $orders->first(),
-            'chartFilters' => ['user_id' => $this->record->id, 'from' => $chartFrom, 'to' => now()->toDateString()],
+            // Whole history, like the key figures: from the first order to today.
+            'chartFilters' => ['user_id' => $this->record->id, 'to' => now()->toDateString()],
             'brandStats' => $service->breakdownQuery($filters, SalesGroupByEnum::BRAND)->orderByDesc('revenue')->toBase()->get(),
             'categoryStats' => $service->breakdownQuery($filters, SalesGroupByEnum::CATEGORY)->orderByDesc('revenue')->toBase()->get(),
             'orders' => $orders,
