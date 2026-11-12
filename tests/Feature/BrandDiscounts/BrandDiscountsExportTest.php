@@ -147,7 +147,10 @@ it('renders a real workbook with frozen panes and dropdowns', function (): void 
         ->and($sheet->getCell('K1')->getValue())->toBe("Rings [{$this->rings->id}] Type de prix")
         ->and($sheet->getCell('K2')->getDataValidation()->getFormula1())->toBe('"default,b2b,special_1,special_2,special_3,fix"')
         ->and($sheet->getCell('L3')->getDataValidation()->getFormula1())->toBe('"oui,non"')
-        ->and($sheet->getCell('H3')->getValue())->toEqual(10);
+        ->and($sheet->getCell('H3')->getValue())->toEqual(10)
+        ->and($sheet->getCell('I3')->getValue())->toBe(0)
+        ->and($sheet->getCell('F2')->getValue())->toBe(0)
+        ->and($sheet->getCell('N3')->getValue())->toBeNull();
 
     unlink($path);
 });
