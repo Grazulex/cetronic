@@ -67,6 +67,10 @@ return [
                 'text' => '<p>We do our best to keep the website running smoothly but cannot guarantee that it is free from interruptions or errors. We are not liable for indirect damage resulting from the use of the website or of websites it links to.</p>',
             ],
             [
+                'title' => 'General terms of sale',
+                'text' => '<p>Every order implies acceptance of our general terms of sale, printed on the back of our invoices. They prevail over the customer’s purchase conditions unless we formally agree otherwise.</p>',
+            ],
+            [
                 'title' => 'Governing law',
                 'text' => '<p>These terms are governed by Belgian law. Any dispute falls under the jurisdiction of the courts of Brussels.</p>',
             ],
@@ -82,15 +86,15 @@ return [
             ],
             [
                 'title' => 'Warranty',
-                'text' => '<p>Our products are covered by the manufacturer’s warranty, whose length depends on the brand. The warranty covers manufacturing defects. It does not cover:</p><ul><li>normal wear and tear (straps, glass, cases);</li><li>batteries;</li><li>damage caused by impact, moisture or misuse;</li><li>products opened or repaired by a third party.</li></ul>',
+                'text' => '<p>Our products are covered by the manufacturer’s warranty, whose length depends on the brand. The warranty covers manufacturing defects. It does not cover:</p><ul><li>normal wear and tear (straps, glass, cases);</li><li>batteries;</li><li>damage caused by impact, moisture or misuse;</li><li>products opened or repaired by a third party.</li></ul><p>We are not liable for the consequences of using the goods sold.</p>',
             ],
             [
-                'title' => 'Defective or non-compliant products',
-                'text' => '<p>Check your delivery on receipt. Any damaged parcel, missing or non-compliant product must be reported within 8 days of delivery. No return is accepted without our prior agreement.</p>',
+                'title' => 'Claims',
+                'text' => '<p>Goods travel at the buyer’s risk, even when delivered carriage paid. Check your delivery on receipt to keep your rights against the carrier.</p><p>Any claim must reach us by registered letter within 8 days of receipt, before the goods are altered in any way. State the product reference and the invoice number and date (or, failing that, the shipping document). A claim does not allow payment of an invoice to be delayed.</p>',
             ],
             [
                 'title' => 'Returns',
-                'text' => '<p>Once our team has agreed, send the product back in its original packaging with a copy of the invoice. After inspection, we repair or replace it, or issue a credit note.</p>',
+                'text' => '<p>No goods may be returned to us without our formal agreement. If we acknowledge that your claim is justified, we replace the part of the delivery found to be defective as soon as possible.</p>',
             ],
             [
                 'title' => 'Out-of-warranty repairs',

@@ -67,6 +67,10 @@ return [
                 'text' => '<p>Nous mettons tout en œuvre pour assurer le bon fonctionnement du site, sans pouvoir garantir l’absence d’interruptions ou d’erreurs. Notre responsabilité ne peut être engagée pour les dommages indirects liés à l’utilisation du site ou des sites vers lesquels il renvoie.</p>',
             ],
             [
+                'title' => 'Conditions générales de vente',
+                'text' => '<p>Toute commande implique l’acceptation de nos conditions générales de vente, reprises au verso de nos factures. Elles prévalent sur les conditions d’achat du client, sauf accord formel de notre part.</p>',
+            ],
+            [
                 'title' => 'Droit applicable',
                 'text' => '<p>Ces conditions sont soumises au droit belge. Tout litige relève de la compétence des tribunaux de Bruxelles.</p>',
             ],
@@ -82,15 +86,15 @@ return [
             ],
             [
                 'title' => 'Garantie',
-                'text' => '<p>Nos produits bénéficient de la garantie du fabricant, dont la durée dépend de la marque. La garantie couvre les défauts de fabrication. Elle ne couvre pas :</p><ul><li>l’usure normale (bracelets, verres, boîtiers) ;</li><li>les piles ;</li><li>les dommages dus à un choc, à l’humidité ou à une mauvaise utilisation ;</li><li>les produits ouverts ou réparés par un tiers.</li></ul>',
+                'text' => '<p>Nos produits bénéficient de la garantie du fabricant, dont la durée dépend de la marque. La garantie couvre les défauts de fabrication. Elle ne couvre pas :</p><ul><li>l’usure normale (bracelets, verres, boîtiers) ;</li><li>les piles ;</li><li>les dommages dus à un choc, à l’humidité ou à une mauvaise utilisation ;</li><li>les produits ouverts ou réparés par un tiers.</li></ul><p>Notre responsabilité n’est pas engagée pour les conséquences de l’utilisation des marchandises vendues.</p>',
             ],
             [
-                'title' => 'Produits défectueux ou non conformes',
-                'text' => '<p>Vérifiez votre livraison dès réception. Tout colis endommagé, produit manquant ou non conforme doit nous être signalé dans les 8 jours suivant la livraison. Aucun retour n’est accepté sans notre accord préalable.</p>',
+                'title' => 'Réclamations',
+                'text' => '<p>Les marchandises voyagent aux risques de l’acheteur, même lorsqu’elles sont livrées franco. Vérifiez votre livraison dès réception afin de conserver vos droits envers le transporteur.</p><p>Toute réclamation doit nous parvenir par lettre recommandée dans les 8 jours suivant la réception, avant toute transformation de la marchandise. Indiquez la référence du produit ainsi que le numéro et la date de la facture (ou, à défaut, du document d’expédition). Une réclamation ne permet pas de retarder le paiement d’une facture.</p>',
             ],
             [
                 'title' => 'Retours',
-                'text' => '<p>Après accord de notre équipe, renvoyez le produit dans son emballage d’origine, accompagné d’une copie de la facture. Après vérification, nous procédons à la réparation, à l’échange ou à l’établissement d’une note de crédit.</p>',
+                'text' => '<p>Aucune marchandise ne peut nous être renvoyée sans notre accord formel. Si nous reconnaissons le bien-fondé de votre réclamation, nous remplaçons dans les meilleurs délais la partie de la livraison reconnue défectueuse.</p>',
             ],
             [
                 'title' => 'Réparations hors garantie',

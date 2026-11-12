@@ -67,6 +67,10 @@ return [
                 'text' => '<p>We doen al het mogelijke om de goede werking van de website te verzekeren, zonder te kunnen garanderen dat er geen onderbrekingen of fouten zijn. We zijn niet aansprakelijk voor onrechtstreekse schade door het gebruik van de website of van de websites waarnaar ze verwijst.</p>',
             ],
             [
+                'title' => 'Algemene verkoopsvoorwaarden',
+                'text' => '<p>Elke bestelling houdt de aanvaarding in van onze algemene verkoopsvoorwaarden, die op de keerzijde van onze facturen staan. Ze hebben voorrang op de aankoopvoorwaarden van de klant, tenzij formeel anders overeengekomen.</p>',
+            ],
+            [
                 'title' => 'Toepasselijk recht',
                 'text' => '<p>Deze voorwaarden zijn onderworpen aan het Belgische recht. Elk geschil valt onder de bevoegdheid van de rechtbanken van Brussel.</p>',
             ],
@@ -82,15 +86,15 @@ return [
             ],
             [
                 'title' => 'Garantie',
-                'text' => '<p>Onze producten genieten de garantie van de fabrikant, waarvan de duur afhangt van het merk. De garantie dekt fabricagefouten. Ze dekt niet:</p><ul><li>normale slijtage (bandjes, glazen, kasten);</li><li>batterijen;</li><li>schade door een schok, vocht of verkeerd gebruik;</li><li>producten die door derden werden geopend of hersteld.</li></ul>',
+                'text' => '<p>Onze producten genieten de garantie van de fabrikant, waarvan de duur afhangt van het merk. De garantie dekt fabricagefouten. Ze dekt niet:</p><ul><li>normale slijtage (bandjes, glazen, kasten);</li><li>batterijen;</li><li>schade door een schok, vocht of verkeerd gebruik;</li><li>producten die door derden werden geopend of hersteld.</li></ul><p>We zijn niet aansprakelijk voor de gevolgen van het gebruik van de verkochte goederen.</p>',
             ],
             [
-                'title' => 'Defecte of niet-conforme producten',
-                'text' => '<p>Controleer uw levering bij ontvangst. Een beschadigd pakket, ontbrekend of niet-conform product moet binnen 8 dagen na levering worden gemeld. Retours worden enkel aanvaard na ons voorafgaand akkoord.</p>',
+                'title' => 'Klachten',
+                'text' => '<p>De goederen reizen op risico van de koper, ook bij een franco levering. Controleer uw levering bij ontvangst om uw rechten tegenover de transporteur te behouden.</p><p>Elke klacht moet ons per aangetekend schrijven bereiken binnen 8 dagen na ontvangst, zolang de goederen zich nog in hun oorspronkelijke staat bevinden. Vermeld de productreferentie en het nummer en de datum van de factuur (of anders van het verzenddocument). Een klacht geeft geen recht op uitstel van betaling.</p>',
             ],
             [
                 'title' => 'Retours',
-                'text' => '<p>Stuur het product na akkoord van ons team terug in de originele verpakking, samen met een kopie van de factuur. Na controle zorgen we voor herstelling, omruiling of een creditnota.</p>',
+                'text' => '<p>Goederen mogen niet worden teruggestuurd zonder ons uitdrukkelijk akkoord. Als we uw klacht gegrond verklaren, vervangen we zo snel mogelijk het deel van de levering dat defect werd bevonden.</p>',
             ],
             [
                 'title' => 'Herstellingen buiten garantie',
