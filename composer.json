@@ -66,6 +66,7 @@
         "ext-zip": "*",
         "akaunting/laravel-money": "^4.0",
         "barryvdh/laravel-dompdf": "^2.0",
+        "brick/varexporter": "^0.7",
         "doctrine/dbal": "^3.6",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
