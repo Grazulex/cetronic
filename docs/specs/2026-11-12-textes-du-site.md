@@ -153,7 +153,7 @@ Sur le site public, un admin connecté voit un petit bouton flottant **« Tradui
 
 ## 7. Exigences non fonctionnelles
 
-- **Compatibilité Filament** : l'admin est en Filament v2.17. `PLAN_TRAVAIL.md` prévoit Filament v3. Il faut décider avant le développement si la page est construite en v2 (et adaptée lors de la migration) ou après la migration.
+- **Compatibilité Filament** : décidé le 12/11/2026 — la page sera construite **après** la migration Filament v3 + Livewire 3 (voir `PLAN_TRAVAIL.md` § 2.7). Elle remplacera l’interface `/translations` d’outhebox, incompatible avec Livewire 3.
 - **Performance** : l'écran charge ≈ 1 500 valeurs (≈ 490 clés × 3 langues). Prévoir un chargement par zone (sections repliées) et une recherche côté serveur.
 - **Accessibilité** : champs étiquetés par langue (« Factuuradres — néerlandais »), navigation au clavier, focus visible.
 - **Sécurité** : page et bouton réservés au rôle admin ; HTML nettoyé ; jeton de page à usage limité dans le temps et lié à l'admin qui l'a généré.
@@ -183,7 +183,7 @@ Chaque étape est livrable seule. Les étapes 1 à 3 répondent à l'essentiel d
 
 ## 10. Questions ouvertes
 
-1. Construire en Filament v2 maintenant, ou attendre la migration v3 de `PLAN_TRAVAIL.md` ?
+1. ~~Construire en Filament v2 maintenant, ou attendre la migration v3 ?~~ **Décidé (12/11/2026) : après la migration v3** (`PLAN_TRAVAIL.md` § 2.7).
 2. Garder `/translations` accessible au client, ou le réserver au développeur une fois la nouvelle page en place ?
 3. Faut-il un bouton « Textes de ce PDF » dans la fiche commande de l'admin (cf. § 6.3) ?
 4. Liste d'exceptions du filtre « À traduire » (marques, références, « Best Seller »…) : à valider avec le client.

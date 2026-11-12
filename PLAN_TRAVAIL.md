@@ -102,6 +102,26 @@
 - [ ] `mcamara/laravel-localization` → vérifier support Laravel 11
 - [ ] `spatie/laravel-media-library` → version compatible Filament v3
 
+### 2.7 Décision du 12/11/2026 — migration reportée, inventaire à jour
+**Décidé :** on fait la migration complète vers Filament v3 + Livewire 3, mais **plus tard**, dès qu'il y a du temps.
+La page « Textes du site » (`docs/specs/2026-11-12-textes-du-site.md`) sera construite **après** cette migration, directement en v3.
+
+**Inventaire (12/11/2026) :**
+- Admin : 12 resources, 12 relation managers, 35 pages de resource, 4 pages custom, 3 widgets (~4 300 lignes), 13 vues Blade custom.
+- Front : 13 composants Livewire, 22 inclusions dans les vues, 21 appels `emit` / `dispatchBrowserEvent` à passer en `dispatch`.
+- Estimation de la migration Filament + Livewire seule : **3 à 6 jours**.
+
+**Pièges identifiés :**
+- `wire:model` devient différé en Livewire 3 : `SearchItem` (et tout champ qui doit réagir à la frappe) doit passer en `wire:model.live`.
+- Livewire 3 embarque Alpine : retirer l'import `alpinejs` du site (`resources/js`) pour éviter un double chargement.
+- `outhebox/laravel-translations` 0.0.6 dépend de Livewire 2 (wireui, wire-elements/modal) : **incompatible**. À remplacer par la page « Textes du site » (même tables `ltu_*` ou migration des données).
+- Tests Filament : les helpers de test changent (`callPageAction`, `assertTableActionExists`…).
+- Plugin Spatie Media Library pour Filament : passer à la version v3.
+- Accès admin : implémenter `FilamentUser::canAccessPanel()` (remplace `canAccessFilament()`), sinon 403 en prod.
+- Prod en PHP 8.3 : vérifier les contraintes de version des paquets avant de déployer.
+
+**Ordre retenu :** 1) migration Filament v3 + Livewire 3 (sans Laravel 11), 2) page « Textes du site » en v3, 3) Laravel 11.
+
 ---
 
 ## Phase 3 — Frontend responsive
