@@ -1796,9 +1796,13 @@ a.login_btn {
     }
 }
 
-/* Promotion ribbon on product pictures: fixed price (everyone) vs promotion calculated for the customer. */
-.promo-ribbon {
-    display: block;
+/* Ribbon band under product pictures: new (black, like the former badge), fixed price promotion (red),
+   promotion calculated for the customer (blue-grey). Split in equal parts when an item is new and on promotion. */
+.item-ribbons {
+    display: flex;
+}
+.item-ribbon {
+    flex: 1 1 0;
     padding: 6px 12px;
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
@@ -1806,11 +1810,20 @@ a.login_btn {
     letter-spacing: 0.02em;
     text-align: center;
     color: #ffffff;
-    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.promo-ribbon--fixed {
+.item-ribbon::first-letter {
+    text-transform: uppercase;
+}
+.item-ribbon--new {
+    background: #1d1d1b;
+    color: #fbece2;
+}
+.item-ribbon--fixed {
     background: #b3261e;
 }
-.promo-ribbon--personal {
+.item-ribbon--personal {
     background: #356273;
 }

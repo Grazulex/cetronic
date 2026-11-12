@@ -118,3 +118,20 @@ it('strikes the start and promo prices when the customer discount applies on the
     expect(mb_substr_count($html, 'class="strike"'))->toBe(2)
         ->and($html)->toContain('6,00');
 });
+
+it('shows new and promotion in one ribbon under the picture', function (): void {
+    $this->fixed->update(['is_new' => true]);
+    $this->regular->update(['is_new' => true]);
+    $this->personal->update(['is_new' => false]);
+    actingAs($this->customer);
+
+    $both = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->fixed]);
+    $newOnly = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->regular]);
+    $promoOnly = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->personal]);
+
+    expect($both)->toContain('item-ribbon--new')->toContain('item-ribbon--fixed')
+        ->and(mb_substr_count($both, 'class="item-ribbons"'))->toBe(1)
+        ->and($newOnly)->toContain('item-ribbon--new')->not->toContain('item-ribbon--fixed')
+        ->and($promoOnly)->toContain('item-ribbon--personal')->not->toContain('item-ribbon--new')
+        ->and($both . $newOnly)->not->toContain('class="if-new"');
+});

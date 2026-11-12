@@ -1,10 +1,4 @@
 <div class="picture3-component">
-    @if ($isNew)
-        <div class="if-new">
-            <p>{{ __('item.badge.new') }}</p>
-        </div>
-    @endif
-
     @if ($isBestSeller)
         @include('components.items.partials.best-seller-badge')
     @endif
@@ -75,11 +69,17 @@
 
     </div>
 
-    @if ($promoType)
-        {{-- Band under the pictures (not over them, so thumbnails stay visible).
-             fixed: price_fix for everyone; personal: promo price with the customer's own discount. --}}
-        <div @class(['promo-ribbon', 'promo-ribbon--' . $promoType])>
-            {{ __('item.badge.promo_' . $promoType) }}
+    @if ($isNew || $promoType)
+        {{-- One band under the pictures (not over them, so thumbnails stay visible), split when the item is
+             both new and on promotion. fixed: price_fix for everyone; personal: promo price with the customer's
+             own discount. --}}
+        <div class="item-ribbons">
+            @if ($isNew)
+                <span class="item-ribbon item-ribbon--new">{{ __('item.badge.new') }}</span>
+            @endif
+            @if ($promoType)
+                <span @class(['item-ribbon', 'item-ribbon--' . $promoType])>{{ __('item.badge.promo_' . $promoType) }}</span>
+            @endif
         </div>
     @endif
 </div>
