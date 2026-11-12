@@ -69,15 +69,3 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
-  deploy:
-    needs: tests
-    if: contains(fromJson('["refs/heads/main"]'), github.ref)
-    name: Laravel Forge Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: PropFuel/laravel-forge-deploy-action@v1.0.1
-        with:
-          forge-api-token: ${{ secrets.FORGE_API_TOKEN }}
-          forge-server-id: ${{ secrets.FORGE_SERVER_ID }}
-          forge-site-id: ${{ secrets.FORGE_SITE_ID }}
