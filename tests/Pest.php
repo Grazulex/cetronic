@@ -10,7 +10,6 @@ use App\Models\CategoryTranslation;
 use App\Models\Item;
 use App\Models\ItemMeta;
 use App\Models\User;
-
 use Illuminate\Database\Eloquent\Collection;
 
 use function Pest\Laravel\actingAs;
@@ -105,3 +104,5 @@ function createSale(Item $item, int $quantity, float $unitPrice, string $date, a
 
     return $order;
 }
+
+uses(Tests\TestCase::class)->in('Unit/SiteTexts');
