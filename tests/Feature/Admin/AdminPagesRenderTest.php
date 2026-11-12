@@ -7,6 +7,7 @@ use App\Filament\Pages\ImportBrandDiscounts;
 use App\Filament\Pages\ImportCSV;
 use App\Filament\Pages\ImportPictures;
 use App\Filament\Pages\SalesStats;
+use App\Filament\Pages\SiteTexts;
 use App\Filament\Resources\BrandResource;
 use App\Filament\Resources\CartResource;
 use App\Filament\Resources\CategoryMetaResource;
@@ -90,4 +91,5 @@ it('renders the custom admin pages', function (string $url): void {
     'import csv' => fn() => ImportCSV::getUrl(),
     'import pictures' => fn() => ImportPictures::getUrl(),
     'sales stats' => fn() => SalesStats::getUrl(),
+    'site texts' => fn() => SiteTexts::getUrl(),
 ]);
