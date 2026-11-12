@@ -7,6 +7,7 @@ namespace App\SiteTexts;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Reads and writes the site texts in the ltu_* tables (source of truth).
@@ -35,6 +36,102 @@ final class SiteTextRepository
     public function find(string $id): ?SiteText
     {
         return $this->all()->first(fn(SiteText $text): bool => $text->id() === $id);
+    }
+
+    /**
+     * Writes the given languages of a text. Unchanged languages are not touched,
+     * so their updated_at stays meaningful; a language without row gets one,
+     * linked to the English source phrase like the package did.
+     *
+     * @param  array<string, ?string>  $values  indexed by locale (fr, nl, en)
+     */
+    public function save(SiteText $text, array $values): SiteText
+    {
+        DB::transaction(function () use ($text, $values): void {
+            foreach (array_intersect_key($values, array_flip(SiteText::LOCALES)) as $locale => $value) {
+                if ($value === $text->values[$locale]) {
+                    continue;
+                }
+
+                $this->write($text, (string) $locale, $value);
+            }
+        });
+
+        return $this->reload($text);
+    }
+
+    private function write(SiteText $text, string $locale, ?string $value): void
+    {
+        $translationId = $this->translationId($locale);
+
+        $fileId = DB::table('ltu_translation_files')
+            ->where('name', $text->file)
+            ->where('extension', 'php')
+            ->value('id');
+
+        $existing = DB::table('ltu_phrases')
+            ->where('translation_id', $translationId)
+            ->where('translation_file_id', $fileId)
+            ->where('key', $text->key)
+            ->value('id');
+
+        if (null !== $existing) {
+            DB::table('ltu_phrases')->where('id', $existing)->update(['value' => $value, 'updated_at' => now()]);
+
+            return;
+        }
+
+        DB::table('ltu_phrases')->insert([
+            'uuid' => (string) Str::uuid(),
+            'translation_id' => $translationId,
+            'translation_file_id' => $fileId,
+            'phrase_id' => $this->sourcePhraseId((int) $fileId, $text->key),
+            'key' => $text->key,
+            'group' => $text->file,
+            'value' => $value,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    /**
+     * The package seeds every language, but a site language may still lack its
+     * translation row (or, on a fresh database, its language row): create them.
+     */
+    private function translationId(string $locale): int
+    {
+        $languageId = DB::table('ltu_languages')->where('code', $locale)->value('id')
+            ?? DB::table('ltu_languages')->insertGetId(['name' => mb_strtoupper($locale), 'code' => $locale]);
+
+        $translationId = DB::table('ltu_translations')->where('language_id', $languageId)->value('id')
+            ?? DB::table('ltu_translations')->insertGetId([
+                'language_id' => $languageId,
+                'source' => 'en' === $locale,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+        return (int) $translationId;
+    }
+
+    private function sourcePhraseId(int $fileId, string $key): ?int
+    {
+        $id = DB::table('ltu_phrases')
+            ->join('ltu_translations', 'ltu_translations.id', '=', 'ltu_phrases.translation_id')
+            ->join('ltu_languages', 'ltu_languages.id', '=', 'ltu_translations.language_id')
+            ->where('ltu_languages.code', 'en')
+            ->where('ltu_phrases.translation_file_id', $fileId)
+            ->where('ltu_phrases.key', $key)
+            ->value('ltu_phrases.id');
+
+        return null === $id ? null : (int) $id;
+    }
+
+    private function reload(SiteText $text): SiteText
+    {
+        $rows = $this->rows()->filter(fn(object $row): bool => $row->file === $text->file && $row->key === $text->key);
+
+        return $this->toText($rows->values());
     }
 
     /**
