@@ -10,17 +10,19 @@ use App\Enum\PriceTypeEnum;
 use App\Enum\UserRoleEnum;
 use App\Exports\BrandDiscounts\BrandDiscountColumns;
 use App\Jobs\ProcessUpdatePriceCart;
-use App\Jobs\UpdateListDisabled;
 use App\Models\Brand;
 use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\User;
 use App\Models\UserBrand;
+use App\Models\UserDisable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /**
  * Reads the spreadsheet produced by BrandDiscountsExport and applies it to user_brands.
@@ -35,9 +37,9 @@ final class BrandDiscountImporter
     private const BOUNDS = [
         'reduction' => [0, 100],
         'coefficient' => [0, 100],
-        'addition_price' => [0, null],
-        'franco' => [0, null],
-        'shipping_price' => [0, null],
+        'addition_price' => [0, 100000],
+        'franco' => [0, 1000000],
+        'shipping_price' => [0, 100000],
     ];
 
     private const TRUE_VALUES = ['oui', '1', 'x', 'true', 'yes'];
@@ -49,7 +51,21 @@ final class BrandDiscountImporter
      */
     public function readFile(string $path): array
     {
-        return Excel::toArray(new class () {}, $path)[0] ?? [];
+        $sheet = IOFactory::load($path)->getSheet(0);
+        $lastColumn = Coordinate::columnIndexFromString($sheet->getHighestDataColumn());
+        $rows = [];
+
+        for ($row = 1, $lastRow = $sheet->getHighestDataRow(); $row <= $lastRow; $row++) {
+            $cells = [];
+
+            for ($column = 1; $column <= $lastColumn; $column++) {
+                $cells[] = $this->cellValue($sheet->getCell(Coordinate::stringFromColumnIndex($column) . $row));
+            }
+
+            $rows[] = $cells;
+        }
+
+        return $rows;
     }
 
     /**
@@ -121,6 +137,8 @@ final class BrandDiscountImporter
         $usersUpdated = 0;
         $unchanged = 0;
 
+        $seenUsers = [];
+
         foreach ($dataRows as $index => $row) {
             if ($this->isBlankRow($row)) {
                 continue;
@@ -130,11 +148,18 @@ final class BrandDiscountImporter
             $rowErrors = [];
             $user = $this->resolveUser($brand, $row, $columns['user'], $users, $excelRow, $rowErrors);
 
+            if (null !== $user && isset($seenUsers[$user->id])) {
+                $rowErrors[] = $this->error($excelRow, BrandDiscountColumns::USER_FIELDS['user_id'], "Ce client apparaît déjà ligne {$seenUsers[$user->id]} : il ne peut figurer qu'une seule fois dans le fichier.");
+                $user = null;
+            }
+
             if (null === $user) {
                 array_push($errors, ...$rowErrors);
 
                 continue;
             }
+
+            $seenUsers[$user->id] = $excelRow;
 
             $userAttributes = $this->userChanges($user, $row, $columns['user'], $excelRow, $rowErrors);
             $ruleChanges = [];
@@ -202,6 +227,10 @@ final class BrandDiscountImporter
             }
 
             if (isset($userLabels[$heading])) {
+                if (isset($columns['user'][$userLabels[$heading]])) {
+                    $errors[] = $this->error(1, $heading, 'Colonne en double : supprimez la copie.');
+                }
+
                 $columns['user'][$userLabels[$heading]] = $index;
 
                 continue;
@@ -219,6 +248,12 @@ final class BrandDiscountImporter
 
             if ( ! $allowedCategories->has($parsed['category_id'])) {
                 $errors[] = $this->error(1, $heading, "Cette catégorie n'a pas d'article publié de la marque {$brand->name}.");
+
+                continue;
+            }
+
+            if (isset($columns['categories'][$parsed['category_id']][$parsed['field']])) {
+                $errors[] = $this->error(1, $heading, 'Colonne en double : supprimez la copie.');
 
                 continue;
             }
@@ -285,6 +320,17 @@ final class BrandDiscountImporter
 
         if (null === $user) {
             $errors[] = $this->error($excelRow, BrandDiscountColumns::USER_FIELDS['user_id'], 'Client inconnu.');
+
+            return null;
+        }
+
+        // Guards against rows shifted by a partial sort in Excel: the email must still match the id.
+        $email = isset($userColumns['email']) ? $this->clean($row[$userColumns['email']] ?? null) : null;
+
+        if (null !== $email && mb_strtolower($email) !== $user->email) {
+            $errors[] = $this->error($excelRow, BrandDiscountColumns::USER_FIELDS['email'], "Cet email ne correspond pas au client {$user->id} ({$user->email}) : les lignes ont peut-être été décalées par un tri.");
+
+            return null;
         }
 
         return $user;
@@ -409,7 +455,36 @@ final class BrandDiscountImporter
         $rule->saveQuietly();
 
         if ($exclusionChanged) {
-            app()->call([new UpdateListDisabled($rule), 'handle']);
+            $this->syncDisabledItems($rule);
+        }
+    }
+
+    /**
+     * Same effect as the UpdateListDisabled job, in a handful of queries instead of one or two per item.
+     */
+    private function syncDisabledItems(UserBrand $rule): void
+    {
+        $itemIds = Item::query()
+            ->where('brand_id', $rule->brand_id)
+            ->where('category_id', $rule->category_id)
+            ->pluck('id');
+
+        foreach ($itemIds->chunk(500) as $chunk) {
+            if ( ! $rule->is_excluded) {
+                UserDisable::query()->where('user_id', $rule->user_id)->whereIn('item_id', $chunk)->delete();
+
+                continue;
+            }
+
+            $existing = UserDisable::query()->where('user_id', $rule->user_id)->whereIn('item_id', $chunk)->pluck('item_id');
+            $now = now();
+
+            UserDisable::query()->insert($chunk->diff($existing)->map(fn(int $itemId): array => [
+                'user_id' => $rule->user_id,
+                'item_id' => $itemId,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ])->values()->all());
         }
     }
 
@@ -452,9 +527,8 @@ final class BrandDiscountImporter
             return $value;
         }
 
-        if ($value < $min || (null !== $max && $value > $max)) {
-            $range = null === $max ? "supérieure ou égale à {$min}" : "entre {$min} et {$max}";
-            $errors[] = $this->error($excelRow, $heading, "La valeur doit être {$range} (valeur : {$value}).");
+        if ($value < $min || $value > $max) {
+            $errors[] = $this->error($excelRow, $heading, "La valeur doit être entre {$min} et {$max} (valeur : {$value}).");
 
             return null;
         }
@@ -497,6 +571,21 @@ final class BrandDiscountImporter
         $errors[] = $this->error($excelRow, $heading, "Valeur « {$value} » non reconnue (attendu : oui ou non).");
 
         return null;
+    }
+
+    /**
+     * Calculated value of a cell; a number typed as a percentage ("10%" is stored as 0.1)
+     * is turned back into what the user typed, since every column already means percent or units.
+     */
+    private function cellValue(Cell $cell): mixed
+    {
+        $value = $cell->getCalculatedValue();
+
+        if ((is_int($value) || is_float($value)) && str_contains((string) $cell->getStyle()->getNumberFormat()->getFormatCode(), '%')) {
+            return $value * 100;
+        }
+
+        return $value;
     }
 
     /**

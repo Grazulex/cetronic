@@ -141,7 +141,6 @@ it('updates external reference, franco and shipping price only', function (): vo
     setCell($rows, 'bob@example.com', 'Référence externe', 'C-999');
     setCell($rows, 'bob@example.com', 'Franco', 200);
     setCell($rows, 'bob@example.com', 'Frais de port', 9.9);
-    setCell($rows, 'bob@example.com', 'Email', 'robert@example.com');
 
 
     $report = $this->importer->apply($this->brand, $rows);
@@ -342,4 +341,83 @@ it('accepts an out-of-range value that is unchanged', function (): void {
 
     expect($report->errors)->toBe([])
         ->and($report->usersUpdated + $report->rulesUpdated)->toBe(0);
+});
+
+it('rejects a customer listed twice', function (): void {
+    $rows = exportedRows($this->brand);
+    setCell($rows, 'bob@example.com', watchesHeading('Réduction %'), 5);
+    $duplicate = collect($rows)->first(fn(array $row): bool => 'bob@example.com' === $row[3]);
+    $duplicate[array_search(watchesHeading('Réduction %'), $rows[0], true)] = 7;
+    $rows[] = $duplicate;
+
+    $report = $this->importer->apply($this->brand, $rows);
+
+    expect($report->hasErrors())->toBeTrue()
+        ->and($report->errors[0]['row'])->toBe(4)
+        ->and($report->errors[0]['message'])->toContain('ligne 3')
+        ->and(UserBrand::where('category_id', $this->watches->id)->exists())->toBeFalse();
+});
+
+it('rejects duplicated columns', function (string $heading): void {
+    $rows = exportedRows($this->brand);
+    $heading = str_starts_with($heading, 'r:') ? ringsHeading(mb_substr($heading, 2)) : $heading;
+    $source = array_search($heading, $rows[0], true);
+    $rows = array_map(fn(array $row): array => [...$row, $row[$source]], $rows);
+
+    $report = $this->importer->analyse($this->brand, $rows);
+
+    expect($report->errors)->toHaveCount(1)
+        ->and($report->errors[0])->toMatchArray(['row' => 1, 'column' => $heading]);
+})->with(['category field' => ['r:Réduction %'], 'customer field' => ['Franco']]);
+
+it('rejects a row whose email does not match the customer id', function (): void {
+    $rows = exportedRows($this->brand);
+    setCell($rows, 'bob@example.com', ringsHeading('Réduction %'), 40);
+    setCell($rows, 'bob@example.com', 'Email', 'anna@example.com');
+
+    $report = $this->importer->apply($this->brand, $rows);
+
+    expect($report->errors)->toHaveCount(1)
+        ->and($report->errors[0]['column'])->toBe('Email')
+        ->and($this->bobRings->fresh()->reduction)->toEqual(12.5);
+});
+
+it('rejects absurdly large amounts', function (string $heading): void {
+    $rows = exportedRows($this->brand);
+    setCell($rows, 'bob@example.com', str_starts_with($heading, 'r:') ? ringsHeading(mb_substr($heading, 2)) : $heading, 99999999);
+
+    expect($this->importer->analyse($this->brand, $rows)->errors)->toHaveCount(1);
+})->with(['addition' => ['r:Ajout €'], 'franco' => ['Franco'], 'shipping' => ['Frais de port']]);
+
+it('syncs exclusions with a bounded number of queries', function (): void {
+    Item::factory()->count(40)->create(['brand_id' => $this->brand->id, 'category_id' => $this->rings->id]);
+    $rows = exportedRows($this->brand);
+    setCell($rows, 'bob@example.com', ringsHeading('Exclu'), 'oui');
+
+    DB::enableQueryLog();
+    $this->importer->apply($this->brand, $rows);
+    $queries = count(DB::getQueryLog());
+    DB::disableQueryLog();
+
+    expect(UserDisable::where('user_id', $this->bob->id)->count())->toBe(42)
+        ->and($queries)->toBeLessThan(30);
+});
+
+it('reads percent-formatted cells and formulas as typed by the user', function (): void {
+    $path = tempnam(sys_get_temp_dir(), 'brand-discounts') . '.xlsx';
+    file_put_contents($path, Maatwebsite\Excel\Facades\Excel::raw(new App\Exports\BrandDiscounts\BrandDiscountsExport($this->brand), Maatwebsite\Excel\Excel::XLSX));
+    $book = PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+    $sheet = $book->getSheetByName('Remises');
+    $headings = $sheet->rangeToArray('A1:' . $sheet->getHighestColumn() . '1')[0];
+    $letter = fn(string $h): string => PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex(array_search($h, $headings, true) + 1);
+    $sheet->setCellValue($letter(ringsHeading('Réduction %')) . '3', 0.1);
+    $sheet->getStyle($letter(ringsHeading('Réduction %')) . '3')->getNumberFormat()->setFormatCode('0%');
+    $sheet->setCellValue($letter('Franco') . '3', '=100*2');
+    PhpOffice\PhpSpreadsheet\IOFactory::createWriter($book, 'Xlsx')->save($path);
+
+    $this->importer->apply($this->brand, $this->importer->readFile($path));
+    unlink($path);
+
+    expect($this->bobRings->fresh()->reduction)->toEqual(10)
+        ->and($this->bob->fresh()->franco)->toEqual(200);
 });
