@@ -66,6 +66,8 @@ it('can not see a category disable in menu', function (): void {
     $user = loginAsUser();
     $brand = Brand::first();
     $category = Category::first();
+    // A distinctive name: the random factory word (e.g. "conn") can appear anywhere in the page HTML.
+    $category->update(['name' => 'Zqx excluded category']);
     UserBrand::factory()->count(1)->create(['user_id' => $user->id, 'brand_id' => $brand->id, 'category_id' => $category->id, 'is_excluded' => true]);
 
     $response = $this->post(

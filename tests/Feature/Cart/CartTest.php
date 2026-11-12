@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enum\CartStatusEnum;
 use App\Enum\CountryEnum;
 use App\Http\Livewire\FormItem;
+use App\Http\Livewire\TotalCart;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Location;
@@ -96,6 +97,7 @@ it('can see VAT if belgium', function (Location $location, CountryEnum $country)
     $vat = $cartService->getVAT($cart);
     $shippingVat = $cartService->getShippingVAT();
     $total = $vat + $shippingVat;
+    livewire(TotalCart::class, ['cart' => $cart])->assertViewHas('hasVAT', true);
     $this->get(uri: route('cart'))
         ->assertStatus(Response::HTTP_OK)
         ->assertSee(__('cart.vat'))
@@ -112,15 +114,14 @@ it('can not see VAT if not belgium', function (Location $location, CountryEnum $
     }
     $cart = Cart::where('user_id', $location->user->id)->where('status', CartStatusEnum::OPEN->value)->first();
     expect($location->country)->toBe($country);
-    $cartService = new CartService();
-    $vat = $cartService->getVAT($cart);
-    $shippingVat = $cartService->getShippingVAT();
-    $total = $vat + $shippingVat;
+
+    // Assert the VAT decision itself: searching the VAT amount as text in the HTML was flaky,
+    // since that number (random quantities) can match any other price on the page.
+    livewire(TotalCart::class, ['cart' => $cart])->assertViewHas('hasVAT', false);
 
     $this->get(uri: route('cart'))
         ->assertStatus(Response::HTTP_OK)
-        ->assertDontSee(__('cart.vat'))
-        ->assertDontSee(str_replace('.', ',', (string) $total));
+        ->assertDontSee(__('cart.vat'));
 })->with(data: 'locations_fr');
 
 it('have free shipping if above franco', function (): void {})->todo();
