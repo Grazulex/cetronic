@@ -1801,11 +1801,13 @@ a.login_btn {
 .item-ribbons {
     display: flex;
     flex-wrap: wrap;
+    min-height: 31px; /* one ribbon line: kept on every card so rows stay aligned */
 }
 
 .item-ribbon {
     flex: 1 1 0;
     padding: 6px 12px;
+    line-height: 19px;
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -1831,4 +1833,85 @@ a.login_btn {
 }
 .item-ribbon--personal {
     background: #356273;
+}
+
+/* Product cards: quantity stepper and add-to-cart button share one height. The label may wrap on two short lines
+   in narrow cards, but stays inside the same 44px. */
+.step-down-upp {
+    box-sizing: border-box;
+    height: 44px;
+    padding: 0 12px;
+}
+.step-down-upp span {
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+}
+.btn.cetronic-card-button {
+    box-sizing: border-box;
+    height: 44px;
+    padding: 0 10px;
+    gap: 8px;
+    border: 1px solid #4d4d4d;
+    border-radius: 5px;
+    line-height: 1.15;
+}
+.btn.cetronic-card-button svg {
+    flex: none;
+    width: 16px;
+    height: 20px;
+}
+.btn.cetronic-card-button .add-to-panier {
+    padding-left: 0 !important;
+    text-align: center;
+}
+
+/* Prices: struck prices fade back, the price actually paid stands out (in the ribbon colour on promotions). */
+.price-component .strike {
+    color: #9a9a9a;
+    font-size: 0.85em;
+    margin-right: 4px;
+}
+.price-final--deal {
+    font-weight: 700;
+    font-size: 1.15em;
+    color: #1d1d1b;
+}
+.price-final--fixed {
+    color: #b3261e;
+}
+.price-final--personal {
+    color: #356273;
+}
+
+/* Pagination in the site palette instead of Bootstrap blue (this Bootstrap version has no pagination CSS variables). */
+.pagination {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+.pagination .page-link {
+    color: #4d4d4d;
+    background-color: #ffffff;
+    border-color: #e6ddd3;
+}
+.pagination .page-link:hover {
+    color: #1d1d1b;
+    background-color: #fbece2;
+    border-color: #e6ddd3;
+}
+.pagination .page-link:focus {
+    color: #1d1d1b;
+    background-color: #fbece2;
+    box-shadow: 0 0 0 2px rgba(53, 98, 115, 0.35);
+}
+.pagination .page-item.active .page-link {
+    color: #ffffff;
+    background-color: #1d1d1b;
+    border-color: #1d1d1b;
+}
+.pagination .page-item.disabled .page-link {
+    color: #b5b5b5;
+    background-color: #ffffff;
+    border-color: #e6ddd3;
 }

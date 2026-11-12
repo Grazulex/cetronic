@@ -141,7 +141,7 @@
                     </div>
                 @endforeach
 
-                {{ $items->links() }}
+                <div class="listing-pagination">{{ $items->links() }}</div>
             </div>
         </div>
 

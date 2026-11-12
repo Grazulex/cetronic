@@ -167,3 +167,33 @@ it('does not show the promotions text on a regular category page', function (): 
         ->assertOk()
         ->assertDontSee(__('listing.promo.title'));
 });
+
+it('highlights the final price when an older price is struck through', function (): void {
+    actingAs($this->customer);
+    $render = fn(Item $item): string => (string) $this->blade('<x-items.price-component :item="$item" />', ['item' => $item]);
+
+    expect($render($this->fixed))->toContain('price-final price-final--deal price-final--fixed')
+        ->and($render($this->personal))->toContain('price-final price-final--deal price-final--personal')
+        ->and($render($this->regular))->toContain('price-final price-final--deal"');
+});
+
+it('does not highlight a price that is not reduced', function (): void {
+    $plain = User::factory()->create(['role' => 'customer', 'is_actif' => true]);
+    actingAs($plain);
+    $this->regular->update(['price_promo' => 0, 'price_fix' => 0]);
+
+    $html = (string) $this->blade('<x-items.price-component :item="$item" />', ['item' => $this->regular]);
+
+    expect($html)->toContain('class="price-final"')->not->toContain('price-final--deal');
+});
+
+it('reserves the ribbon space on every card so rows stay aligned', function (): void {
+    $plain = User::factory()->create(['role' => 'customer', 'is_actif' => true]);
+    actingAs($plain);
+    $this->regular->update(['is_new' => false, 'is_best_seller' => false, 'price_promo' => 0, 'price_fix' => 0]);
+
+    $html = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->regular]);
+
+    expect($html)->toContain('class="item-ribbons item-ribbons--0" aria-hidden="true"')
+        ->not->toContain('class="item-ribbon ');
+});

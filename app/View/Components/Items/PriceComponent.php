@@ -28,7 +28,8 @@ final class PriceComponent extends Component
     {
         $itemService = new ItemService($this->item);
         $price = $itemService->getPrice((auth()->user() ? auth()->user() : null));
+        $promoType = $itemService->promoType(auth()->user());
 
-        return view('components.items.price-component', ['price' => $price]);
+        return view('components.items.price-component', ['price' => $price, 'promoType' => $promoType]);
     }
 }

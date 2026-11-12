@@ -84,5 +84,8 @@
                 <span @class(['item-ribbon', 'item-ribbon--' . $promoType])>{{ __('item.badge.promo_' . $promoType) }}</span>
             @endif
         </div>
+    @else
+        {{-- Same height kept empty so cards with and without ribbon stay aligned in a row. --}}
+        <div class="item-ribbons item-ribbons--0" aria-hidden="true"></div>
     @endif
 </div>
