@@ -25,17 +25,17 @@
                 <div class="col-xl-3">
                     <div class="footer-content">
                         <div class="footer-title">{{ __('home.footer.column3.title') }}</div>
-                        <p><a class="text-decoration-none" href="#">{{ ucfirst(__('home.footer.column3.confidentality')) }}</a></p>
-                        <p><a class="text-decoration-none" href="#">{{ ucfirst(__('home.footer.column3.conditions')) }}</a></p>
-                        <p><a class="text-decoration-none" href="#">{{ ucfirst(__('home.footer.column3.cgv')) }}</a></p>
+                        <p><a class="text-decoration-none" href="{{ route('legal.privacy') }}">{{ ucfirst(__('home.footer.column3.confidentality')) }}</a></p>
+                        <p><a class="text-decoration-none" href="{{ route('legal.terms') }}">{{ ucfirst(__('home.footer.column3.conditions')) }}</a></p>
+                        <p><a class="text-decoration-none" href="{{ route('legal.after_sales') }}">{{ ucfirst(__('home.footer.column3.cgv')) }}</a></p>
                     </div>
                 </div>
 
                 <div class="col-xl-3">
                     <div class="footer-content">
                         <div class="footer-title">{{ __('home.footer.column4.title') }}</div>
-                        <p><a class="text-decoration-none" href="tel:{{ __('home.footer.column4.phone') }}">{{ __('home.footer.column4.phone') }}</a></p>
-                        <p><a class="text-decoration-none"
+                        <p><a class="text-decoration-none footer-contact-link" href="tel:{{ __('home.footer.column4.phone') }}">{{ __('home.footer.column4.phone') }}</a></p>
+                        <p><a class="text-decoration-none footer-contact-link"
                                 href="mailto:{{ __('home.footer.column4.email') }}">{{ __('home.footer.column4.email') }}</a></p>
                         <p>{{ __('home.footer.column4.address') }}</p>
                         <p>{{ __('home.footer.column4.vat') }}</p>

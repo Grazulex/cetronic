@@ -1,0 +1,133 @@
+/*
+ * Pages légales (resources/views/front/pages/legal.blade.php) : confidentialité, conditions, SAV.
+ * Même vocabulaire visuel que la page « Nous connaître » : une colonne de lecture calme.
+ */
+.legal {
+    --legal-ink: #1d1d1b;
+    --legal-text: #4d4d4d;
+    --legal-accent: #356273;
+    --legal-rule: #e6ddd3;
+
+    max-width: 820px;
+    margin: 0 auto 72px;
+    padding: 230px 24px 0; /* the site header is fixed (≈190px on desktop) */
+    color: var(--legal-text);
+    font-family: 'Poppins', sans-serif;
+}
+
+.legal-intro {
+    text-align: center;
+}
+
+.legal-title {
+    font-family: 'CHAMAN ELEGANT FONT';
+    font-weight: 400;
+    font-size: clamp(32px, 4.5vw, 48px);
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--legal-ink);
+    margin: 0 0 16px;
+}
+
+.legal-lead {
+    max-width: 60ch;
+    margin: 0 auto 8px;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.legal-updated {
+    font-size: 13px;
+    color: var(--legal-accent);
+    margin: 0;
+}
+
+.legal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 24px;
+    margin: 32px 0 40px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--legal-rule);
+}
+
+.legal-nav_link {
+    font-size: 14px;
+    color: var(--legal-text);
+    text-decoration: none;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+}
+
+.legal-nav_link:hover {
+    color: var(--legal-ink);
+}
+
+.legal-nav_link.is-active {
+    color: var(--legal-ink);
+    border-bottom-color: var(--legal-accent);
+}
+
+.legal-nav_link:focus-visible {
+    outline: 2px solid var(--legal-accent);
+    outline-offset: 3px;
+}
+
+.legal-section + .legal-section {
+    margin-top: 32px;
+}
+
+.legal-section_title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--legal-ink);
+    margin: 0 0 10px;
+}
+
+.legal-section_text {
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.legal-section_text p {
+    margin: 0 0 12px;
+}
+
+.legal-section_text p:last-child,
+.legal-section_text ul:last-child {
+    margin-bottom: 0;
+}
+
+.legal-section_text ul {
+    margin: 0 0 12px;
+    padding-left: 20px;
+    list-style: disc; /* the site stylesheet strips list markers globally */
+}
+
+.legal-section_text li {
+    list-style: inherit;
+}
+
+.legal-section_text li + li {
+    margin-top: 4px;
+}
+
+.legal-section_text strong {
+    color: var(--legal-ink);
+    font-weight: 600;
+}
+
+@media (max-width: 991px) {
+    .legal {
+        padding-top: 200px;
+        margin-bottom: 48px;
+    }
+}
+
+@media (max-width: 575px) {
+    .legal {
+        padding-inline: 16px;
+    }
+}

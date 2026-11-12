@@ -109,6 +109,9 @@ Route::group(
         Route::post('contact-send', SendContactController::class)->name('contact.send');
         Route::view('contact/thanks', 'front.pages.contact-thanks')->name('contact.thanks');
         Route::view('help', 'front.pages.help')->name('help');
+        Route::view('privacy', 'front.pages.legal', ['page' => 'privacy'])->name('legal.privacy');
+        Route::view('terms', 'front.pages.legal', ['page' => 'terms'])->name('legal.terms');
+        Route::view('after-sales', 'front.pages.legal', ['page' => 'after_sales'])->name('legal.after_sales');
         Route::post('help-send', SendHelpController::class)->name('help.send');
         Route::get('cart', [CartController::class, 'index'])->name('cart');
         Route::get('item/{item:slug}', fn(Item $item) => view('front.pages.item', ['item' => $item]))->name('item');

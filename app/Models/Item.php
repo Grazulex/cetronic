@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -102,8 +102,12 @@ final class Item extends Model implements HasMedia
     {
         return $query->where(function (Builder $query) use ($term): void {
             $query->where('reference', 'LIKE', "%{$term}%")
+                ->orWhere('description', 'LIKE', "%{$term}%")
                 ->orWhereHas('variants', fn(Builder $query) => $query->where('reference', 'LIKE', "%{$term}%"))
-                ->orWhereHas('brand', fn(Builder $query) => $query->where('name', 'LIKE', "%{$term}%"));
+                ->orWhereHas('brand', fn(Builder $query) => $query->where('name', 'LIKE', "%{$term}%"))
+                // Category names in every language, so "montre" or "horloge" find watches.
+                ->orWhereHas('category', fn(Builder $query) => $query->where('name', 'LIKE', "%{$term}%")
+                    ->orWhereHas('translations', fn(Builder $query) => $query->where('name', 'LIKE', "%{$term}%")));
         });
     }
 
@@ -114,7 +118,8 @@ final class Item extends Model implements HasMedia
 
     public function getMicroDescriptionAttribute(): string
     {
-        return  trim(str_replace("\r", ' ', str_replace("\n", ' ', $this->description)));
+        // Regex instead of trim(): Pint rewrites trim() to mb_trim(), which does not exist on PHP 8.3 (prod).
+        return (string) preg_replace('/^\s+|\s+$/u', '', str_replace("\r", ' ', str_replace("\n", ' ', $this->description)));
     }
 
     public function prunable()

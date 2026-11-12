@@ -17,3 +17,10 @@ footer p a {
 footer {
     margin-bottom: 40px;
 }
+
+/* Phone and e-mail stay usable (tel:/mailto:) but look like the surrounding text. */
+footer p a.footer-contact-link:hover,
+footer p a.footer-contact-link:focus {
+    color: #4d4d4d;
+    text-decoration: none;
+}
