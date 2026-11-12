@@ -6,11 +6,12 @@ namespace App\Filament\Resources\ItemResource\RelationManagers;
 
 use App\Models\CategoryMeta;
 use App\Models\ItemMeta;
-use Closure;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables\Actions\CreateAction;
@@ -35,10 +36,10 @@ final class MetasRelationManager extends RelationManager
                     ->options(CategoryMeta::pluck('name', 'id'))
                     ->searchable()
                     ->reactive()
-                    ->afterStateUpdated(fn(callable $set) => $set('value', null))
+                    ->afterStateUpdated(fn(Set $set) => $set('value', null))
                     ->required(),
                 Select::make('value')
-                    ->options(function (callable $get) {
+                    ->options(function (Get $get) {
                         $meta = CategoryMeta::where('id', $get('meta_id'))->first();
                         if ($meta) {
                             return ItemMeta::where('meta_id', $get('meta_id'))->orderBy('value')->pluck('value', 'value');
@@ -47,12 +48,12 @@ final class MetasRelationManager extends RelationManager
                     })
                     ->searchable()
                     ->required()
-                    ->visible(fn(Closure $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
+                    ->visible(fn(Get $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
                 TextInput::make('value')
-                    ->visible(fn(Closure $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
+                    ->visible(fn(Get $get) => false === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
                 ColorPicker::make('color')
                     ->required()
-                    ->visible(fn(Closure $get) => true === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
+                    ->visible(fn(Get $get) => true === CategoryMeta::where('id', $get('meta_id'))->pluck('is_color')->first()),
             ]);
     }
 
