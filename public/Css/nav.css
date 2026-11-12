@@ -5,11 +5,22 @@
 .head {
     background: #fbece2;
 }
-.col-xl-6.justify-content-start span {
+/* Wholesale notice on the left of the top bar: same size and colour as the account/language menus on the right.
+   (The old selector targeted .col-xl-6 while the markup uses col-xl-7, so the text fell back to 16px and blue links.) */
+.head .justify-content-start span {
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
-    text-transform: first-letter;
+    font-size: 12px;
+    line-height: 18px;
+    color: #4d4d4d;
+}
+.head .justify-content-start a {
+    color: #4d4d4d;
+}
+.head .justify-content-start a:hover,
+.head .justify-content-start a:focus {
+    color: #1d1d1b;
+    text-decoration: underline !important;
 }
 .login-register-link, .login-register-link + span {
     font-style: normal;
