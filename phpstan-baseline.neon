@@ -1,0 +1,266 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Command \"app\\:create\\-catalogue\\-enfant\" does not have option \"queue\"\\.$#"
+			count: 1
+			path: app/Console/Commands/AbstractCatalogueCommand.php
+
+		-
+			message: "#^Command \"app\\:create\\-catalogue\\-femme\" does not have option \"queue\"\\.$#"
+			count: 1
+			path: app/Console/Commands/AbstractCatalogueCommand.php
+
+		-
+			message: "#^Command \"app\\:create\\-catalogue\\-homme\" does not have option \"queue\"\\.$#"
+			count: 1
+			path: app/Console/Commands/AbstractCatalogueCommand.php
+
+		-
+			message: "#^Command \"app\\:create\\-catalogue\\-unisex\" does not have option \"queue\"\\.$#"
+			count: 1
+			path: app/Console/Commands/AbstractCatalogueCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of method Illuminate\\\\Console\\\\Command\\:\\:info\\(\\) expects string, int given\\.$#"
+			count: 1
+			path: app/Console/Commands/TransfertFileCommand.php
+
+		-
+			message: "#^Static method Illuminate\\\\Contracts\\\\Filesystem\\\\Filesystem\\:\\:makeDirectory\\(\\) invoked with 4 parameters, 1 required\\.$#"
+			count: 2
+			path: app/Console/Commands/TransfertFileCommand.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: app/Console/Commands/TransfertFileCommand.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
+			count: 2
+			path: app/DataObjects/OrderItem/OrderItemDataObject.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_old\\.$#"
+			count: 1
+			path: app/DataObjects/OrderItem/OrderItemDataObject.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_promo\\.$#"
+			count: 1
+			path: app/DataObjects/OrderItem/OrderItemDataObject.php
+
+		-
+			message: "#^Called 'pluck' on Laravel collection, but could have been retrieved as a query\\.$#"
+			count: 1
+			path: app/Filament/Pages/ImportCSV.php
+
+		-
+			message: "#^Method Filament\\\\Forms\\\\Components\\\\Component\\:\\:afterStateUpdated\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 1
+			path: app/Filament/Resources/CartResource.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$is_published\\.$#"
+			count: 1
+			path: app/Filament/Resources/ItemResource/Pages/EditItem.php
+
+		-
+			message: "#^Parameter \\$item of method App\\\\Actions\\\\Item\\\\LogItemPublishChangeAction\\:\\:handle\\(\\) expects App\\\\Models\\\\Item, Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: app/Filament/Resources/ItemResource/Pages/EditItem.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$color\\.$#"
+			count: 1
+			path: app/Filament/Resources/ItemResource/RelationManagers/MetasRelationManager.php
+
+		-
+			message: "#^Called 'first' on Laravel collection, but could have been retrieved as a query\\.$#"
+			count: 3
+			path: app/Filament/Resources/ItemResource/RelationManagers/MetasRelationManager.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$password\\.$#"
+			count: 1
+			path: app/Filament/Resources/UserResource.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Filament/Resources/UserResource/Pages/EditUser.php
+
+		-
+			message: "#^Parameter \\#1 \\$user of class Illuminate\\\\Auth\\\\Events\\\\Verified constructor expects Illuminate\\\\Contracts\\\\Auth\\\\MustVerifyEmail, App\\\\Models\\\\User\\|null given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Auth/VerifyEmailController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
+			count: 1
+			path: app/Http/Livewire/PriceCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_old\\.$#"
+			count: 1
+			path: app/Http/Livewire/PriceCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_promo\\.$#"
+			count: 1
+			path: app/Http/Livewire/PriceCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UserDiscount\\:\\:\\$reduction\\.$#"
+			count: 1
+			path: app/Http/Livewire/PriceCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
+			count: 1
+			path: app/Http/Livewire/PriceTotalCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_promo\\.$#"
+			count: 1
+			path: app/Http/Livewire/PriceTotalCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UserDiscount\\:\\:\\$reduction\\.$#"
+			count: 1
+			path: app/Http/Livewire/PriceTotalCart.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between int\\<1, max\\> and 0 is always true\\.$#"
+			count: 1
+			path: app/Imports/ItemsImport.php
+
+		-
+			message: "#^Property App\\\\Models\\\\PdfCatalog\\:\\:\\$status \\('generated'\\|'pending'\\|'run'\\) does not accept App\\\\Enum\\\\PdfGeneratorStatusEnum\\:\\:GENERATED\\.$#"
+			count: 1
+			path: app/Jobs/PdfGenerate.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
+			count: 1
+			path: app/Jobs/ProcessUpdatePriceCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_old\\.$#"
+			count: 1
+			path: app/Jobs/ProcessUpdatePriceCart.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_promo\\.$#"
+			count: 1
+			path: app/Jobs/ProcessUpdatePriceCart.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:\\$language\\.$#"
+			count: 1
+			path: app/Listeners/UserLoginAt.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(array conditions\\)\\: Unexpected token \"conditions\", expected variable at offset 43$#"
+			count: 1
+			path: app/Models/PdfCatalog.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string created_at\\)\\: Unexpected token \"created_at\", expected variable at offset 156$#"
+			count: 1
+			path: app/Models/PdfCatalog.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string status\\)\\: Unexpected token \"status\", expected variable at offset 74$#"
+			count: 1
+			path: app/Models/PdfCatalog.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string updated_at\\)\\: Unexpected token \"updated_at\", expected variable at offset 125$#"
+			count: 1
+			path: app/Models/PdfCatalog.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(string url\\)\\: Unexpected token \"url\", expected variable at offset 101$#"
+			count: 1
+			path: app/Models/PdfCatalog.php
+
+		-
+			message: "#^Property App\\\\Models\\\\PdfCatalog\\:\\:\\$status \\('generated'\\|'pending'\\|'run'\\) does not accept App\\\\Enum\\\\PdfGeneratorStatusEnum\\:\\:GENERATING\\.$#"
+			count: 1
+			path: app/Models/PdfCatalog.php
+
+		-
+			message: "#^Property App\\\\Models\\\\Location\\:\\:\\$type \\(App\\\\Enum\\\\LocationTypeEnum\\) does not accept string\\.$#"
+			count: 2
+			path: app/Observers/LocationObserver.php
+
+		-
+			message: "#^Call to an undefined method Whitecube\\\\LaravelCookieConsent\\\\CookiesCategory\\:\\:google\\(\\)\\.$#"
+			count: 1
+			path: app/Providers/CookiesServiceProvider.php
+
+		-
+			message: "#^Call to an undefined method Whitecube\\\\LaravelCookieConsent\\\\CookiesCategory\\:\\:session\\(\\)\\.$#"
+			count: 1
+			path: app/Providers/CookiesServiceProvider.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
+			count: 5
+			path: app/Services/CartService.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_promo\\.$#"
+			count: 5
+			path: app/Services/CartService.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\UserDiscount\\:\\:\\$reduction\\.$#"
+			count: 4
+			path: app/Services/CartService.php
+
+		-
+			message: "#^Method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Category\\>\\:\\:enabled\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 2
+			path: app/Services/CategoryService.php
+
+		-
+			message: "#^Static method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<App\\\\Models\\\\Category\\>\\:\\:enabled\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: app/Services/CategoryService.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: app/Services/ItemService.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between 0 and float\\|int\\<min, \\-1\\>\\|int\\<1, max\\> will always evaluate to false\\.$#"
+			count: 1
+			path: app/Services/ItemService.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: app/Services/UserService.php
+
+		-
+			message: "#^Method App\\\\View\\\\Components\\\\Items\\\\ListComponent\\:\\:applyOrdering\\(\\) is unused\\.$#"
+			count: 1
+			path: app/View/Components/Items/ListComponent.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(Item Displayed item\\)\\: Unexpected token \"Displayed\", expected variable at offset 115$#"
+			count: 1
+			path: app/View/Components/Items/Picture3Component.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(itemCarouselId Displayed html id for the product carousel\\.\\)\\: Unexpected token \"Displayed\", expected variable at offset 159$#"
+			count: 1
+			path: app/View/Components/Items/Picture3Component.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(showThumb Show or hide thumbnail for the current carousel\\.\\)\\: Unexpected token \"Show\", expected variable at offset 227$#"
+			count: 1
+			path: app/View/Components/Items/Picture3Component.php
