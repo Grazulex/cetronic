@@ -120,3 +120,38 @@ it('hides the technical texts until asked', function (): void {
         ->set('technical', true)
         ->assertSee('Messages d’erreur des formulaires (1)');
 });
+
+it('edits a long text in the rich editor, not in a plain field', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'about', 'section1.description', '<p>Any claim</p>');
+    $id = SiteText::idFor('about', 'section1.description');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'about')
+        ->assertDontSeeHtml("drafts.{$id}.en")
+        ->assertSee('Modifier le texte')
+        ->callAction('editLongText', [
+            'fr' => '<p><strong>Toute</strong> réclamation<script>x()</script></p><p>Par écrit</p>',
+            'nl' => '<p>Elke klacht</p>',
+            'en' => '<p>Any claim</p>',
+        ], arguments: ['id' => $id])
+        ->assertHasNoActionErrors()
+        ->assertNotified('Texte enregistré et publié');
+
+    expect(app(SiteTextRepository::class)->find($id)->values)->toBe([
+        'fr' => '<p><strong>Toute</strong> réclamation</p><p>Par écrit</p>',
+        'nl' => 'Elke klacht',
+        'en' => 'Any claim',
+    ]);
+});
+
+it('opens the rich editor with paragraphs instead of double line breaks', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'emails', 'order_new.body', 'Hello,<br><br>Thanks');
+    $id = SiteText::idFor('emails', 'order_new.body');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'emails')
+        ->mountAction('editLongText', ['id' => $id])
+        ->assertActionDataSet(['en' => '<p>Hello,</p><p>Thanks</p>']);
+});

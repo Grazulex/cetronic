@@ -83,6 +83,7 @@
         "mcamara/laravel-localization": "^1.8",
         "meilisearch/meilisearch-php": "^1.0",
         "moneyphp/money": "^4.0",
+        "symfony/html-sanitizer": "^7.4",
         "whitecube/laravel-cookie-consent": "^1.2"
     },
     "require-dev": {

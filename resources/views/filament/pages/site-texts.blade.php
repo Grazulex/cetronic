@@ -73,6 +73,26 @@
                                 <span class="text-xs text-gray-400" title="Clé technique">{{ $text->fullKey() }}</span>
                             </div>
 
+                            @if ($text->long)
+                                {{-- Long texts hold html: never in a plain field, always in the rich editor --}}
+                                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: .75rem; align-items: start;">
+                                    @foreach ($languages as $locale => $languageName)
+                                        @php($plain = trim(strip_tags((string) ($text->values[$locale] ?? ''))))
+                                        <div
+                                            class="text-sm text-gray-600"
+                                            style="padding: .5rem .75rem; border-radius: .5rem; background: rgb(249 250 251);{{ '' === $plain ? ' box-shadow: 0 0 0 2px rgb(245 158 11);' : ($row['matches'][$locale] ? ' box-shadow: 0 0 0 2px rgb(250 204 21);' : '') }}"
+                                        >
+                                            <span class="text-xs font-semibold text-gray-500">{{ mb_strtoupper($locale) }}</span>
+                                            <span class="sr-only">{{ $text->label }} — {{ $languageName }}</span>
+                                            <div>{{ '' === $plain ? 'À traduire' : \Illuminate\Support\Str::limit($plain, 120) }}</div>
+                                        </div>
+                                    @endforeach
+
+                                    <div style="padding-top: .25rem;">
+                                        {{ ($this->editLongTextAction)(['id' => $id]) }}
+                                    </div>
+                                </div>
+                            @else
                             <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; gap: .75rem; align-items: start;">
                                 @foreach ($languages as $locale => $languageName)
                                     @php($empty = '' === trim((string) ($drafts[$id][$locale] ?? '')))
@@ -100,6 +120,7 @@
                                     </x-filament::button>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
