@@ -12,7 +12,7 @@
         {{-- Informations du client --}}
         <x-filament::section>
             <h2 class="text-base font-semibold leading-6 text-gray-950">Informations client</h2>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));">
                 <div>
                     <dt class="text-sm font-medium text-gray-500">Nom</dt>
                     <dd class="mt-1 text-sm text-gray-900">{{ $record->name }}</dd>
@@ -31,7 +31,7 @@
         </x-filament::section>
 
         {{-- Chiffres clés (toutes les commandes non supprimées, montants HT) --}}
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));">
             @foreach ([
                 'Commandes' => number_format($summary['orders'], 0, ',', ' '),
                 'CA HT total' => $euros($summary['revenue']),

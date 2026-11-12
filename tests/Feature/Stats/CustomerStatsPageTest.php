@@ -81,3 +81,11 @@ it('breaks the customer sales down per brand and category', function (): void {
         ->assertSeeInOrder(['Alpha', '3', '30,00 €'])
         ->assertSeeInOrder(['Rings', '3', '30,00 €']);
 });
+
+it('lays the customer key figures out in a grid', function (): void {
+    loginAsAdmin();
+
+    $this->get(customerStatsUrl($this->customer))
+        ->assertOk()
+        ->assertSee('grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr))', false);
+});

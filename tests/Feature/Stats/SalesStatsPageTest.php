@@ -136,3 +136,12 @@ it('exports the filtered rows to Excel', function (): void {
         return 1 === $rows->count() && 'REF-B' === $rows->first()['Référence'] && 60.0 === $rows->first()['CA HT (€)'];
     });
 });
+
+it('lays the key figures out in a grid that does not depend on missing css classes', function (): void {
+    loginAsAdmin();
+
+    // Filament v3 ships no grid-cols-* utilities for custom views: the grid is inline.
+    $this->get(SalesStats::getUrl())
+        ->assertOk()
+        ->assertSee('grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr))', false);
+});
