@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6faec909c131156e36646270f58b78d",
+    "content-hash": "94b2a9e63f9d228c91980638252fcd19",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -512,55 +512,6 @@
                 }
             ],
             "time": "2025-02-28T13:11:00+00:00"
-        },
-        {
-            "name": "brick/varexporter",
-            "version": "0.3.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/brick/varexporter.git",
-                "reference": "b5853edea6204ff8fa10633c3a4cccc4058410ed"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/brick/varexporter/zipball/b5853edea6204ff8fa10633c3a4cccc4058410ed",
-                "reference": "b5853edea6204ff8fa10633c3a4cccc4058410ed",
-                "shasum": ""
-            },
-            "require": {
-                "nikic/php-parser": "^4.0",
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^8.5 || ^9.0",
-                "vimeo/psalm": "4.23.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Brick\\VarExporter\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A powerful alternative to var_export(), which can export closures and objects without __set_state()",
-            "keywords": [
-                "var_export"
-            ],
-            "support": {
-                "issues": "https://github.com/brick/varexporter/issues",
-                "source": "https://github.com/brick/varexporter/tree/0.3.8"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/BenMorel",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-01-21T23:05:38+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -5057,156 +5008,6 @@
             "time": "2024-11-21T10:36:35+00:00"
         },
         {
-            "name": "outhebox/blade-flags",
-            "version": "1.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/MohmmedAshraf/blade-flags.git",
-                "reference": "00574e523f179d5a64dec555bea4dfd9ea9cd463"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/MohmmedAshraf/blade-flags/zipball/00574e523f179d5a64dec555bea4dfd9ea9cd463",
-                "reference": "00574e523f179d5a64dec555bea4dfd9ea9cd463",
-                "shasum": ""
-            },
-            "require": {
-                "blade-ui-kit/blade-icons": "^1.1",
-                "ext-json": "*",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
-                "php": "^7.4|^8.0|^8.1|^8.2"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "phpunit/phpunit": "^9.0|^10.5|^11.5.3|^12.5.12"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "OutheBox\\BladeFlags\\BladeFlagsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "OutheBox\\BladeFlags\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mohamed Ashraf",
-                    "email": "cupo.ashraf@gmail.com",
-                    "homepage": "https://github.com/MohmmedAshraf"
-                }
-            ],
-            "description": "A package to easily make use of country & language flags in your Laravel Blade views.",
-            "homepage": "https://github.com/MohmmedAshraf/blade-flags",
-            "keywords": [
-                "blade",
-                "country flags",
-                "flags",
-                "language flags",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/MohmmedAshraf/blade-flags/issues",
-                "source": "https://github.com/MohmmedAshraf/blade-flags/tree/1.7.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/MohmmedAshraf",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-03-01T17:25:55+00:00"
-        },
-        {
-            "name": "outhebox/laravel-translations",
-            "version": "0.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/MohmmedAshraf/laravel-translations.git",
-                "reference": "e633050b38c4e229899365e0674a1bce6c95a126"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/MohmmedAshraf/laravel-translations/zipball/e633050b38c4e229899365e0674a1bce6c95a126",
-                "reference": "e633050b38c4e229899365e0674a1bce6c95a126",
-                "shasum": ""
-            },
-            "require": {
-                "brick/varexporter": "^0.3.7",
-                "livewire/livewire": "^2.10",
-                "outhebox/blade-flags": "^1.0",
-                "php": "^8.0|^8.1|^8.2",
-                "saade/blade-iconsax": "^1.0",
-                "wire-elements/modal": "^1.0",
-                "wireui/wireui": "^1.17"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.0",
-                "orchestra/testbench": "^6.0|^7.6|^8.0",
-                "pestphp/pest": "^1.21",
-                "pestphp/pest-plugin-laravel": "^1.1",
-                "pestphp/pest-plugin-livewire": "^1.0",
-                "phpunit/phpunit": "^9.5|^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "LaravelTranslations": "Outhebox\\LaravelTranslations\\Facades\\LaravelTranslations"
-                    },
-                    "providers": [
-                        "Outhebox\\LaravelTranslations\\LaravelTranslationsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Outhebox\\LaravelTranslations\\": "src",
-                    "Outhebox\\LaravelTranslations\\Database\\Factories\\": "database/factories"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mohamed Ashraf",
-                    "email": "cupo.ashraf@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Laravel Translations UI provides a simple way to manage your translations in your Laravel application. It allows you to add, edit, delete and export translations, and it also provides a search functionality to find translations.",
-            "homepage": "https://github.com/MohmmedAshraf/laravel-translations",
-            "keywords": [
-                "laravel",
-                "laravel-translations",
-                "livewire",
-                "localization",
-                "translation-manager",
-                "translations"
-            ],
-            "support": {
-                "issues": "https://github.com/MohmmedAshraf/laravel-translations/issues",
-                "source": "https://github.com/MohmmedAshraf/laravel-translations/tree/0.0.6"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/MohmmedAshraf",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-02-19T07:11:46+00:00"
-        },
-        {
             "name": "phenx/php-font-lib",
             "version": "0.5.6",
             "source": {
@@ -6373,70 +6174,6 @@
                 }
             ],
             "time": "2023-02-14T16:54:54+00:00"
-        },
-        {
-            "name": "saade/blade-iconsax",
-            "version": "v1.2.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/saade/blade-iconsax.git",
-                "reference": "c1630e1fea178e0b78fdb230b9aedd82ec686e9d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/saade/blade-iconsax/zipball/c1630e1fea178e0b78fdb230b9aedd82ec686e9d",
-                "reference": "c1630e1fea178e0b78fdb230b9aedd82ec686e9d",
-                "shasum": ""
-            },
-            "require": {
-                "blade-ui-kit/blade-icons": "^1.1",
-                "illuminate/support": "^9.0|^10.0|^11.0|^12.0|^13.0",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0|^11.0",
-                "phpunit/phpunit": "^9.0|^10.5|^11.5.3|^12.5.12"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Saade\\BladeIconsax\\BladeIconsaxServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Saade\\BladeIconsax\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Saade"
-                }
-            ],
-            "description": "A package to easily make use of Iconsax in your Laravel Blade views.",
-            "homepage": "https://github.com/saade/blade-iconsax",
-            "keywords": [
-                "Iconsax",
-                "blade",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/saade/blade-iconsax/issues",
-                "source": "https://github.com/saade/blade-iconsax/tree/v1.2.2"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/saade",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-03-05T14:29:31+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -9678,132 +9415,6 @@
                 }
             ],
             "time": "2026-05-25T21:36:30+00:00"
-        },
-        {
-            "name": "wire-elements/modal",
-            "version": "1.0.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wire-elements/modal.git",
-                "reference": "1019f423485afb6df0d1531d978e93d4ad0975fb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wire-elements/modal/zipball/1019f423485afb6df0d1531d978e93d4ad0975fb",
-                "reference": "1019f423485afb6df0d1531d978e93d4ad0975fb",
-                "shasum": ""
-            },
-            "require": {
-                "livewire/livewire": "^2.0",
-                "php": "^7.4|^8.0",
-                "spatie/laravel-package-tools": "^1.9"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^6.15",
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "LivewireUI\\Modal\\LivewireModalServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "LivewireUI\\Modal\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Philo Hermans",
-                    "email": "me@philohermans.com"
-                }
-            ],
-            "description": "Laravel Livewire modal component",
-            "keywords": [
-                "laravel",
-                "livewire",
-                "modal"
-            ],
-            "support": {
-                "issues": "https://github.com/wire-elements/modal/issues",
-                "source": "https://github.com/wire-elements/modal/tree/1.0.8"
-            },
-            "time": "2023-04-07T12:35:15+00:00"
-        },
-        {
-            "name": "wireui/wireui",
-            "version": "v1.17.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wireui/wireui.git",
-                "reference": "cd885eb615c0ad9b6e57f839990417d67c6b2ada"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wireui/wireui/zipball/cd885eb615c0ad9b6e57f839990417d67c6b2ada",
-                "reference": "cd885eb615c0ad9b6e57f839990417d67c6b2ada",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "^8.83|^9.16|^10.0",
-                "livewire/livewire": "^2.10",
-                "php": "^8.0|^8.1"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.9",
-                "mockery/mockery": "^1.5",
-                "orchestra/testbench": "^6.0|^7.6|^8.0",
-                "orchestra/testbench-dusk": "^6.0|^7.6|^8.0",
-                "pestphp/pest": "^1.21",
-                "pestphp/pest-plugin-livewire": "^1.0",
-                "pestphp/pest-plugin-mock": "^1.0",
-                "phpunit/phpunit": "^9.5",
-                "psy/psysh": "@stable"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": [],
-                    "providers": [
-                        "WireUi\\Providers\\WireUiServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "WireUi\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Pedro Henrique",
-                    "email": "pedrolivertwd@gmail.com"
-                }
-            ],
-            "description": "TallStack components",
-            "keywords": [
-                "blade components",
-                "laravel components",
-                "livewire components",
-                "livewire-ui",
-                "wireui"
-            ],
-            "support": {
-                "issues": "https://github.com/wireui/wireui/issues",
-                "source": "https://github.com/wireui/wireui/tree/v1.17.13"
-            },
-            "time": "2024-05-24T20:06:03+00:00"
         }
     ],
     "packages-dev": [
@@ -14156,5 +13767,8 @@
         "ext-zip": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "platform-overrides": {
+        "php": "8.3.0"
+    },
+    "plugin-api-version": "2.11.0"
 }
