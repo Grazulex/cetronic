@@ -69,4 +69,91 @@ return [
       <br/><br/>
       In Frankrijk (+Dom Tom) hebben we 6 vertegenwoordigers. Stuur ons een e-mail op info@cetronicbenelux.com en we zullen de vertegenwoordiger van uw regio vragen om contact met u op te nemen.',
     ],
+    'intro' => [
+        'title' => 'Over ons',
+        'lead' => 'Een familiebedrijf ten dienste van horlogemakers, juweliers en verkooppunten in België, Nederland en Frankrijk sinds 1978.',
+    ],
+    'story' => [
+        'title' => 'Onze geschiedenis',
+        'm1' => [
+            'year' => '1978',
+            'title' => 'International Manufacturers',
+            'text' => 'Ons bedrijf werd opgericht onder de naam „International Manufacturers” en hield zich oorspronkelijk vooral bezig met de import en export van allerlei goederen, gebaseerd op toegankelijke producten en een nauwgezet beheer. In het begin verkende het verschillende markten voordat het zich specialiseerde in confectiekleding.',
+        ],
+        'm2' => [
+            'year' => '1980',
+            'title' => 'De omslag naar uurwerken',
+            'text' => 'Met een beperkt aantal klanten betekende het verlies van één enkele klant een groot risico voor de activiteit. In die context maakte het bedrijf begin jaren 1980 een beslissende keuze: die van de uurwerken.',
+        ],
+        'm3' => [
+            'year' => '1980 – 1994',
+            'title' => 'Een sterk partnernetwerk',
+            'text' => 'Die keuze betekende een keerpunt. Het bedrijf bouwde geleidelijk een netwerk van sterke partners uit, met name met verschillende leveranciers in Hongkong, en baseerde zijn activiteit op een wendbaar en reactief familiemodel.',
+        ],
+        'm4' => [
+            'year' => '1994',
+            'title' => 'Cetronic Benelux S.A.',
+            'text' => 'Een nieuwe stap: het bedrijf krijgt een sterkere structuur, verhoogt zijn kapitaal en neemt een nieuwe naam aan — Cetronic Benelux S.A.',
+        ],
+        'm5' => [
+            'year' => 'Vandaag',
+            'title' => 'Trouw aan onze roots',
+            'text' => 'Het bedrijf blijft groeien in de sector van uurwerken en accessoires, trouw aan wat vanaf de eerste dag zijn succes heeft gemaakt: een menselijke aanpak, servicegerichtheid en de wil om duurzame relaties op te bouwen.',
+        ],
+    ],
+    'values' => [
+        'title' => 'Onze principes',
+        'intro' => 'Jaar na jaar groeit het bedrijf, gedragen door een duidelijke visie en principes die nooit veranderd zijn.',
+        'v1' => 'Kwaliteitsproducten aanbieden',
+        'v2' => 'Een betrouwbare after-sales service verzekeren',
+        'v3' => 'Onze afspraken nakomen',
+    ],
+    'team' => [
+        'title' => 'Het Cetronic-team',
+        'geoffrey' => [
+            'role' => 'Directeur – Verantwoordelijk voor commerciële ontwikkeling, leveranciers en marketing',
+            'text' => 'Geoffrey is uw belangrijkste aanspreekpunt voor leveranciers en grote klanten (groothandels, distributeurs). Hij overziet ook marketing, communicatie, human resources en de algemene ontwikkeling van het bedrijf.',
+        ],
+        'stephanie' => [
+            'role' => 'Verantwoordelijke operaties & verkoop (FR)',
+            'text' => 'Stéphanie staat in voor de dagelijkse operaties, de verkoop en de afdeling horlogebandjes. Ze is verantwoordelijk voor de Franstalige klanten (België en Frankrijk) en volgt de bestellingen, de facturatie en de klantenondersteuning op.',
+        ],
+        'stieven' => [
+            'role' => 'Verantwoordelijke operaties & verkoop (NL)',
+            'text' => 'Stieven heeft een gelijkaardige rol als Stéphanie en is het vaste aanspreekpunt voor de Nederlandstalige klanten (België en Nederland). Hij beheert de bestellingen, de facturatie en zorgt dagelijks voor de klantenondersteuning.',
+        ],
+        'manal' => [
+            'role' => 'Verantwoordelijke online ontwikkeling',
+            'text' => 'Manal stuurt de ontwikkeling van het bedrijf op de online kanalen aan en versterkt de aanwezigheid op sociale media.',
+        ],
+        'jeanmarie' => [
+            'role' => 'Meester-horlogemaker – Verantwoordelijke after-sales',
+            'text' => 'Jean-Marie is uw aanspreekpunt voor alle technische vragen, herstellingen en de after-sales service.',
+        ],
+    ],
+    'reps' => [
+        'title' => 'Onze vertegenwoordigers',
+        'intro' => 'We rekenen op een netwerk van ervaren vertegenwoordigers, dicht bij het terrein, om een efficiënte begeleiding te verzekeren in België, Nederland en Frankrijk.',
+        'brussels' => [
+            'region' => 'Brussel & Wallonië',
+            'text' => 'Arnaud stuurt de ontwikkeling van de uurwerk- en juwelensector in Brussel en Wallonië aan. Hij begeleidt de lokale professionals met een persoonlijke aanpak en een uitstekende kennis van de markt.',
+        ],
+        'flanders' => [
+            'region' => 'Vlaanderen & Nederland',
+            'text' => 'Ludo is uw vaste aanspreekpunt voor Vlaanderen en Nederland. Met meer dan 30 jaar ervaring in de uurwerksector — onder meer als voormalig verdeler van Maxell-batterijen via Verbatco — zet hij zijn grondige expertise in voor onze klanten.',
+        ],
+        'france' => [
+            'region' => 'Frankrijk',
+            'text' => 'Ons netwerk bestaat uit verschillende vertegenwoordigers, verdeeld per regio, om het hele grondgebied optimaal te dekken.',
+        ],
+        'domtom' => [
+            'region' => 'Franse overzeese gebieden',
+            'text' => 'Een toegewijde vertegenwoordiger speelt zo goed mogelijk in op de specifieke kenmerken van deze markten.',
+        ],
+    ],
+    'contact' => [
+        'title' => 'Een vraag?',
+        'text' => 'Ons team staat klaar voor al uw vragen. Neem contact met ons op en we brengen u rechtstreeks in contact met uw lokale aanspreekpunt.',
+        'cta' => 'Contacteer ons',
+    ],
 ];

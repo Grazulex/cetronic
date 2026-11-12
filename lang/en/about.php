@@ -70,4 +70,91 @@ return [
       To reach Ludo: +32(0)475/70.78.43<br/><br/>
       In France (+Dom Tom), we have 6 representatives. Send us an email on info@cetronicbenelux.com and we will ask the representative in charge of your region to contact you.',
     ],
+    'intro' => [
+        'title' => 'About us',
+        'lead' => 'A family business serving watchmakers, jewellers and retailers in Belgium, the Netherlands and France since 1978.',
+    ],
+    'story' => [
+        'title' => 'Our story',
+        'm1' => [
+            'year' => '1978',
+            'title' => 'International Manufacturers',
+            'text' => 'Founded under the name “International Manufacturers”, our company was originally focused on the import and export of all kinds of goods, built on accessible products and rigorous management. In its early days it explored different markets before specialising in ready-to-wear clothing.',
+        ],
+        'm2' => [
+            'year' => '1980',
+            'title' => 'The move into watches',
+            'text' => 'With a limited number of customers, losing just one of them was a major risk for the business. It was against this background that, in the early 1980s, the company made a decisive move into watches.',
+        ],
+        'm3' => [
+            'year' => '1980 – 1994',
+            'title' => 'A strong partner network',
+            'text' => 'That choice was a turning point. The company gradually built a network of strong partners, notably with several suppliers based in Hong Kong, and shaped its business around an agile and responsive family model.',
+        ],
+        'm4' => [
+            'year' => '1994',
+            'title' => 'Cetronic Benelux S.A.',
+            'text' => 'A new step: the company became more structured, increased its capital and took a new name — Cetronic Benelux S.A.',
+        ],
+        'm5' => [
+            'year' => 'Today',
+            'title' => 'True to our roots',
+            'text' => 'The company keeps growing in the watch and accessories sector, true to what has made it successful from day one: a human approach, a sense of service and the will to build lasting relationships.',
+        ],
+    ],
+    'values' => [
+        'title' => 'Our principles',
+        'intro' => 'Year after year the company has grown, driven by a clear vision and principles that have never changed.',
+        'v1' => 'Offer quality products',
+        'v2' => 'Provide reliable after-sales service',
+        'v3' => 'Keep our commitments',
+    ],
+    'team' => [
+        'title' => 'The Cetronic team',
+        'geoffrey' => [
+            'role' => 'Managing Director – Business development, suppliers and marketing',
+            'text' => 'Geoffrey is your main contact for suppliers and key accounts (wholesalers, distributors). He also oversees marketing, communication, human resources and the overall development of the company.',
+        ],
+        'stephanie' => [
+            'role' => 'Operations & sales manager (FR)',
+            'text' => 'Stéphanie is in charge of day-to-day operations, sales and the watch straps department. She looks after French-speaking customers (Belgium and France) and handles order follow-up, invoicing and customer support.',
+        ],
+        'stieven' => [
+            'role' => 'Operations & sales manager (NL)',
+            'text' => 'Stieven has a role equivalent to Stéphanie’s and is the dedicated contact for Dutch-speaking customers (Belgium and the Netherlands). He manages orders and invoicing and provides day-to-day customer support.',
+        ],
+        'manal' => [
+            'role' => 'Online development manager',
+            'text' => 'Manal drives the company’s development on online channels and works to strengthen its presence on social media.',
+        ],
+        'jeanmarie' => [
+            'role' => 'Master watchmaker – After-sales manager',
+            'text' => 'Jean-Marie is your contact for all technical questions, as well as for repairs and after-sales service.',
+        ],
+    ],
+    'reps' => [
+        'title' => 'Our representatives',
+        'intro' => 'We rely on a network of experienced representatives who know their territory, so we can support you effectively in Belgium, the Netherlands and France.',
+        'brussels' => [
+            'region' => 'Brussels & Wallonia',
+            'text' => 'Arnaud drives the development of the watch and jewellery sector in Brussels and Wallonia. He supports local professionals with a close, personal approach and an excellent knowledge of the market.',
+        ],
+        'flanders' => [
+            'region' => 'Flanders & the Netherlands',
+            'text' => 'Ludo is your dedicated contact for Flanders and the Netherlands. With more than 30 years of experience in the watch industry — including as a former distributor of Maxell batteries through Verbatco — he puts his in-depth expertise at our customers’ service.',
+        ],
+        'france' => [
+            'region' => 'Mainland France',
+            'text' => 'Our network relies on several representatives organised by region, to cover the whole territory.',
+        ],
+        'domtom' => [
+            'region' => 'French overseas territories',
+            'text' => 'A dedicated representative meets the specific needs of these markets.',
+        ],
+    ],
+    'contact' => [
+        'title' => 'Any questions?',
+        'text' => 'Our team is here to help with any request. Contact us and we will put you directly in touch with your local contact.',
+        'cta' => 'Contact us',
+    ],
 ];
