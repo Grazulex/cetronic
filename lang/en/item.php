@@ -15,6 +15,8 @@ return [
         'new' => 'New',
         'best_seller' => 'Best Seller',
         'sale' => 'Sale',
+        'promo_fixed' => 'Don\'t miss it',
+        'promo_personal' => 'Just for you',
     ],
     'price' => [
         'login' => 'Login to see price',

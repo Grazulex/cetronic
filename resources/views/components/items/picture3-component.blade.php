@@ -9,6 +9,7 @@
         @include('components.items.partials.best-seller-badge')
     @endif
 
+
     @php
         $carouselId = ($itemCarouselId != null ? $itemCarouselId : 'productCarousel');
         $picturesCount = count($pictures);
@@ -73,4 +74,12 @@
         @endif
 
     </div>
+
+    @if ($promoType)
+        {{-- Band under the pictures (not over them, so thumbnails stay visible).
+             fixed: price_fix for everyone; personal: promo price with the customer's own discount. --}}
+        <div @class(['promo-ribbon', 'promo-ribbon--' . $promoType])>
+            {{ __('item.badge.promo_' . $promoType) }}
+        </div>
+    @endif
 </div>

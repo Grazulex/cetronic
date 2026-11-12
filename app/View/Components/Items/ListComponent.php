@@ -92,11 +92,11 @@ final class ListComponent extends Component
     public function render()
     {
         if ('promo' === $this->type) {
-            // Pour les promotions, nous filtrons par catégorie et price_promo
+            // Promotions of the category: fixed prices and customer-calculated promotions, mixed.
             $mainCategory = Category::where('slug', $this->catSlug)->first();
             
             $query = Item::where('category_id', $mainCategory->id)
-                ->where('price_fix', '>', 0)
+                ->promotions(auth()->user())
                 ->enable(auth()->user())
                 ->with('category')
                 ->with('brand')

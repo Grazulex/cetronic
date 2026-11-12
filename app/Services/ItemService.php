@@ -30,16 +30,43 @@ final class ItemService
         return $this->item->getMedia();
     }
 
+    /**
+     * Fixed price and customer-calculated promotions, mixed (homepage carousel).
+     */
     public function getPromoItems(int $qty = 8): Collection
     {
-        return Item::where('price_promo', '>', 0)
+        return Item::promotions(auth()->user())
             ->with('brand')
             ->with('category')
             ->with('variants')
             ->enable(auth()->user())
+            ->whereNull('master_id')
             ->inRandomOrder()
-            ->limit(8)
+            ->limit($qty)
             ->get();
+    }
+
+    /**
+     * Kind of promotion this item is for the user, used to badge product cards:
+     * "fixed" when price_fix applies (same price for everyone, it overrides every other price),
+     * "personal" when price_promo applies (the customer's own discount is applied on top of it),
+     * null otherwise, for guests, or when the customer's rule hides promotions (not_show_promo).
+     */
+    public function promoType(?User $user): ?string
+    {
+        if (null === $user) {
+            return null;
+        }
+
+        if ($this->findRuleFor($user)?->not_show_promo) {
+            return null;
+        }
+
+        if ($this->item->price_fix > 0) {
+            return 'fixed';
+        }
+
+        return $this->item->price_promo > 0 ? 'personal' : null;
     }
 
     public function getNewItems(int $qty = 8): Collection
@@ -98,21 +125,29 @@ final class ItemService
         return null;
     }
 
-    private function getPricesForUser(User $user): \Illuminate\Support\Collection
+    /**
+     * The customer's pricing rule for this item: a rule on one of the item's meta values first,
+     * otherwise the brand + category rule.
+     */
+    private function findRuleFor(User $user): ?UserBrand
     {
-        if ( ! $rule = UserBrand::where('user_id', $user->id)
+        return UserBrand::where('user_id', $user->id)
             ->where('brand_id', $this->item->brand_id)
             ->where('category_id', $this->item->category_id)
             ->whereIn('category_meta_id', $this->item->metas->pluck('meta_id'))
             ->whereIn('category_meta_value', $this->item->metas->pluck('value'))
-            ->first()) {
-            $rule = UserBrand::where('user_id', $user->id)
+            ->first()
+            ?? UserBrand::where('user_id', $user->id)
                 ->where('brand_id', $this->item->brand_id)
                 ->where('category_id', $this->item->category_id)
                 ->whereNull('category_meta_id')
                 ->whereNull('category_meta_value')
                 ->first();
-        };
+    }
+
+    private function getPricesForUser(User $user): \Illuminate\Support\Collection
+    {
+        $rule = $this->findRuleFor($user);
         if ($rule) {
             $price_end = 0;
             $price_promo = ($rule->not_show_promo) ? 0 : $this->item->price_promo;

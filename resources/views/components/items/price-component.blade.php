@@ -2,7 +2,8 @@
     @if ($price['price_start'] != $price['price_end'])
         <font class="strike">@money($price['price_start'])</font>
     @endif
-    @if ($price['price_promo'] > 0)
+    {{-- The promo price is struck only when another price (customer discount, fixed price) replaces it. --}}
+    @if ($price['price_promo'] > 0 && $price['price_promo'] != $price['price_end'])
         <font class="strike">@money($price['price_promo'])</font>
     @endif
 

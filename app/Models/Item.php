@@ -12,11 +12,24 @@ use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * Prices are stored in cents and exposed in euros by the accessors below.
+ *
+ * @property float|int $price
+ * @property float|int $price_b2b
+ * @property float|int $price_promo
+ * @property float|int $price_special1
+ * @property float|int $price_special2
+ * @property float|int $price_special3
+ * @property float|int $price_fix
+ * @property float|int $sale_price
+ */
 final class Item extends Model implements HasMedia
 {
     use HasFactory;
@@ -96,6 +109,28 @@ final class Item extends Model implements HasMedia
 
         return $query->whereDoesntHave('disables', fn($query) => $query->where('user_id', $user->id)->where('is_enable', true))
             ->where('is_published', true);
+    }
+
+    /**
+     * Items on promotion for the user: a fixed price (price_fix) or a promo price (price_promo),
+     * minus those whose brand + category rule hides promotions for this customer (not_show_promo).
+     * Guests see no promotions.
+     */
+    public function scopePromotions(Builder $query, ?User $user): Builder
+    {
+        if (null === $user) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query
+            ->where(fn(Builder $query) => $query->where('price_fix', '>', 0)->orWhere('price_promo', '>', 0))
+            ->whereNotExists(fn($query) => $query->select(DB::raw(1))
+                ->from('user_brands')
+                ->where('user_brands.user_id', $user->id)
+                ->whereColumn('user_brands.brand_id', 'items.brand_id')
+                ->whereColumn('user_brands.category_id', 'items.category_id')
+                ->whereNull('user_brands.category_meta_id')
+                ->where('user_brands.not_show_promo', true));
     }
 
     public function scopeMatchingTerm(Builder $query, string $term): Builder

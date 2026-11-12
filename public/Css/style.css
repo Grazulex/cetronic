@@ -1795,3 +1795,22 @@ a.login_btn {
         padding-left: calc(var(--bs-gutter-x) * 0.5) !important;
     }
 }
+
+/* Promotion ribbon on product pictures: fixed price (everyone) vs promotion calculated for the customer. */
+.promo-ribbon {
+    display: block;
+    padding: 6px 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-align: center;
+    color: #ffffff;
+    pointer-events: none;
+}
+.promo-ribbon--fixed {
+    background: #b3261e;
+}
+.promo-ribbon--personal {
+    background: #356273;
+}

@@ -15,6 +15,8 @@ return [
         'new' => 'nouveau',
         'best_seller' => 'Best Seller',
         'sale' => 'promo',
+        'promo_fixed' => 'Profitez-en',
+        'promo_personal' => 'Rien que pour vous',
     ],
     'price' => [
         'login' => 'Identifiez-vous pour voir le prix',

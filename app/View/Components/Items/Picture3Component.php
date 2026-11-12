@@ -38,8 +38,9 @@ final class Picture3Component extends Component
         $pictures = $itemService->getPictures();
         $isNew = $itemService->isNew();
         $isBestSeller = $itemService->isBestSeller();
+        $promoType = $itemService->promoType(auth()->user());
         $slug = $this->slug;
 
-        return view('components.items.picture3-component', ['pictures' => $pictures, 'isNew' => $isNew, 'isBestSeller' => $isBestSeller, 'slug' => $slug]);
+        return view('components.items.picture3-component', ['pictures' => $pictures, 'isNew' => $isNew, 'isBestSeller' => $isBestSeller, 'promoType' => $promoType, 'slug' => $slug]);
     }
 }

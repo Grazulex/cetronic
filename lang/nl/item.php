@@ -15,6 +15,8 @@ return [
         'new' => 'nieuw',
         'best_seller' => 'Best Seller',
         'sale' => 'promo',
+        'promo_fixed' => 'Profiteer ervan',
+        'promo_personal' => 'Speciaal voor u',
     ],
     'price' => [
         'login' => 'Log in om de prijs te zien',

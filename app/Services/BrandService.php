@@ -135,8 +135,7 @@ final class BrandService
         foreach ($categories as $category) {
             // Compter les produits en promo dans cette catégorie pour cet utilisateur
             $promoCount = Item::where('category_id', $category['id'])
-                ->whereNotNull('price_fix')
-                ->where('price_fix', '>', 0)
+                ->promotions($user)
                 ->enable($user)
                 ->whereNull('master_id')
                 ->count();
