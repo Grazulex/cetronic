@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 /*
  * translations:export runs at every deploy (Forge script): it must rebuild
@@ -12,37 +10,16 @@ use Illuminate\Support\Str;
  */
 
 beforeEach(function (): void {
-    $this->langPath = sys_get_temp_dir() . '/cetronic-lang-' . Str::random(8);
-    File::ensureDirectoryExists($this->langPath);
-    $this->app->useLangPath($this->langPath);
-
-    $fr = DB::table('ltu_languages')->insertGetId(['name' => 'French', 'code' => 'fr']);
-    $nl = DB::table('ltu_languages')->insertGetId(['name' => 'Dutch', 'code' => 'nl']);
-    $this->fr = DB::table('ltu_translations')->insertGetId(['language_id' => $fr]);
-    $this->nl = DB::table('ltu_translations')->insertGetId(['language_id' => $nl]);
-    $this->listing = DB::table('ltu_translation_files')->insertGetId(['name' => 'listing', 'extension' => 'php']);
-    $this->json = DB::table('ltu_translation_files')->insertGetId(['name' => 'fr', 'extension' => 'json']);
+    $this->langPath = useTemporaryLangPath();
 });
 
 afterEach(fn() => File::deleteDirectory($this->langPath));
 
-function phrase(int $translation, int $file, string $key, ?string $value): void
-{
-    DB::table('ltu_phrases')->insert([
-        'uuid' => (string) Str::uuid(),
-        'translation_id' => $translation,
-        'translation_file_id' => $file,
-        'key' => $key,
-        'group' => 'listing',
-        'value' => $value,
-    ]);
-}
-
 it('writes one php file per language, with nested keys', function (): void {
-    phrase($this->fr, $this->listing, 'search.placeholder', 'Recherche');
-    phrase($this->fr, $this->listing, 'search.searching', 'Recherche en cours…');
-    phrase($this->fr, $this->listing, 'title', 'Produits');
-    phrase($this->nl, $this->listing, 'search.placeholder', 'Zoeken');
+    ltuPhrase('fr', 'listing', 'search.placeholder', 'Recherche');
+    ltuPhrase('fr', 'listing', 'search.searching', 'Recherche en cours…');
+    ltuPhrase('fr', 'listing', 'title', 'Produits');
+    ltuPhrase('nl', 'listing', 'search.placeholder', 'Zoeken');
 
     $this->artisan('translations:export')->assertSuccessful();
 
@@ -55,7 +32,7 @@ it('writes one php file per language, with nested keys', function (): void {
 });
 
 it('makes the exported texts available to the translator', function (): void {
-    phrase($this->fr, $this->listing, 'search.placeholder', 'Recherche');
+    ltuPhrase('fr', 'listing', 'search.placeholder', 'Recherche');
 
     $this->artisan('translations:export')->assertSuccessful();
     // The translator was built at boot with the real lang path: rebuild it.
@@ -66,8 +43,8 @@ it('makes the exported texts available to the translator', function (): void {
 });
 
 it('skips phrases without value but keeps empty strings', function (): void {
-    phrase($this->fr, $this->listing, 'missing', null);
-    phrase($this->fr, $this->listing, 'empty', '');
+    ltuPhrase('fr', 'listing', 'missing', null);
+    ltuPhrase('fr', 'listing', 'empty', '');
 
     $this->artisan('translations:export')->assertSuccessful();
 
@@ -75,7 +52,7 @@ it('skips phrases without value but keeps empty strings', function (): void {
 });
 
 it('writes json translation files as json', function (): void {
-    phrase($this->fr, $this->json, 'Add to cart', 'Ajouter au panier');
+    ltuPhrase('fr', 'fr', 'Add to cart', 'Ajouter au panier', 'json');
 
     $this->artisan('translations:export')->assertSuccessful();
 
@@ -87,7 +64,7 @@ it('replaces the content of exported files and leaves the other files alone', fu
     File::ensureDirectoryExists($this->langPath . '/fr');
     File::put($this->langPath . '/fr/listing.php', "<?php\n\nreturn ['old' => 'Ancien'];\n");
     File::put($this->langPath . '/fr/auth.php', "<?php\n\nreturn ['failed' => 'Échec'];\n");
-    phrase($this->fr, $this->listing, 'title', 'Produits');
+    ltuPhrase('fr', 'listing', 'title', 'Produits');
 
     $this->artisan('translations:export')->assertSuccessful();
 
@@ -96,7 +73,7 @@ it('replaces the content of exported files and leaves the other files alone', fu
 });
 
 it('escapes quotes so the generated files stay valid php', function (): void {
-    phrase($this->fr, $this->listing, 'quote', "L'article \"Montre\" \\ 5 €");
+    ltuPhrase('fr', 'listing', 'quote', "L'article \"Montre\" \\ 5 €");
 
     $this->artisan('translations:export')->assertSuccessful();
 
