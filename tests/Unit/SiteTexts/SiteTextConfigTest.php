@@ -47,3 +47,15 @@ it('knows the long texts forced in the configuration', function (): void {
     expect(app(SiteTextConfig::class)->isLongForced('legal', 'cgv.claims'))->toBeTrue()
         ->and(app(SiteTextConfig::class)->isLongForced('legal', 'cgv.title'))->toBeFalse();
 });
+
+it('only names keys of known zones', function (): void {
+    $config = app(SiteTextConfig::class);
+
+    $orphans = collect(config('site-texts.labels'))->keys()->filter(function (string $fullKey) use ($config): bool {
+        [$file, $key] = explode('.', $fullKey, 2) + [1 => ''];
+
+        return SiteTextConfig::FALLBACK_ZONE === $config->zoneFor($file, $key) || '' === $key;
+    });
+
+    expect($orphans->values()->all())->toBe([]);
+});
