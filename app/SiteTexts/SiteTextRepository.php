@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use stdClass;
 
 /**
  * Reads and writes the site texts in the ltu_* tables (source of truth).
@@ -24,7 +25,7 @@ final class SiteTextRepository
         $zones = $this->config->zones();
 
         return $this->rows()
-            ->groupBy(fn(object $row): string => $row->file . "\0" . $row->key)
+            ->groupBy(fn(stdClass $row): string => $row->file . "\0" . $row->key)
             ->map(fn(Collection $rows): SiteText => $this->toText($rows))
             ->sortBy([
                 fn(SiteText $a, SiteText $b): int => ($zones[$a->zone]['order'] ?? PHP_INT_MAX) <=> ($zones[$b->zone]['order'] ?? PHP_INT_MAX),
@@ -129,13 +130,13 @@ final class SiteTextRepository
 
     private function reload(SiteText $text): SiteText
     {
-        $rows = $this->rows()->filter(fn(object $row): bool => $row->file === $text->file && $row->key === $text->key);
+        $rows = $this->rows()->filter(fn(stdClass $row): bool => $row->file === $text->file && $row->key === $text->key);
 
         return $this->toText($rows->values());
     }
 
     /**
-     * @return Collection<int, object{id: int, file: string, key: string, locale: string, value: ?string, updated_at: ?string}>
+     * @return Collection<int, stdClass> rows with id, file, key, locale, value, updated_at
      */
     private function rows(): Collection
     {
@@ -157,7 +158,7 @@ final class SiteTextRepository
     }
 
     /**
-     * @param  Collection<int, object>  $rows  the rows of one file + key
+     * @param  Collection<int, stdClass>  $rows  the rows of one file + key
      */
     private function toText(Collection $rows): SiteText
     {
