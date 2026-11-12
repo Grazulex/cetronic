@@ -14,8 +14,9 @@
         return $urlWith($params);
     };
     $withoutParam = fn (string $key): string => $urlWith(array_diff_key($query, [$key => true]));
-    $isNew = isset($new) && '1' == $new;
-    $isBestSeller = isset($bestSeller) && '1' == $bestSeller;
+    // "New" and "best sellers" do not apply on promotions pages.
+    $isNew = 'promo' !== $type && isset($new) && '1' == $new;
+    $isBestSeller = 'promo' !== $type && isset($bestSeller) && '1' == $bestSeller;
     $activeCount = collect($selected)->flatten()->count() + ($isNew ? 1 : 0) + ($isBestSeller ? 1 : 0);
     $visibleValues = 6;
 @endphp
@@ -29,6 +30,8 @@
 
             <aside class="filters" id="listing-filters-panel">
                 <form id="listing-filters" action="{{ $baseUrl }}" method="GET" data-filters-form>
+                    {{-- Not on promotions pages: an item on promotion never shows "new", and best sellers do not apply there. --}}
+                    @if ($type !== 'promo')
                     <div class="filters_quick">
                         <label @class(['filter-pill', 'is-active' => $isNew])>
                             <input type="checkbox" name="new" value="1" @checked($isNew)>
@@ -39,6 +42,7 @@
                             {{ __('listing.items.best_seller.title') }}
                         </label>
                     </div>
+                    @endif
 
                     @foreach ($metas as $meta)
                         @php

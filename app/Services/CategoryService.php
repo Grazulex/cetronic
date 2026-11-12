@@ -147,6 +147,41 @@ final class CategoryService
         return $data;
     }
 
+    /**
+     * Filter groups of a category with values and counts limited to the given (master) items and their variants,
+     * e.g. the items currently on promotion. Each master item is counted once per value.
+     *
+     * @param  array<int, int>  $itemIds
+     * @return array<int, array{id: int, name: string, is_color: mixed, values: array<int, array{value: string, count: int}>}>
+     */
+    public function getMetasAndValuesForItems(Category $category, array $itemIds): array
+    {
+        $data = [];
+
+        foreach ($this->getMetas(category: $category) as $meta) {
+            $name = str_replace('"', '', $meta['translations'][0]['name'] ?? $meta['name']);
+            $values = ItemMeta::query()
+                ->join('items', 'items.id', '=', 'item_metas.item_id')
+                ->where('item_metas.meta_id', $meta['id'])
+                ->where(fn($query) => $query->whereIn('items.id', $itemIds)->orWhereIn('items.master_id', $itemIds))
+                ->groupBy('item_metas.value')
+                ->orderBy('item_metas.value')
+                ->selectRaw('item_metas.value as value, COUNT(DISTINCT COALESCE(items.master_id, items.id)) as total')
+                ->get();
+
+            if ($values->isNotEmpty()) {
+                $data[$meta['id']] = [
+                    'id' => $meta['id'],
+                    'name' => $name,
+                    'is_color' => $meta['is_color'],
+                    'values' => $values->map(fn(ItemMeta $value): array => ['value' => str_replace('"', '', (string) $value->getAttribute('value')), 'count' => (int) $value->getAttribute('total')])->all(),
+                ];
+            }
+        }
+
+        return $data;
+    }
+
     public function getDefaultPicture(Category $category): string
     {
         $defaultPicture = 'public/categories/default.jpg';

@@ -67,3 +67,37 @@ it('redirects home when the category in the url does not exist', function (): vo
     $this->get(route('list', ['cat' => 'unknown', 'type' => 'brand', 'slug' => 'alpha']))->assertRedirect(route('home'));
     $this->get(route('list', ['cat' => 'unknown', 'type' => 'category', 'slug' => 'watches']))->assertRedirect(route('home'));
 });
+
+function promoUrl(array $query = []): string
+{
+    return route('promo', ['cat' => 'watches']) . ($query ? '?' . http_build_query($query) : '');
+}
+
+/** The factory gives random promo prices: start from items that are not on promotion. */
+function resetPromotions(): void
+{
+    Item::query()->update(['price_fix' => 0, 'price_promo' => 0]);
+}
+
+it('offers filters on the promotions page, counted on promotional items only', function (): void {
+    resetPromotions();
+    Item::whereIn('reference', ['REF-0', 'REF-2', 'REF-4'])->get()->each->update(['price_fix' => 9]);
+
+    $html = $this->get(promoUrl())->assertOk()->getContent();
+
+    expect($html)->toContain('data-meta="' . $this->gender->id . '"')
+        ->toMatch('/Gents<\/span>\s*<span class="filter-option_count">3</')
+        ->not->toContain('>Ladies<')
+        ->toContain(trans_choice('listing.results', 3, ['count' => 3]))
+        ->not->toContain('name="new"')
+        ->not->toContain('name="best_seller"');
+});
+
+it('applies filters on the promotions page', function (): void {
+    resetPromotions();
+    Item::whereIn('reference', ['REF-0', 'REF-1', 'REF-2'])->get()->each->update(['price_fix' => 9]);
+
+    $byGender = $this->get(promoUrl(['metas' => [$this->gender->id => ['Ladies']]]))->assertOk()->getContent();
+
+    expect($byGender)->toContain(trans_choice('listing.results', 1, ['count' => 1]))->toContain('REF-1')->not->toContain('REF-0');
+});

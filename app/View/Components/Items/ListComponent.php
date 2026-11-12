@@ -102,12 +102,16 @@ final class ListComponent extends Component
                 ->with('brand')
                 ->with('variants')
                 ->whereNull('master_id');
-            
+
+            // Filter values and counts come from the promotional items only (before the filters are applied).
+            $metas = (new CategoryService())->getMetasAndValuesForItems($mainCategory, (clone $query)->pluck('items.id')->all());
+
+            $query = $this->applyMetadataFilters($query, includeVariants: true);
+
             $query = $this->addPriceJoinsIfNeeded($query);
             $items = $this->applyOrderingAndPagination($query);
             
             $model = $mainCategory;
-            $metas = collect(); // Pas de métadonnées pour les promos
             
             $selected = $this->selected;
             $new = $this->new;
@@ -354,13 +358,18 @@ final class ListComponent extends Component
     /**
      * Apply metadata filters: AND between meta categories, OR within same category
      */
-    private function applyMetadataFilters($query)
+    private function applyMetadataFilters($query, bool $includeVariants = false)
     {
         foreach ($this->selected as $meta => $values) {
-            $query->whereHas('metas', function ($q) use ($meta, $values): void {
+            $matches = function ($q) use ($meta, $values): void {
                 $q->where('meta_id', $meta)
-                  ->whereIn('value', $values);
-            });
+                  ->whereIn('value', (array) $values);
+            };
+
+            // Master items only (promotions page): a value may sit on one of the item's variants.
+            $includeVariants
+                ? $query->where(fn($q) => $q->whereHas('metas', $matches)->orWhereHas('variants', fn($v) => $v->whereHas('metas', $matches)))
+                : $query->whereHas('metas', $matches);
         }
         return $query;
     }
