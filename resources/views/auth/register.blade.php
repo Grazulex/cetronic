@@ -139,10 +139,10 @@
 
                                 <select class="form-control login-form" name="country" id="country">
                                     <option value="" disabled {{ old('country') ? '' : 'selected' }}>{{ __('user.choose_country') }}</option>
-                                    @foreach ($countries as $country)
-                                        <option value="{{ $country->value }}"
-                                            {{ old('country') === $country->value ? 'selected' : '' }}>
-                                            {{ $country->name }}</option>
+                                    @foreach ($countries as $code => $label)
+                                        <option value="{{ $code }}"
+                                            {{ old('country') === $code ? 'selected' : '' }}>
+                                            {{ $label }}</option>
                                     @endforeach
                                 </select>
                                 @error('country')

@@ -136,10 +136,10 @@
                                     class="col-md-4 control-label champ-form-commande">{{ __('user.location.country') }}</label>
                                 <select class="form-control login-form" name="country" id="country">
                                     <option value="" disabled {{ old('country', isset($location) ? $location->country?->value : null) ? '' : 'selected' }}>{{ __('user.choose_country') }}</option>
-                                    @foreach (\App\Enum\CountryEnum::cases() as $country)
-                                        <option value="{{ $country->value }}"
-                                            {{ old('country', isset($location) ? $location->country?->value : null) === $country->value ? 'selected' : '' }}>
-                                            {{ $country->name }}</option>
+                                    @foreach (\App\Enum\CountryEnum::allowedOptions() as $code => $label)
+                                        <option value="{{ $code }}"
+                                            {{ old('country', isset($location) ? $location->country?->value : null) === $code ? 'selected' : '' }}>
+                                            {{ $label }}</option>
                                     @endforeach
                                 </select>
                             </div>

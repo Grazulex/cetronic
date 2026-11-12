@@ -48,7 +48,8 @@ final class LocationsRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('country')
-                    ->options(CountryEnum::class)
+                    ->options(fn(): array => CountryEnum::allowedOptions())
+                    ->in(CountryEnum::allowedValues())
                     ->default(CountryEnum::BELGIUM->value)
                     ->searchable()
                     ->required(),

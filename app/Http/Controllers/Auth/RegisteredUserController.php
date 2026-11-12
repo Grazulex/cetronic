@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Enum;
 
@@ -40,7 +41,7 @@ final class RegisteredUserController extends Controller
             'street_number' => ['required', 'string', 'max:255'],
             'zip' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
-            'country' => ['required', new Enum(CountryEnum::class)],
+            'country' => ['required', new Enum(CountryEnum::class), Rule::in(CountryEnum::allowedValues())],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -89,7 +90,7 @@ final class RegisteredUserController extends Controller
     public function create()
     {
         $brands = Brand::orderBy('order_register')->where('is_register', true)->get();
-        $countries = CountryEnum::cases();
+        $countries = CountryEnum::allowedOptions();
 
 
         return view('auth.register', compact('brands', 'countries'));

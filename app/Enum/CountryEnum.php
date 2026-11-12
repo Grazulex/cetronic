@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
+use Collator;
 use Locale;
 use ResourceBundle;
 
@@ -259,6 +260,18 @@ enum CountryEnum: string
     case ZAMBIA = 'ZMB';
     case ZIMBABWE = 'ZWE';
 
+    /**
+     * Countries customers may choose: EU, EFTA, United Kingdom and European microstates,
+     * the French overseas departments, plus Madagascar and Mauritius (existing customers).
+     */
+    private const ALLOWED = [
+        'AUT', 'BEL', 'BGR', 'HRV', 'CYP', 'CZE', 'DNK', 'EST', 'FIN', 'FRA', 'DEU', 'GRC', 'HUN', 'IRL',
+        'ITA', 'LVA', 'LTU', 'LUX', 'MLT', 'NLD', 'POL', 'PRT', 'ROU', 'SVK', 'SVN', 'ESP', 'SWE',
+        'CHE', 'NOR', 'ISL', 'LIE', 'GBR', 'MCO', 'AND', 'SMR',
+        'REU', 'GLP', 'MTQ', 'GUF', 'MYT',
+        'MDG', 'MUS',
+    ];
+
     /** Country name for a raw stored code; unknown codes are returned unchanged. */
     public static function labelFor(?string $code, ?string $locale = null): string
     {
@@ -267,6 +280,41 @@ enum CountryEnum: string
         }
 
         return self::tryFrom($code)?->label($locale) ?? $code;
+    }
+
+    /**
+     * @return array<int, self>
+     */
+    public static function allowed(): array
+    {
+        return array_map(fn(string $code): self => self::from($code), self::ALLOWED);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function allowedValues(): array
+    {
+        return self::ALLOWED;
+    }
+
+    /**
+     * Allowed countries as code => translated name, sorted by name for the locale.
+     *
+     * @return array<string, string>
+     */
+    public static function allowedOptions(?string $locale = null): array
+    {
+        $locale ??= app()->getLocale();
+        $options = [];
+
+        foreach (self::allowed() as $country) {
+            $options[$country->value] = $country->label($locale);
+        }
+
+        (new Collator($locale))->asort($options);
+
+        return $options;
     }
 
     /**

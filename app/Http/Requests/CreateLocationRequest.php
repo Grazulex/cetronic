@@ -7,6 +7,7 @@ namespace App\Http\Requests;
 use App\Enum\CountryEnum;
 use App\Enum\LocationTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 final class CreateLocationRequest extends FormRequest
@@ -29,7 +30,7 @@ final class CreateLocationRequest extends FormRequest
             'street_other' => ['sometimes', 'max:255'],
             'zip' => ['required', 'string', 'min:3', 'max:255'],
             'city' => ['required', 'string', 'min:3', 'max:255'],
-            'country' => ['required', new Enum(type: CountryEnum::class)],
+            'country' => ['required', new Enum(type: CountryEnum::class), Rule::in(CountryEnum::allowedValues())],
             'phone' => ['required', 'string', 'min:3', 'max:255'],
         ];
     }
