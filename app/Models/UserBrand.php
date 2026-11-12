@@ -10,6 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property float|int $reduction
+ * @property float|int $coefficient
+ * @property float|int $addition_price
+ */
 final class UserBrand extends Model
 {
     use HasFactory;
