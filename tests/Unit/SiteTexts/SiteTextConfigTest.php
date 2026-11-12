@@ -17,7 +17,7 @@ it('sends an unknown file to the other zone', function (): void {
 });
 
 it('derives a readable name from the key', function (): void {
-    expect(app(SiteTextConfig::class)->labelFor('order', 'location.invoice'))->toBe('Location › Invoice');
+    expect(app(SiteTextConfig::class)->labelFor('order', 'location.unknown_place'))->toBe('Location › Unknown place');
 });
 
 it('turns underscores and dashes into spaces in derived names', function (): void {

@@ -52,7 +52,7 @@ it('shows the three languages of an opened zone', function (): void {
     livewire(SiteTexts::class)
         ->call('toggleZone', 'order')
         ->assertSet("drafts.{$id}", ['fr' => 'Adresse de facturation', 'nl' => null, 'en' => 'Invoice address'])
-        ->assertSee('Location › Invoice — néerlandais');
+        ->assertSee('Adresse de facturation — néerlandais');
 });
 
 it('saves a row whose key contains dots and publishes it', function (): void {

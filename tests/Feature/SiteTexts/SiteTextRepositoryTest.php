@@ -14,7 +14,7 @@ it('groups the three languages of a key in one text', function (): void {
 
     expect($text->values)->toBe(['fr' => 'Adresse de facturation', 'nl' => 'Factuuradres', 'en' => 'Invoice address'])
         ->and($text->zone)->toBe('order')
-        ->and($text->label)->toBe('Location › Invoice')
+        ->and($text->label)->toBe('Adresse de facturation')
         ->and($text->fullKey())->toBe('order.location.invoice');
 });
 
