@@ -324,3 +324,22 @@ it('round-trips a real exported xlsx file without changes', function (): void {
         ->and($report->rulesCreated + $report->rulesUpdated + $report->usersUpdated)->toBe(0)
         ->and($report->unchanged)->toBe(2);
 });
+
+it('ignores surrounding spaces in the stored external reference', function (): void {
+    $this->bob->forceFill(['external_reference' => 'C-002 '])->saveQuietly();
+
+    $report = $this->importer->analyse($this->brand, exportedRows($this->brand));
+
+    expect($report->usersUpdated)->toBe(0)
+        ->and($report->unchanged)->toBe(2);
+});
+
+it('accepts an out-of-range value that is unchanged', function (): void {
+    DB::table('users')->where('id', $this->bob->id)->update(['franco' => -100]);
+    DB::table('user_brands')->where('id', $this->bobRings->id)->update(['reduction' => 15000]);
+
+    $report = $this->importer->analyse($this->brand, exportedRows($this->brand));
+
+    expect($report->errors)->toBe([])
+        ->and($report->usersUpdated + $report->rulesUpdated)->toBe(0);
+});

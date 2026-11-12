@@ -140,13 +140,12 @@ final class BrandDiscountImporter
             $ruleChanges = [];
 
             foreach ($columns['categories'] as $categoryId => $fieldColumns) {
-                $attributes = $this->cellValues($row, $fieldColumns, $excelRow, $rowErrors);
+                $existing = $rules->get("{$user->id}-{$categoryId}", collect());
+                $attributes = $this->cellValues($row, $fieldColumns, 1 === $existing->count() ? $existing->first() : null, $excelRow, $rowErrors);
 
                 if ([] === $attributes) {
                     continue;
                 }
-
-                $existing = $rules->get("{$user->id}-{$categoryId}", collect());
 
                 if ($existing->count() > 1) {
                     $rowErrors[] = $this->error($excelRow, $this->headingOf($fieldColumns), 'Plusieurs remises existent pour ce client et cette catégorie : lancer « php artisan user-brands:dedupe » avant d\'importer.');
@@ -304,7 +303,8 @@ final class BrandDiscountImporter
         if (isset($userColumns['external_reference'])) {
             $reference = $this->text($row[$userColumns['external_reference']] ?? null);
 
-            if (null !== $reference && $reference !== (string) $user->external_reference) {
+            // Stored references may carry stray spaces: they are not a change.
+            if (null !== $reference && $reference !== (string) $this->clean($user->external_reference)) {
                 $changes['external_reference'] = $reference;
             }
         }
@@ -314,9 +314,10 @@ final class BrandDiscountImporter
                 continue;
             }
 
-            $value = $this->numberCell($row[$userColumns[$field]] ?? null, $field, $excelRow, BrandDiscountColumns::USER_FIELDS[$field], $errors);
+            $current = round((float) $user->{$field}, 2);
+            $value = $this->numberCell($row[$userColumns[$field]] ?? null, $field, $current, $excelRow, BrandDiscountColumns::USER_FIELDS[$field], $errors);
 
-            if (null !== $value && $value !== round((float) $user->{$field}, 2)) {
+            if (null !== $value && $value !== $current) {
                 $changes[$field] = $value;
             }
         }
@@ -332,9 +333,10 @@ final class BrandDiscountImporter
      * @param  array<int, array{row: int, column: string, message: string}>  $errors
      * @return array<string, bool|float|string>
      */
-    private function cellValues(array $row, array $fieldColumns, int $excelRow, array &$errors): array
+    private function cellValues(array $row, array $fieldColumns, ?UserBrand $rule, int $excelRow, array &$errors): array
     {
         $values = [];
+        $current = null === $rule ? [] : $this->currentValues($rule);
 
         foreach ($fieldColumns as $field => $column) {
             $raw = $row[$column['index']] ?? null;
@@ -346,7 +348,7 @@ final class BrandDiscountImporter
             $value = match ($field) {
                 'price_type' => $this->priceType($raw, $excelRow, $column['heading'], $errors),
                 'not_show_promo', 'is_excluded' => $this->boolean($raw, $excelRow, $column['heading'], $errors),
-                default => $this->numberCell($raw, $field, $excelRow, $column['heading'], $errors),
+                default => $this->numberCell($raw, $field, $current[$field] ?? null, $excelRow, $column['heading'], $errors),
             };
 
             if (null !== $value) {
@@ -363,7 +365,19 @@ final class BrandDiscountImporter
      */
     private function ruleDiff(UserBrand $rule, array $attributes): array
     {
-        $current = [
+        $current = $this->currentValues($rule);
+
+        return array_filter($attributes, fn(bool|float|string $value, string $field): bool => $current[$field] !== $value, ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * Current rule values in the same shape as parsed cells.
+     *
+     * @return array<string, bool|float|string>
+     */
+    private function currentValues(UserBrand $rule): array
+    {
+        return [
             'reduction' => round((float) $rule->reduction, 2),
             'coefficient' => round((float) $rule->coefficient, 2),
             'addition_price' => round((float) $rule->addition_price, 2),
@@ -371,8 +385,6 @@ final class BrandDiscountImporter
             'not_show_promo' => $rule->not_show_promo,
             'is_excluded' => $rule->is_excluded,
         ];
-
-        return array_filter($attributes, fn(bool|float|string $value, string $field): bool => $current[$field] !== $value, ARRAY_FILTER_USE_BOTH);
     }
 
     /**
@@ -414,9 +426,12 @@ final class BrandDiscountImporter
     }
 
     /**
+     * Parses a numeric cell. A value equal to the stored one ($current) is never rejected:
+     * legacy data such as franco = -1 ("no free shipping") must not block an import.
+     *
      * @param  array<int, array{row: int, column: string, message: string}>  $errors
      */
-    private function numberCell(mixed $raw, string $field, int $excelRow, string $heading, array &$errors): ?float
+    private function numberCell(mixed $raw, string $field, ?float $current, int $excelRow, string $heading, array &$errors): ?float
     {
         if (null === $this->clean($raw)) {
             return null;
@@ -433,8 +448,12 @@ final class BrandDiscountImporter
         $value = round((float) $normalised, 2);
         [$min, $max] = self::BOUNDS[$field];
 
+        if ($value === $current) {
+            return $value;
+        }
+
         if ($value < $min || (null !== $max && $value > $max)) {
-            $range = null === $max ? "supérieur ou égal à {$min}" : "entre {$min} et {$max}";
+            $range = null === $max ? "supérieure ou égale à {$min}" : "entre {$min} et {$max}";
             $errors[] = $this->error($excelRow, $heading, "La valeur doit être {$range} (valeur : {$value}).");
 
             return null;
