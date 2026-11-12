@@ -1,8 +1,4 @@
 <div class="picture3-component">
-    @if ($isBestSeller)
-        @include('components.items.partials.best-seller-badge')
-    @endif
-
 
     @php
         $carouselId = ($itemCarouselId != null ? $itemCarouselId : 'productCarousel');
@@ -69,13 +65,17 @@
 
     </div>
 
-    @if ($isNew || $promoType)
-        {{-- One band under the pictures (not over them, so thumbnails stay visible), split when the item is
-             both new and on promotion. fixed: price_fix for everyone; personal: promo price with the customer's
-             own discount. --}}
-        <div class="item-ribbons">
+    @php $ribbonCount = (int) $isNew + (int) $isBestSeller + (int) (bool) $promoType; @endphp
+    @if ($ribbonCount > 0)
+        {{-- One band under the pictures (not over them, so thumbnails stay visible), split between the labels;
+             with three labels the promotion takes its own line. fixed: price_fix for everyone; personal: promo
+             price with the customer's own discount. --}}
+        <div class="item-ribbons item-ribbons--{{ $ribbonCount }}">
             @if ($isNew)
                 <span class="item-ribbon item-ribbon--new">{{ __('item.badge.new') }}</span>
+            @endif
+            @if ($isBestSeller)
+                <span class="item-ribbon item-ribbon--best-seller">{{ __('item.badge.best_seller') }}</span>
             @endif
             @if ($promoType)
                 <span @class(['item-ribbon', 'item-ribbon--' . $promoType])>{{ __('item.badge.promo_' . $promoType) }}</span>

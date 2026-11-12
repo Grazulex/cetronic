@@ -1800,6 +1800,11 @@ a.login_btn {
    promotion calculated for the customer (blue-grey). Split in equal parts when an item is new and on promotion. */
 .item-ribbons {
     display: flex;
+    flex-wrap: wrap;
+}
+/* Three labels: new and best seller share the first line, the promotion gets a full line. */
+.item-ribbons--3 > .item-ribbon:last-child {
+    flex-basis: 100%;
 }
 .item-ribbon {
     flex: 1 1 0;
@@ -1820,6 +1825,9 @@ a.login_btn {
 .item-ribbon--new {
     background: #1d1d1b;
     color: #fbece2;
+}
+.item-ribbon--best-seller {
+    background: #8b6914; /* gold of the former best seller badge */
 }
 .item-ribbon--fixed {
     background: #b3261e;
