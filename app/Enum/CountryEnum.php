@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
+use Locale;
+use ResourceBundle;
+
 enum CountryEnum: string
 {
     case AFGHANISTAN = 'AFG';
@@ -255,4 +258,49 @@ enum CountryEnum: string
     case YEMEN = 'YEM';
     case ZAMBIA = 'ZMB';
     case ZIMBABWE = 'ZWE';
+
+    /** Country name for a raw stored code; unknown codes are returned unchanged. */
+    public static function labelFor(?string $code, ?string $locale = null): string
+    {
+        if (null === $code || '' === $code) {
+            return '';
+        }
+
+        return self::tryFrom($code)?->label($locale) ?? $code;
+    }
+
+    /**
+     * Country name in the given locale (current locale by default), from the ICU data of the intl extension.
+     * Codes are ISO 3166 alpha-3; ICU display names need alpha-2, mapped through the ICU territory aliases.
+     */
+    public function label(?string $locale = null): string
+    {
+        $alpha2 = self::alpha2Codes()[$this->value] ?? null;
+        $name = null === $alpha2 ? '' : Locale::getDisplayRegion('-' . $alpha2, $locale ?? app()->getLocale());
+
+        return '' === $name || $name === $alpha2 ? $this->value : $name;
+    }
+
+    /**
+     * @return array<string, string> alpha-3 => alpha-2
+     */
+    private static function alpha2Codes(): array
+    {
+        static $codes = null;
+
+        if (null === $codes) {
+            $codes = [];
+            $aliases = ResourceBundle::create('metadata', 'ICUDATA', false)['alias']['territory'] ?? [];
+
+            foreach ($aliases as $alpha3 => $alias) {
+                $replacement = $alias['replacement'] ?? null;
+
+                if (3 === mb_strlen((string) $alpha3) && is_string($replacement) && 1 === preg_match('/^[A-Z]{2}$/', $replacement)) {
+                    $codes[(string) $alpha3] = $replacement;
+                }
+            }
+        }
+
+        return $codes;
+    }
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Cetronix Benelux</title>
+    <title>Cetronic Benelux</title>
 
     <style>
         .invoice-box {
@@ -117,7 +117,7 @@
 
                             <td>
                                 {{ __('order.reference') }} #: {{ strtoupper($order->reference) }}<br />
-                                {{ __('order.date') }}: {{ $order->created_at }}<br />
+                                {{ __('order.date') }}: {{ $order->created_at->format('d/m/Y') }}<br />
                                 @if ($order->user->external_reference)
                                     {{ __('order.user.reference') }}: {{ $order->user->external_reference }}<br />
                                 @endif
@@ -138,7 +138,7 @@
                                 {{ $order->shipping_street_other }} <br />
                                 {{ $order->shipping_street }} {{ $order->shipping_street_number }} <br />
                                 {{ $order->shipping_zip }} {{ $order->shipping_city }} <br />
-                                {{ $order->shipping_country }} <br />
+                                {{ \App\Enum\CountryEnum::labelFor($order->shipping_country) }} <br />
                                 {{ $order->invoice_email }}<br />
                                 {{ $order->shipping_phone }}<br />
 
@@ -151,7 +151,7 @@
                                 {{ $order->invoice_street_other }} <br />
                                 {{ $order->invoice_street }} {{ $order->invoice_street_number }} <br />
                                 {{ $order->invoice_zip }} {{ $order->invoice_city }} <br />
-                                {{ $order->invoice_country }} <br />
+                                {{ \App\Enum\CountryEnum::labelFor($order->invoice_country) }} <br />
                                 {{ $order->invoice_vat }} <br />
                             </td>
                         </tr>
