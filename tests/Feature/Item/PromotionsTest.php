@@ -119,37 +119,36 @@ it('strikes the start and promo prices when the customer discount applies on the
         ->and($html)->toContain('6,00');
 });
 
-it('shows new and promotion in one ribbon under the picture', function (): void {
+it('hides the new label when the item is on promotion', function (): void {
     $this->fixed->update(['is_new' => true, 'is_best_seller' => false]);
     $this->regular->update(['is_new' => true, 'is_best_seller' => false]);
     $this->personal->update(['is_new' => false, 'is_best_seller' => false]);
     actingAs($this->customer);
 
-    $both = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->fixed]);
+    $newAndPromo = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->fixed]);
     $newOnly = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->regular]);
     $promoOnly = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->personal]);
 
-    expect($both)->toContain('item-ribbon--new')->toContain('item-ribbon--fixed')
-        ->and(mb_substr_count($both, 'class="item-ribbons item-ribbons--2"'))->toBe(1)
+    expect($newAndPromo)->toContain('item-ribbon--fixed')->not->toContain('item-ribbon--new')
         ->and($newOnly)->toContain('item-ribbon--new')->not->toContain('item-ribbon--fixed')
         ->and($promoOnly)->toContain('item-ribbon--personal')->not->toContain('item-ribbon--new')
-        ->and($both . $newOnly)->not->toContain('class="if-new"');
+        ->and($newAndPromo . $newOnly)->not->toContain('class="if-new"');
 });
 
-it('adds best seller to the same ribbon, promotion on its own line when there are three', function (): void {
+it('keeps best seller next to the promotion or the new label', function (): void {
     $this->fixed->update(['is_new' => true, 'is_best_seller' => true]);
-    $this->regular->update(['is_new' => false, 'is_best_seller' => true]);
+    $this->regular->update(['is_new' => true, 'is_best_seller' => true]);
     actingAs($this->customer);
 
-    $three = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->fixed]);
-    $bestOnly = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->regular]);
+    $bestAndPromo = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->fixed]);
+    $newAndBest = (string) $this->blade('<x-items.picture3-component :item="$item" />', ['item' => $this->regular]);
 
-    expect($three)->toContain('item-ribbon--new')->toContain('item-ribbon--best-seller')->toContain('item-ribbon--fixed')
-        ->toContain('item-ribbons item-ribbons--3')
-        ->not->toContain('if-best-seller')
-        ->and($bestOnly)->toContain('item-ribbon--best-seller')->toContain(e(__('item.badge.best_seller')))
+    expect($bestAndPromo)->toContain('item-ribbon--best-seller')->toContain('item-ribbon--fixed')
         ->not->toContain('item-ribbon--new')
-        ->not->toContain('if-best-seller');
+        ->toContain('item-ribbons item-ribbons--2')
+        ->not->toContain('if-best-seller')
+        ->and($newAndBest)->toContain('item-ribbon--new')->toContain('item-ribbon--best-seller')
+        ->toContain(e(__('item.badge.best_seller')));
 });
 
 it('explains promotions and links the terms of sale on the promotions page', function (): void {

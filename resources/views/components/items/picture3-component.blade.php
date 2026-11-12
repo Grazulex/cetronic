@@ -65,13 +65,16 @@
 
     </div>
 
-    @php $ribbonCount = (int) $isNew + (int) $isBestSeller + (int) (bool) $promoType; @endphp
+    @php
+        // A promotion takes precedence over "new": both never show together.
+        $showNew = $isNew && ! $promoType;
+        $ribbonCount = (int) $showNew + (int) $isBestSeller + (int) (bool) $promoType;
+    @endphp
     @if ($ribbonCount > 0)
-        {{-- One band under the pictures (not over them, so thumbnails stay visible), split between the labels;
-             with three labels the promotion takes its own line. fixed: price_fix for everyone; personal: promo
-             price with the customer's own discount. --}}
+        {{-- One band under the pictures (not over them, so thumbnails stay visible), split between the labels.
+             fixed: price_fix for everyone; personal: promo price with the customer's own discount. --}}
         <div class="item-ribbons item-ribbons--{{ $ribbonCount }}">
-            @if ($isNew)
+            @if ($showNew)
                 <span class="item-ribbon item-ribbon--new">{{ __('item.badge.new') }}</span>
             @endif
             @if ($isBestSeller)

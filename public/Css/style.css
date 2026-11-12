@@ -1802,10 +1802,7 @@ a.login_btn {
     display: flex;
     flex-wrap: wrap;
 }
-/* Three labels: new and best seller share the first line, the promotion gets a full line. */
-.item-ribbons--3 > .item-ribbon:last-child {
-    flex-basis: 100%;
-}
+
 .item-ribbon {
     flex: 1 1 0;
     padding: 6px 12px;
