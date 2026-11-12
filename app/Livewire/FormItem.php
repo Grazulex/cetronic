@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Item;
 use App\Services\CartService;
@@ -67,18 +67,18 @@ final class FormItem extends Component
 
         $cartService->addToCart(cart: $openCart, item:  $this->item, price: $prices['price_promo'], price_promo: $prices['price_end'], quantity: (int) $this->quantity[$this->item->id], price_old: $prices['price_start'], variant: $this->variant[$this->item->id]);
 
-        $this->emit(event: 'cart_updated');
+        $this->dispatch('cart_updated');
 
         if ($cartService->getTotal($openCart) < $userService->getFranco()) {
-            $this->dispatchBrowserEvent(event: 'alert', data: [
-                'type' => 'warning',
-                'message' => __('cart.item.franco', ['franco' => $userService->getFranco()]),
-            ]);
+            $this->dispatch('alert',
+                type: 'warning',
+                message: __('cart.item.franco', ['franco' => $userService->getFranco()])
+            );
         } else {
-            $this->dispatchBrowserEvent(event: 'alert', data: [
-                'type' => 'success',
-                'message' => __('cart.item.added'),
-            ]);
+            $this->dispatch('alert',
+                type: 'success',
+                message: __('cart.item.added')
+            );
         }
     }
 }

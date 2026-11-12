@@ -64,10 +64,12 @@ it('charts the whole history of the customer, like the key figures', function ()
     loginAsAdmin();
     createSale($this->item, 1, 100, '2023-08-01', ['user_id' => $this->customer->id]);
 
-    $this->get(customerStatsUrl($this->customer))
-        ->assertOk()
-        ->assertSee('08\/2023', false)
-        ->assertSee('11\/2026', false);
+    $html = $this->get(customerStatsUrl($this->customer))->assertOk()->getContent();
+
+    // The chart labels are JSON-encoded in the page: the escaping of "/" varies.
+    expect($html)
+        ->toMatch('#08\\\\*/2023#')
+        ->toMatch('#11\\\\*/2026#');
 });
 
 it('breaks the customer sales down per brand and category', function (): void {

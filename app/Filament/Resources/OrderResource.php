@@ -11,9 +11,9 @@ use App\Filament\Resources\OrderResource\RelationManagers\ItemsRelationManager;
 use App\Models\Order;
 use App\Services\OrderService;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -113,7 +113,7 @@ final class OrderResource extends Resource
                         );
                     })
                     ->tooltip(__('Export'))
-                    ->icon('heroicon-s-download')
+                    ->icon('heroicon-s-arrow-down-tray')
                     ->color('primary'),
             ])
             ->bulkActions([
@@ -155,7 +155,7 @@ final class OrderResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return (string) static::getModel()::count();
     }

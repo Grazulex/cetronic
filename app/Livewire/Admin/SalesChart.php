@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire\Admin;
+namespace App\Livewire\Admin;
 
 use App\DataObjects\Stats\SalesFilters;
 use App\Enum\UserRoleEnum;
 use App\Services\SalesStatsService;
-use Filament\Widgets\BarChartWidget;
+use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
 
 /**
@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
  * Lives outside App\Filament\Widgets on purpose: it must not be discovered
  * as a dashboard widget. Parents re-mount it (wire:key) when filters change.
  */
-final class SalesChart extends BarChartWidget
+final class SalesChart extends ChartWidget
 {
     /** @var array<string, mixed> */
     public array $filters = [];
@@ -24,6 +24,9 @@ final class SalesChart extends BarChartWidget
     protected static ?string $heading = 'Évolution mensuelle';
 
     protected static ?string $pollingInterval = null;
+
+    // Embedded in the stats pages: render the data with the page, not in a second request.
+    protected static bool $isLazy = false;
 
     protected static ?string $maxHeight = '300px';
 
@@ -65,6 +68,11 @@ final class SalesChart extends BarChartWidget
                 $months,
             ),
         ];
+    }
+
+    protected function getType(): string
+    {
+        return 'bar';
     }
 
     protected function getOptions(): ?array

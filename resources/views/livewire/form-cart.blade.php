@@ -1,10 +1,10 @@
 <div>
-    <form wire:submit.prevent="updateCart({{ $cartItem->id }})" action="#">
+    <form wire:submit="updateCart({{ $cartItem->id }})" action="#">
         <input type="hidden" value="">
         <div class="d-flex align-items-center update-panier">
             <div class="row">
                 <div class="col-9 d-flex justify-content-start">
-                    <input wire:model="quantity.{{ $cartItem->id }}" class="form-control btn-panier text-center "
+                    <input wire:model.live="quantity.{{ $cartItem->id }}" class="form-control btn-panier text-center "
                         type="number" step="{{ $cartItem->item->multiple_quantity }}"
                         min="{{ $cartItem->item->multiple_quantity }}">
                 </div>

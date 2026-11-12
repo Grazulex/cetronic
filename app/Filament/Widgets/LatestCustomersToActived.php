@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\UserResource;
 use App\Enum\UserRoleEnum;
 use App\Models\User;
 use Closure;
@@ -28,7 +29,7 @@ final class LatestCustomersToActived extends BaseWidget
 
     protected function getTableRecordUrlUsing(): Closure
     {
-        return fn(Model $record): string => route('filament.resources.users.edit', ['record' => $record]);
+        return fn(Model $record): string => UserResource::getUrl('edit', ['record' => $record]);
     }
 
     protected function getTableColumns(): array

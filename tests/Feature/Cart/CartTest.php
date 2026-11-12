@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use App\Enum\CartStatusEnum;
 use App\Enum\CountryEnum;
-use App\Http\Livewire\FormItem;
-use App\Http\Livewire\TotalCart;
+use App\Livewire\FormItem;
+use App\Livewire\TotalCart;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Location;

@@ -1,11 +1,11 @@
-<x-filament::page>
-    <x-filament::card>
+<x-filament-panels::page>
+    <x-filament::section>
         {{ $this->form }}
-    </x-filament::card>
+    </x-filament::section>
 
     @include('filament.partials.sales-summary', ['summary' => $summary])
 
-    @livewire(\App\Http\Livewire\Admin\SalesChart::class, ['filters' => $chartFilters], key('sales-chart-' . md5(json_encode($chartFilters))))
+    @livewire(\App\Livewire\Admin\SalesChart::class, ['filters' => $chartFilters], key('sales-chart-' . md5(json_encode($chartFilters))))
 
     {{ $this->table }}
-</x-filament::page>
+</x-filament-panels::page>

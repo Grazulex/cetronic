@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Livewire\SearchItem;
+use App\Livewire\SearchItem;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;

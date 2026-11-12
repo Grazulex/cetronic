@@ -1,7 +1,7 @@
 <div style="position: relative;">
     <form method="GET" action="{{ route('search') }}">
         <input class="login-form form-control" style="min-width: 150px;"
-               type="text" name="search-input" value="{{ Request::get('search-input') }}" placeholder="{{ __('listing.search.placeholder') }}" wire:model="term" >
+               type="text" name="search-input" value="{{ Request::get('search-input') }}" placeholder="{{ __('listing.search.placeholder') }}" wire:model.live="term" >
     </form>
 
     <div wire:loading wire:loading.class="listing-search-preview">{{ __('listing.search.searching') }}</div>

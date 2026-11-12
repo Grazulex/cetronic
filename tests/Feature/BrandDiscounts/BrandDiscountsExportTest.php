@@ -128,7 +128,7 @@ it('downloads the file from the users list for admins', function (): void {
     Excel::fake();
     loginAsAdmin();
 
-    livewire(ListUsers::class)->callPageAction('exportBrandDiscounts', ['brand_id' => $this->brand->id]);
+    livewire(ListUsers::class)->callAction('exportBrandDiscounts', ['brand_id' => $this->brand->id]);
 
     Excel::assertDownloaded('Remises_alpha_2026-11-12_100000.xlsx', fn(BrandDiscountsExport $export): bool => $export->brand->is($this->brand));
     Carbon::setTestNow();

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enum\CountryEnum;
+use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Filament\Resources\UserResource\RelationManagers\LocationsRelationManager;
 use App\Models\User;
 use Filament\Tables\Actions\CreateAction;
@@ -69,7 +70,7 @@ it('refuses a non allowed country in the admin address form', function (string $
     loginAsAdmin();
     $customer = User::factory()->create(['role' => 'customer']);
 
-    $component = livewire(LocationsRelationManager::class, ['ownerRecord' => $customer])
+    $component = livewire(LocationsRelationManager::class, ['ownerRecord' => $customer, 'pageClass' => EditUser::class])
         ->callTableAction(CreateAction::class, data: [
             'type' => 'invoice', 'street' => 'Main street', 'zip' => '1000', 'city' => 'Brussels', 'country' => $country,
         ]);

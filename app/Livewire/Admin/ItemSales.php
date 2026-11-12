@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire\Admin;
+namespace App\Livewire\Admin;
 
 use App\DataObjects\Stats\SalesFilters;
 use App\Enum\UserRoleEnum;

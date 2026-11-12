@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use App\Enum\LocationTypeEnum;
-use App\Http\Livewire\CartCounter;
-use App\Http\Livewire\DeleteCart;
-use App\Http\Livewire\FormCart;
-use App\Http\Livewire\LocationCart;
-use App\Http\Livewire\PriceTotalCart;
+use App\Livewire\CartCounter;
+use App\Livewire\DeleteCart;
+use App\Livewire\FormCart;
+use App\Livewire\LocationCart;
+use App\Livewire\PriceTotalCart;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Location;
@@ -18,8 +18,8 @@ use function Pest\Livewire\livewire;
 /*
  * Front cart components. These pin the events each component sends
  * (cart_updated, quantity_updated, total_updated), which are the contract
- * between components: emit() becomes dispatch() in Livewire 3, and the
- * assertEmitted() calls below become assertDispatched().
+ * between components: events are sent with dispatch() since Livewire 3 and
+ * the tests below check them with assertDispatched().
  */
 
 function cartLine(User $user, int $quantity = 2, int $multiple = 1): CartItem
@@ -54,7 +54,7 @@ it('refreshes the counter when the cart changes', function (): void {
 
     $line->update(['quantity' => 5]);
 
-    $counter->emit('cart_updated')->assertSeeHtml('>5</div>');
+    $counter->dispatch('cart_updated')->assertSeeHtml('>5</div>');
 });
 
 it('updates the quantity of a cart line', function (): void {
@@ -63,9 +63,9 @@ it('updates the quantity of a cart line', function (): void {
     livewire(FormCart::class, ['cartItem' => $line])
         ->set("quantity.{$line->id}", 6)
         ->call('updateCart')
-        ->assertEmitted('cart_updated')
-        ->assertEmitted('quantity_updated')
-        ->assertEmitted('total_updated');
+        ->assertDispatched('cart_updated')
+        ->assertDispatched('quantity_updated')
+        ->assertDispatched('total_updated');
 
     expect($line->fresh()->quantity)->toBe(6);
 });
@@ -109,7 +109,7 @@ it('saves the invoice and shipping addresses of the cart', function (): void {
     livewire(LocationCart::class, ['cart' => $line->cart])
         ->set('locationInvoice', $invoice->id)
         ->set('locationShipping', $shipping->id)
-        ->assertEmitted('total_updated');
+        ->assertDispatched('total_updated');
 
     expect($line->cart->fresh())
         ->invoice_location_id->toBe($invoice->id)

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Livewire\FormItem;
+use App\Livewire\FormItem;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;
@@ -16,7 +16,7 @@ it('renders well-formed quantity buttons', function (): void {
     ]);
     loginAsUser();
 
-    $html = livewire(FormItem::class, ['item' => $item, 'quantity' => [$item->multiple_quantity], 'variante' => ['']])->payload['effects']['html'];
+    $html = livewire(FormItem::class, ['item' => $item, 'quantity' => [$item->multiple_quantity], 'variante' => ['']])->html();
 
     expect($html)->toContain('wire:click="down(' . $item->id . ')"')
         ->toContain('wire:click="up(' . $item->id . ')"')

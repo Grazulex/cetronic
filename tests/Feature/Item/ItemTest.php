@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-use App\Http\Livewire\FormItem;
+use App\Livewire\FormItem;
 use App\Models\CategoryTranslation;
 
 use function Pest\Livewire\livewire;

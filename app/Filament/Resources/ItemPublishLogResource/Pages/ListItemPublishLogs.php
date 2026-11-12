@@ -11,7 +11,7 @@ final class ListItemPublishLogs extends ListRecords
 {
     protected static string $resource = ItemPublishLogResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [];
     }

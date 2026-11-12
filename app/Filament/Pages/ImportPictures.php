@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Filament\Resources\ItemResource;
 use App\Actions\Item\LogItemPublishChangeAction;
 use App\Enum\UserRoleEnum;
 use App\Models\Brand;
@@ -14,7 +15,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Illuminate\Http\RedirectResponse;
-use Livewire\Redirector;
+use Livewire\Features\SupportRedirects\Redirector;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -28,7 +29,7 @@ final class ImportPictures extends Page implements HasForms
 
     public int $category_id;
 
-    protected static ?string $navigationIcon = 'heroicon-o-photograph';
+    protected static ?string $navigationIcon = 'heroicon-o-photo';
 
     protected static ?string $navigationGroup = 'Upload';
 
@@ -134,15 +135,15 @@ final class ImportPictures extends Page implements HasForms
                         ->preservingOriginal()
                         ->toMediaCollection(collectionName: 'default', diskName: 'items');
                 } catch (FileDoesNotExist|FileIsTooBig $e) {
-                    return redirect()->route(route: 'filament.pages.import-pictures')->with(key: 'error', value: $e->getMessage());
+                    return redirect(self::getUrl())->with(key: 'error', value: $e->getMessage());
                 }
             }
         }
 
-        return redirect()->route(route: 'filament.resources.items.index')->with(key: 'success', value: 'Pictures imported successfully!');
+        return redirect(ItemResource::getUrl('index'))->with(key: 'success', value: 'Pictures imported successfully!');
     }
 
-    protected static function shouldRegisterNavigation(): bool
+    public static function shouldRegisterNavigation(): bool
     {
         return UserRoleEnum::ADMIN === auth()->user()?->role;
     }

@@ -21,9 +21,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\View;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
@@ -46,7 +47,7 @@ final class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Items';
 
@@ -206,7 +207,7 @@ final class ItemResource extends Resource
                                 'orders',
                             )
                             ->suffix(' orders')
-                            ->color('secondary')
+                            ->color('gray')
                             ->sortable(),
                         BadgeColumn::make('media_count')
                             ->counts(
@@ -239,6 +240,7 @@ final class ItemResource extends Resource
                 TernaryFilter::make('is_best_seller'),
                 Tables\Filters\TrashedFilter::make(),
             ])
+            ->filtersLayout(FiltersLayout::AboveContent)
             ->actions([
                 EditAction::make(),
                 RestoreAction::make(),
@@ -254,7 +256,7 @@ final class ItemResource extends Resource
                     })
                     ->requiresConfirmation()
                     ->tooltip(__('Duplicate'))
-                    ->icon('heroicon-s-duplicate')
+                    ->icon('heroicon-s-document-duplicate')
                     ->color('primary'),
             ])
             ->bulkActions([
@@ -283,7 +285,7 @@ final class ItemResource extends Resource
                     ->deselectRecordsAfterCompletion(),
                 BulkAction::make('unpublished')
                     ->label(__('Unpublished selection'))
-                    ->icon('heroicon-s-x')
+                    ->icon('heroicon-s-x-mark')
                     ->action(function (Collection $records): void {
                         $logAction = app(LogItemPublishChangeAction::class);
                         foreach ($records as $record) {
@@ -319,7 +321,7 @@ final class ItemResource extends Resource
         ];
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return (string) self::getModel()::count();
     }

@@ -14,17 +14,17 @@ use App\Models\Category;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Services\SalesStatsService;
-use Closure;
 use Filament\Forms\ComponentContainer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Pages\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -82,8 +82,6 @@ final class SalesStats extends Page implements HasTable
         if ('group_by' === $key) {
             $this->tableSortColumn = null;
             $this->tableSortDirection = null;
-            // Columns were cached when the request booted, with the old grouping.
-            $this->cacheTableColumns();
         }
 
         $this->resetPage();
@@ -99,17 +97,17 @@ final class SalesStats extends Page implements HasTable
         return SalesGroupByEnum::tryFrom((string) ($this->filters['group_by'] ?? '')) ?? SalesGroupByEnum::ITEM;
     }
 
-    protected static function shouldRegisterNavigation(): bool
+    public static function shouldRegisterNavigation(): bool
     {
         return UserRoleEnum::ADMIN === auth()->user()?->role;
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Action::make('export')
                 ->label('Exporter en Excel')
-                ->icon('heroicon-o-download')
+                ->icon('heroicon-o-arrow-down-tray')
                 ->action(fn(): BinaryFileResponse => Excel::download(
                     new SalesExport($this->salesFilters(), $this->groupBy()),
                     sprintf(
@@ -184,57 +182,36 @@ final class SalesStats extends Page implements HasTable
         ];
     }
 
-    protected function getTableQuery(): Builder
+    public function table(Table $table): Table
     {
-        return app(SalesStatsService::class)->breakdownQuery($this->salesFilters(), $this->groupBy());
-    }
+        // Columns are evaluated on every render, so they follow the grouping.
+        $isItem = fn(): bool => SalesGroupByEnum::ITEM === $this->groupBy();
 
-    protected function getTableColumns(): array
-    {
-        $isItem = SalesGroupByEnum::ITEM === $this->groupBy();
-
-        return array_values(array_filter([
-            TextColumn::make('label')->label($this->groupBy()->label())->sortable(),
-            $isItem ? TextColumn::make('brand_name')->label('Marque')->sortable() : null,
-            $isItem ? TextColumn::make('category_name')->label('Catégorie')->sortable() : null,
-            TextColumn::make('quantity')
-                ->label('Quantité')
-                ->formatStateUsing(fn($state): string => number_format((int) $state, 0, ',', ' '))
-                ->sortable()
-                ->alignRight(),
-            TextColumn::make('revenue')
-                ->label('CA HT')
-                ->formatStateUsing(fn($state): string => number_format(((int) $state) / 100, 2, ',', ' ') . ' €')
-                ->sortable()
-                ->alignRight(),
-            TextColumn::make('orders_count')->label('Commandes')->sortable()->alignRight(),
-            TextColumn::make('customers_count')->label('Clients')->sortable()->alignRight(),
-            TextColumn::make('last_sold_at')->label('Dernière vente')->date('d/m/Y')->sortable(),
-        ]));
-    }
-
-    protected function getDefaultTableSortColumn(): ?string
-    {
-        return 'revenue';
-    }
-
-    protected function getDefaultTableSortDirection(): ?string
-    {
-        return 'desc';
-    }
-
-    protected function getTableRecordUrlUsing(): ?Closure
-    {
-        if (SalesGroupByEnum::ITEM !== $this->groupBy()) {
-            return null;
-        }
-
-        return fn(OrderItem $record): string => ItemResource::getUrl('edit', ['record' => $record->getAttribute('slug')]);
-    }
-
-    protected function getTableEmptyStateHeading(): ?string
-    {
-        return 'Aucune vente pour ces critères';
+        return $table
+            ->query(fn(): Builder => app(SalesStatsService::class)->breakdownQuery($this->salesFilters(), $this->groupBy()))
+            ->columns([
+                TextColumn::make('label')->label(fn(): string => $this->groupBy()->label())->sortable(),
+                TextColumn::make('brand_name')->label('Marque')->sortable()->visible($isItem),
+                TextColumn::make('category_name')->label('Catégorie')->sortable()->visible($isItem),
+                TextColumn::make('quantity')
+                    ->label('Quantité')
+                    ->formatStateUsing(fn($state): string => number_format((int) $state, 0, ',', ' '))
+                    ->sortable()
+                    ->alignRight(),
+                TextColumn::make('revenue')
+                    ->label('CA HT')
+                    ->formatStateUsing(fn($state): string => number_format(((int) $state) / 100, 2, ',', ' ') . ' €')
+                    ->sortable()
+                    ->alignRight(),
+                TextColumn::make('orders_count')->label('Commandes')->sortable()->alignRight(),
+                TextColumn::make('customers_count')->label('Clients')->sortable()->alignRight(),
+                TextColumn::make('last_sold_at')->label('Dernière vente')->date('d/m/Y')->sortable(),
+            ])
+            ->defaultSort('revenue', 'desc')
+            ->recordUrl(fn(OrderItem $record): ?string => $isItem()
+                ? ItemResource::getUrl('edit', ['record' => $record->getAttribute('slug')])
+                : null)
+            ->emptyStateHeading('Aucune vente pour ces critères');
     }
 
     private function datesMatchPeriod(): bool

@@ -62,7 +62,7 @@ final class User extends Authenticatable implements FilamentUser, HasLocalePrefe
         return $this->language;
     }
 
-    public function canAccessFilament(): bool
+    public function canAccessPanel(\Filament\Panel $panel): bool
     {
         return UserRoleEnum::ADMIN === $this->role || UserRoleEnum::AGENT === $this->role;
     }

@@ -7,9 +7,9 @@ namespace App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\Brand;
 use App\Models\Category;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 final class DiscountsRelationManager extends RelationManager
@@ -18,7 +18,7 @@ final class DiscountsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -46,7 +46,7 @@ final class DiscountsRelationManager extends RelationManager
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

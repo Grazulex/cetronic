@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Brand;
 use App\Models\Category;
@@ -47,6 +47,6 @@ final class SearchMetas extends Component
             }
         }
 
-        $this->emit(event: 'searchMetas', data: $data);
+        $this->dispatch('searchMetas', selected: $data);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\CartItem;
 use App\Services\CartService;
@@ -28,25 +28,25 @@ final class DeleteCart extends Component
 
         if (0 === $cartService->getCartCount(cart: $this->cartItem->cart)) {
             $cartService->deleteCart(cart: $this->cartItem->cart);
-            $this->dispatchBrowserEvent(event: 'alert', data: [
-                'type' => 'success',
-                'message' => __(key: 'toast.cart.removed'),
-            ]);
+            $this->dispatch('alert',
+                type: 'success',
+                message: __(key: 'toast.cart.removed')
+            );
 
             return redirect()->route(route: 'home');
         }
         $this->redirectRoute('cart'); // hotfix to avoid 404 error
-        $this->emit(event: 'cart_updated');
-        $this->emit(event: 'total_updated');
+        $this->dispatch('cart_updated');
+        $this->dispatch('total_updated');
 
-        $this->dispatchBrowserEvent(event: 'alert', data: [
-            'type' => 'success',
-            'message' => __('toast.item.removed'),
-        ]);
+        $this->dispatch('alert',
+            type: 'success',
+            message: __('toast.item.removed')
+        );
 
-        $this->dispatchBrowserEvent('cart-item-deleted', [
-            'cart_line_id' => $this->cartItem->id,
-        ]);
+        $this->dispatch('cart-item-deleted',
+            cart_line_id: $this->cartItem->id
+        );
 
     }
 }

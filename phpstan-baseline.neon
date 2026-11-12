@@ -98,37 +98,37 @@ parameters:
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
 			count: 1
-			path: app/Http/Livewire/PriceCart.php
+			path: app/Livewire/PriceCart.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_old\\.$#"
 			count: 1
-			path: app/Http/Livewire/PriceCart.php
+			path: app/Livewire/PriceCart.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_promo\\.$#"
 			count: 1
-			path: app/Http/Livewire/PriceCart.php
+			path: app/Livewire/PriceCart.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\UserDiscount\\:\\:\\$reduction\\.$#"
 			count: 1
-			path: app/Http/Livewire/PriceCart.php
+			path: app/Livewire/PriceCart.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price\\.$#"
 			count: 1
-			path: app/Http/Livewire/PriceTotalCart.php
+			path: app/Livewire/PriceTotalCart.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\CartItem\\:\\:\\$price_promo\\.$#"
 			count: 1
-			path: app/Http/Livewire/PriceTotalCart.php
+			path: app/Livewire/PriceTotalCart.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\UserDiscount\\:\\:\\$reduction\\.$#"
 			count: 1
-			path: app/Http/Livewire/PriceTotalCart.php
+			path: app/Livewire/PriceTotalCart.php
 
 		-
 			message: "#^Comparison operation \"\\>\" between int\\<1, max\\> and 0 is always true\\.$#"

@@ -10,7 +10,7 @@ use App\Filament\Resources\UserResource;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Services\SalesStatsService;
-use Filament\Pages\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\Page;
 
 class CustomerStats extends Page
@@ -32,7 +32,7 @@ class CustomerStats extends Page
         }
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Action::make('back')
@@ -42,7 +42,7 @@ class CustomerStats extends Page
         ];
     }
 
-    protected function getTitle(): string
+    public function getTitle(): string
     {
         return 'Statistiques de ' . $this->record->name;
     }

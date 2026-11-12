@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Enum\LocationTypeEnum;
 use App\Models\Cart;
@@ -40,12 +40,12 @@ final class LocationCart extends Component
         $this->cart->invoice_location_id = $this->locationInvoice;
         $this->cart->save();
 
-        $this->emit(event: 'total_updated');
+        $this->dispatch('total_updated');
 
-        $this->dispatchBrowserEvent(event: 'alert', data: [
-            'type' => 'success',
-            'message' => __('toast.location.updated'),
-        ]);
+        $this->dispatch('alert',
+            type: 'success',
+            message: __('toast.location.updated')
+        );
     }
 
     public function updatedLocationShipping(): void
@@ -54,12 +54,12 @@ final class LocationCart extends Component
         $this->cart->shipping_location_id = $this->locationShipping;
         $this->cart->save();
 
-        $this->emit(event: 'total_updated');
+        $this->dispatch('total_updated');
 
-        $this->dispatchBrowserEvent(event: 'alert', data: [
-            'type' => 'success',
-            'message' => __('toast.location.updated'),
-        ]);
+        $this->dispatch('alert',
+            type: 'success',
+            message: __('toast.location.updated')
+        );
     }
 
     public function updatedComment(): void
@@ -68,10 +68,10 @@ final class LocationCart extends Component
         $this->cart->comment = $this->comment;
         $this->cart->save();
 
-        $this->dispatchBrowserEvent(event: 'alert', data: [
-            'type' => 'success',
-            'message' => __('toast.comment.updated'),
-        ]);
+        $this->dispatch('alert',
+            type: 'success',
+            message: __('toast.comment.updated')
+        );
     }
 
     public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
