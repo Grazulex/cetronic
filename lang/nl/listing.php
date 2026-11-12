@@ -16,4 +16,14 @@ return [
             'yes' => 'Alleen bestsellers',
         ],
     ],
+    'results' => ':count product|:count producten',
+    'filters' => [
+        'title' => 'Filters',
+        'more' => 'Toon er nog :count',
+        'less' => 'Toon minder',
+        'search' => 'Zoeken…',
+        'clear' => 'Alles wissen',
+        'remove' => 'Filter :name verwijderen',
+        'apply' => 'Toepassen',
+    ],
 ];

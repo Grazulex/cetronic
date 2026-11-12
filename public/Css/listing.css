@@ -1,0 +1,340 @@
+/*
+ * Category / brand listing: compact filter column, toolbar above the grid, active filter chips.
+ * resources/views/components/items/list-component.blade.php
+ */
+.listing {
+    --lf-ink: #1d1d1b;
+    --lf-text: #4d4d4d;
+    --lf-muted: #8a8a8a;
+    --lf-accent: #356273;
+    --lf-peach: #fbece2;
+    --lf-rule: #e6ddd3;
+
+    font-family: 'Poppins', sans-serif;
+    color: var(--lf-text);
+}
+
+/* ---- Filter column ---- */
+.filters {
+    position: sticky;
+    top: 190px; /* below the fixed site header */
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-width: thin;
+}
+
+.filters-toggle {
+    display: none;
+}
+
+.filters_quick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--lf-rule);
+}
+
+.filter-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border: 1px solid var(--lf-rule);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--lf-text);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-pill input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.filter-pill:hover {
+    border-color: var(--lf-ink);
+}
+
+.filter-pill.is-active {
+    background: var(--lf-ink);
+    border-color: var(--lf-ink);
+    color: #ffffff;
+}
+
+.filter-pill:focus-within {
+    outline: 2px solid var(--lf-accent);
+    outline-offset: 2px;
+}
+
+.filter-group {
+    border-bottom: 1px solid var(--lf-rule);
+}
+
+.filter-group_title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--lf-ink);
+    cursor: pointer;
+    list-style: none;
+}
+
+.filter-group_title::-webkit-details-marker {
+    display: none;
+}
+
+.filter-group_title::after {
+    content: '';
+    margin-left: auto;
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid var(--lf-text);
+    border-bottom: 1.5px solid var(--lf-text);
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.15s ease;
+}
+
+.filter-group[open] > .filter-group_title::after {
+    transform: rotate(-135deg) translateY(-2px);
+}
+
+.filter-group_badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--lf-accent);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.filter-group_search {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    border: 1px solid var(--lf-rule);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.filter-group_search:focus {
+    outline: 2px solid var(--lf-accent);
+    outline-offset: 0;
+    border-color: transparent;
+}
+
+.filter-group_options {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 10px;
+}
+
+.filter-option.is-extra {
+    display: none;
+}
+
+.filter-group.is-expanded .filter-option.is-extra,
+.filter-group.is-searching .filter-option.is-extra {
+    display: block;
+}
+
+.filter-group.is-searching .filter-group_more {
+    display: none;
+}
+
+.filter-option[hidden] {
+    display: none !important;
+}
+
+.filter-option label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 5px 0;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--lf-text);
+    cursor: pointer;
+}
+
+.filter-option label:hover .filter-option_label {
+    color: var(--lf-ink);
+}
+
+.filter-option input {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--lf-ink);
+}
+
+.filter-option_swatch {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.filter-option_label {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.filter-option_count {
+    flex: none;
+    font-size: 12px;
+    color: var(--lf-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.filter-group_more {
+    margin: -4px 0 12px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 13px;
+    color: var(--lf-accent);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.filters_apply {
+    margin-top: 16px;
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    background: var(--lf-ink);
+    color: #ffffff;
+}
+
+/* ---- Toolbar above the grid ---- */
+.listing-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--lf-rule);
+}
+
+.listing-toolbar_count {
+    margin: 0;
+    font-size: 14px;
+    color: var(--lf-ink);
+    font-weight: 600;
+}
+
+.listing-toolbar_controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.listing-toolbar_field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+}
+
+.listing-toolbar_field select {
+    padding: 6px 28px 6px 10px;
+    border: 1px solid var(--lf-rule);
+    border-radius: 4px;
+    background-color: #ffffff;
+    font-size: 13px;
+    color: var(--lf-ink);
+}
+
+.listing-toolbar_field select:focus {
+    outline: 2px solid var(--lf-accent);
+    outline-offset: 1px;
+}
+
+/* ---- Active filter chips ---- */
+.listing-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--lf-peach);
+    font-size: 13px;
+    color: var(--lf-ink);
+    text-decoration: none;
+}
+
+.filter-chip span {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.filter-chip:hover {
+    background: #f6dccb;
+    color: var(--lf-ink);
+}
+
+.listing-chips_clear {
+    margin-left: 4px;
+    font-size: 13px;
+    color: var(--lf-accent);
+}
+
+/* ---- Mobile: filters open from a button ---- */
+@media (max-width: 991px) {
+    .filters-toggle {
+        display: block;
+        width: 100%;
+        margin-bottom: 16px;
+        padding: 10px 14px;
+        border: 1px solid var(--lf-ink);
+        background: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--lf-ink);
+        text-align: left;
+    }
+
+    .filters {
+        display: none;
+        position: static;
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+        margin-bottom: 24px;
+    }
+
+    .filters.is-open {
+        display: block;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .filter-pill,
+    .filter-group_title::after {
+        transition: none;
+    }
+}

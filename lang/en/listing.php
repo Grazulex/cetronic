@@ -16,4 +16,14 @@ return [
             'yes' => 'Best sellers only',
         ],
     ],
+    'results' => ':count product|:count products',
+    'filters' => [
+        'title' => 'Filters',
+        'more' => 'Show :count more',
+        'less' => 'Show less',
+        'search' => 'Search…',
+        'clear' => 'Clear all',
+        'remove' => 'Remove filter :name',
+        'apply' => 'Apply',
+    ],
 ];

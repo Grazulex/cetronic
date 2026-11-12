@@ -1,145 +1,135 @@
-<div>
+@php
+    $baseUrl = route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]);
+    $query = request()->query();
+    $urlWith = function (array $params) use ($baseUrl): string {
+        $params = array_filter($params, fn ($value) => null !== $value && '' !== $value && [] !== $value);
+
+        return $baseUrl . ([] === $params ? '' : '?' . http_build_query($params));
+    };
+    $withoutMetaValue = function (int|string $metaId, string $value) use ($query, $urlWith): string {
+        $params = $query;
+        $params['metas'][$metaId] = array_values(array_filter($params['metas'][$metaId] ?? [], fn ($selected) => $selected !== $value));
+        $params['metas'] = array_filter($params['metas'], fn ($values) => [] !== $values);
+
+        return $urlWith($params);
+    };
+    $withoutParam = fn (string $key): string => $urlWith(array_diff_key($query, [$key => true]));
+    $isNew = isset($new) && '1' == $new;
+    $isBestSeller = isset($bestSeller) && '1' == $bestSeller;
+    $activeCount = collect($selected)->flatten()->count() + ($isNew ? 1 : 0) + ($isBestSeller ? 1 : 0);
+    $visibleValues = 6;
+@endphp
+
+<div class="listing">
     <div class="row mb-5">
         <div class="col-lg-3">
-            <div class="accordion" id="accordionPanelsStayOpenExample">
-                <form action="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}" method="GET">
-                    <div class="mb-3">
-                        <label for="order" class="listing-accordion-head mb-1 d-block">{{ __('item.orders') }}</label>
-                        <select id="order" name="order" class="card-select w-100">
-                            <option value="reference_asc"
-                                    @if ($order == 'reference_asc') selected @endif>{{ __('item.reference_asc') }}</option>
-                            <option value="reference_desc"
-                                    @if ($order == 'reference_desc') selected @endif>{{ __('item.reference_desc') }}</option>
-                            <option value="price_asc"
-                                    @if ($order == 'price_asc') selected @endif>{{ __('item.price_asc') }}</option>
-                            <option value="price_desc"
-                                    @if ($order == 'price_desc') selected @endif>{{ __('item.price_desc') }}</option>
-                            <option value="catalogue"
-                                    @if ($order == 'catalogue') selected @endif>{{ __('item.catalogue') }}</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="paginate" class="listing-accordion-head mb-1 d-block">{{ __('item.paginate') }}</label>
-                        <select id="paginate" name="paginate" class="card-select w-100">
-                            <option value="15" @if ($paginate == '15') selected @endif>15</option>
-                            <option value="21" @if ($paginate == '21') selected @endif>21</option>
-                            <option value="30" @if ($paginate == '30') selected @endif>30</option>
-                            <option value="42" @if ($paginate == '42') selected @endif>42</option>
-                            <option value="60" @if ($paginate == '60') selected @endif>60</option>
-                            <option value="84" @if ($paginate == '84') selected @endif>84</option>
-                        </select>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-3" style="border-bottom: 1px solid #4d4d4d; padding-bottom: 10px;">
-                        <span class="listing-accordion-head">{{ __('item.filters') }}</span>
-                        <div>
-                            @if (count($selected) > 0 || (isset($new) && $new == '1') || (isset($bestSeller) && $bestSeller == '1'))
-                                <a href="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}"
-                                   class="btn btn-sm btn-outline-secondary me-1">{{ __('item.reset') }}</a>
-                            @endif
-                            <input type="submit" value="{{ __('item.show') }}" class="small_btn">
-                        </div>
-                    </div>
-                    <div class="accordion-item listing-accordion-item ">
-                        <h2 class="accordion-header" id="panelsStayOpen-heading99999">
-                            <button class="accordion-button listing-accordion-button collapsed" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse99999"
-                                    aria-expanded="false" aria-controls="panelsStayOpen-collapse99999">
-                                <span class="listing-accordion-head">{{ __('listing.items.new.title') }} </span>
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapse99999" class="accordion-collapse collapse show"
-                             aria-labelledby="panelsStayOpen-heading99999">
-                            <div class="accordion-body listing-accordion-body">
-                                <ul>
-                                    <li class="d-flex align-items-center">
-                                        <input type="checkbox" class="listing-checkbox" name="new" id="new" value="1"
-                                               @if (isset($new) && $new == '1') checked @endif>
-                                        <span class="select-bg">{{ __('listing.items.new.yes') }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item listing-accordion-item ">
-                        <h2 class="accordion-header" id="panelsStayOpen-heading99998">
-                            <button class="accordion-button listing-accordion-button collapsed" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse99998"
-                                    aria-expanded="false" aria-controls="panelsStayOpen-collapse99998">
-                                <span class="listing-accordion-head">{{ __('listing.items.best_seller.title') }} </span>
-                            </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapse99998" class="accordion-collapse collapse show"
-                             aria-labelledby="panelsStayOpen-heading99998">
-                            <div class="accordion-body listing-accordion-body">
-                                <ul>
-                                    <li class="d-flex align-items-center">
-                                        <input type="checkbox" class="listing-checkbox" name="best_seller" id="best_seller" value="1"
-                                               @if (isset($bestSeller) && $bestSeller == '1') checked @endif>
-                                        <span class="select-bg">{{ __('listing.items.best_seller.yes') }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+            <button type="button" class="filters-toggle" data-filters-toggle aria-controls="listing-filters-panel" aria-expanded="false">
+                {{ __('listing.filters.title') }}@if ($activeCount > 0) ({{ $activeCount }})@endif
+            </button>
+
+            <aside class="filters" id="listing-filters-panel">
+                <form id="listing-filters" action="{{ $baseUrl }}" method="GET" data-filters-form>
+                    <div class="filters_quick">
+                        <label @class(['filter-pill', 'is-active' => $isNew])>
+                            <input type="checkbox" name="new" value="1" @checked($isNew)>
+                            {{ __('listing.items.new.title') }}
+                        </label>
+                        <label @class(['filter-pill', 'is-active' => $isBestSeller])>
+                            <input type="checkbox" name="best_seller" value="1" @checked($isBestSeller)>
+                            {{ __('listing.items.best_seller.title') }}
+                        </label>
                     </div>
 
                     @foreach ($metas as $meta)
-                        <div class="accordion-item listing-accordion-item ">
-                            <h2 class="accordion-header" id="panelsStayOpen-heading{{ $meta['id'] }}">
-                                <button class="accordion-button listing-accordion-button collapsed" type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapse{{ $meta['id'] }}"
-                                        aria-expanded="false" aria-controls="panelsStayOpen-collapse{{ $meta['id'] }}">
-                                    <span class="listing-accordion-head">{{ ucfirst($meta['name']) }} @if (isset($selected[$meta['id']]))
-                                            ({{ __('item.filters') }}: {{ count($selected[$meta['id']]) }})
-                                        @endif</span>
-                                </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapse{{ $meta['id'] }}" class="accordion-collapse collapse show"
-                                 aria-labelledby="panelsStayOpen-heading{{ $meta['id'] }}">
-                                <div class="accordion-body listing-accordion-body">
-                                    <ul>
-                                        @foreach ($meta['values'] as $value)
-                                            <li class="d-flex align-items-center">
-                                                @if ($meta['is_color'])
-                                                    <input type="checkbox" class="listing-checkbox"
-                                                           name="metas[{{ $meta['id'] }}][]"
-                                                           id="metas[{{ $meta['id'] }}][{{ $value['value'] }}]"
-                                                           value="{{ $value['value'] }}"
-                                                           @if (isset($selected[$meta['id']]) && in_array($value['value'], $selected[$meta['id']])) checked @endif>
-                                                    <span
-                                                            class="select-bg"
-                                                            style="background-color: {{ $value['value'] }}; width: 20px; height: 20px; display: inline-block; border: 1px solid #000;"></span>
-                                                    ({{ $value['count'] }} items)
-                                                @else
-                                                    <input type="checkbox" class="listing-checkbox"
-                                                           name="metas[{{ $meta['id'] }}][]"
-                                                           id="metas[{{ $meta['id'] }}][{{ $value['value'] }}]"
-                                                           value="{{ $value['value'] }}"
-                                                           @if (isset($selected[$meta['id']]) && in_array($value['value'], $selected[$meta['id']])) checked @endif>
-                                                    <span class="select-bg">{{ ucfirst($value['value']) }} ({{ $value['count'] }}
-                                                   items)</span>
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                    <div class="d-flex align-items-center justify-content-between mt-3">
-                        <div>
-                            @if (count($selected) > 0 || (isset($new) && $new == '1') || (isset($bestSeller) && $bestSeller == '1'))
-                                <a href="{{ route('list', ['cat' => $catSlug, 'type' => $type, 'slug' => $slug]) }}"
-                                   class="btn btn-sm btn-outline-secondary me-1">{{ __('item.reset') }}</a>
+                        @php
+                            $chosen = $selected[$meta['id']] ?? [];
+                            $values = $meta['values'];
+                        @endphp
+                        <details class="filter-group" data-meta="{{ $meta['id'] }}"{{ count($chosen) > 0 ? ' open' : '' }}>
+                            <summary class="filter-group_title">
+                                <span>{{ ucfirst($meta['name']) }}</span>
+                                @if (count($chosen) > 0)
+                                    <span class="filter-group_badge">{{ count($chosen) }}</span>
+                                @endif
+                            </summary>
+
+                            @if (count($values) > 10)
+                                <input type="search" class="filter-group_search" placeholder="{{ __('listing.filters.search') }}"
+                                    aria-label="{{ __('listing.filters.search') }} {{ $meta['name'] }}" data-filter-search>
                             @endif
-                        </div>
-                        <input type="submit" value="{{ __('item.show') }}" class="small_btn">
-                    </div>
+
+                            <ul class="filter-group_options">
+                                @foreach ($values as $value)
+                                    @php $isChecked = in_array($value['value'], $chosen); @endphp
+                                    <li @class(['filter-option', 'is-extra' => $loop->index >= $visibleValues && ! $isChecked])>
+                                        <label>
+                                            <input type="checkbox" name="metas[{{ $meta['id'] }}][]" value="{{ $value['value'] }}" @checked($isChecked)>
+                                            @if ($meta['is_color'])
+                                                <span class="filter-option_swatch" style="background-color: {{ $value['value'] }}"></span>
+                                            @endif
+                                            <span class="filter-option_label">{{ ucfirst($value['value']) }}</span>
+                                            <span class="filter-option_count">{{ $value['count'] }}</span>
+                                        </label>
+                                    </li>
+                                @endforeach
+                            </ul>
+
+                            @if (count($values) > $visibleValues)
+                                <button type="button" class="filter-group_more" data-filter-more
+                                    data-less="{{ __('listing.filters.less') }}">{{ __('listing.filters.more', ['count' => count($values) - $visibleValues]) }}</button>
+                            @endif
+                        </details>
+                    @endforeach
+
+                    <noscript>
+                        <button type="submit" class="filters_apply">{{ __('listing.filters.apply') }}</button>
+                    </noscript>
                 </form>
-            </div>
+            </aside>
         </div>
 
         <div class="col-lg-9">
+            <div class="listing-toolbar">
+                <p class="listing-toolbar_count">{{ trans_choice('listing.results', $items->total(), ['count' => $items->total()]) }}</p>
+                <div class="listing-toolbar_controls">
+                    <label class="listing-toolbar_field">
+                        <span>{{ __('item.orders') }}</span>
+                        <select name="order" form="listing-filters" data-filters-auto>
+                            <option value="reference_asc" @selected($order == 'reference_asc')>{{ __('item.reference_asc') }}</option>
+                            <option value="reference_desc" @selected($order == 'reference_desc')>{{ __('item.reference_desc') }}</option>
+                            <option value="price_asc" @selected($order == 'price_asc')>{{ __('item.price_asc') }}</option>
+                            <option value="price_desc" @selected($order == 'price_desc')>{{ __('item.price_desc') }}</option>
+                            <option value="catalogue" @selected($order == 'catalogue')>{{ __('item.catalogue') }}</option>
+                        </select>
+                    </label>
+                    <label class="listing-toolbar_field">
+                        <span>{{ __('item.paginate') }}</span>
+                        <select name="paginate" form="listing-filters" data-filters-auto>
+                            @foreach ([15, 21, 30, 42, 60, 84] as $size)
+                                <option value="{{ $size }}" @selected($paginate == $size)>{{ $size }}</option>
+                            @endforeach
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+            @if ($activeCount > 0)
+                <div class="listing-chips">
+                    @if ($isNew)
+                        <a class="filter-chip" href="{{ $withoutParam('new') }}" aria-label="{{ __('listing.filters.remove', ['name' => __('listing.items.new.title')]) }}">{{ __('listing.items.new.title') }} <span aria-hidden="true">×</span></a>
+                    @endif
+                    @if ($isBestSeller)
+                        <a class="filter-chip" href="{{ $withoutParam('best_seller') }}" aria-label="{{ __('listing.filters.remove', ['name' => __('listing.items.best_seller.title')]) }}">{{ __('listing.items.best_seller.title') }} <span aria-hidden="true">×</span></a>
+                    @endif
+                    @foreach ($selected as $metaId => $values)
+                        @foreach ((array) $values as $value)
+                            <a class="filter-chip" href="{{ $withoutMetaValue($metaId, $value) }}" aria-label="{{ __('listing.filters.remove', ['name' => $value]) }}">{{ ucfirst($value) }} <span aria-hidden="true">×</span></a>
+                        @endforeach
+                    @endforeach
+                    <a class="listing-chips_clear" href="{{ $baseUrl }}">{{ __('listing.filters.clear') }}</a>
+                </div>
+            @endif
+
             <div class="row">
                 @foreach ($items as $item)
                     <div class="col-lg-4 col-xl-4">
@@ -153,3 +143,49 @@
 
     </div>
 </div>
+
+@once
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('[data-filters-form]');
+            if (!form) return;
+
+            // Apply filters as soon as they change: no "Show" button to click.
+            const submit = () => (form.requestSubmit ? form.requestSubmit() : form.submit());
+            form.addEventListener('change', (event) => {
+                if (event.target.matches('input[type="checkbox"]')) submit();
+            });
+            document.querySelectorAll('[data-filters-auto]').forEach((select) => select.addEventListener('change', submit));
+
+            // "Show N more" / "Show less" on long filter groups.
+            form.querySelectorAll('[data-filter-more]').forEach((button) => {
+                const more = button.textContent;
+                button.addEventListener('click', () => {
+                    const group = button.closest('.filter-group');
+                    const expanded = group.classList.toggle('is-expanded');
+                    button.textContent = expanded ? button.dataset.less : more;
+                });
+            });
+
+            // Search inside long filter groups.
+            form.querySelectorAll('[data-filter-search]').forEach((input) => {
+                input.addEventListener('input', () => {
+                    const group = input.closest('.filter-group');
+                    const term = input.value.trim().toLowerCase();
+                    group.classList.toggle('is-searching', term !== '');
+                    group.querySelectorAll('.filter-option').forEach((option) => {
+                        option.hidden = term !== '' && !option.textContent.toLowerCase().includes(term);
+                    });
+                });
+            });
+
+            // Mobile: the filters panel opens from a button.
+            const toggle = document.querySelector('[data-filters-toggle]');
+            const panel = document.getElementById('listing-filters-panel');
+            toggle?.addEventListener('click', () => {
+                const open = panel.classList.toggle('is-open');
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        });
+    </script>
+@endonce

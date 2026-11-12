@@ -16,4 +16,14 @@ return [
             'yes' => 'Meilleures ventes uniquement',
         ],
     ],
+    'results' => ':count produit|:count produits',
+    'filters' => [
+        'title' => 'Filtres',
+        'more' => 'Voir :count de plus',
+        'less' => 'Voir moins',
+        'search' => 'Rechercher…',
+        'clear' => 'Tout effacer',
+        'remove' => 'Retirer le filtre :name',
+        'apply' => 'Appliquer',
+    ],
 ];

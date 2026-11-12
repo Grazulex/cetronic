@@ -18,6 +18,11 @@ final class ListingController extends Controller
 {
     public function index(string $catSlug, string $type, string $slug): Application|Factory|View|\Illuminate\Foundation\Application|RedirectResponse
     {
+        // The listing filters items by this category: an unknown one (old link, crawler) used to end in a 500.
+        if ( ! Category::where('slug', $catSlug)->exists()) {
+            return redirect()->route('home');
+        }
+
         if ('brand' === $type) {
             $model = Brand::where('slug', $slug)
                 ->with('translations', function ($query): void {
