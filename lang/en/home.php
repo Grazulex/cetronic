@@ -45,6 +45,7 @@ return [
             'confidentality' => 'confidentiality',
             'conditions' => 'conditions of use',
             'cgv' => 'cgv',
+            'sales' => 'General terms of sale',
         ],
         'column4' => [
             'title' => 'contact',

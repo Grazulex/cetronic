@@ -102,4 +102,46 @@ return [
             ],
         ],
     ],
+    'sales' => [
+        'title' => 'Algemene verkoopsvoorwaarden',
+        'intro' => 'Deze voorwaarden gelden voor al onze verkopen. Ze staan ook op de keerzijde van onze facturen.',
+        'sections' => [
+            [
+                'title' => 'Aanvaarding van de voorwaarden',
+                'text' => '<p>Elke klant wordt geacht onze algemene verkoops- en betalingsvoorwaarden te kennen en te hebben aanvaard. Zelfs indien de aankoopvoorwaarden van de klant tegenstrijdig zijn, blijven onze voorwaarden van toepassing, tenzij vooraf schriftelijk of formeel anders werd overeengekomen.</p>',
+            ],
+            [
+                'title' => 'Transport en leveringstermijnen',
+                'text' => '<p>Wij zijn niet verantwoordelijk tijdens het goederentransport, zelfs niet bij een franco levering. De bijgevoegde documenten vermelden duidelijk de hoeveelheid en de aard van de goederen. De bestemmeling heeft er dus baat bij de goederen bij aankomst te controleren, zoniet verliest hij elk recht op verhaal tegenover de transporteur. Wij zijn niet verantwoordelijk voor enig gebrek of enige beschadiging ontstaan na het vertrek uit onze magazijnen.</p><p>De opgegeven leveringsdatum is slechts een richtlijn. Vertragingen kunnen geen reden zijn voor de weigering van de goederen, noch aanleiding geven tot schadevergoeding of interesten.</p>',
+            ],
+            [
+                'title' => 'Klachten',
+                'text' => '<p>Elke klacht over een gebrek of beschadiging van de geleverde goederen moet ons per aangetekend schrijven gemeld worden binnen de acht dagen na ontvangst, zolang de goederen zich nog in hun oorspronkelijke staat bevinden. Vermeld daarbij de artikelreferentie, het factuurnummer en de leveringsdatum, of beter nog een kopie van de vrachtbrief. Goederen mogen niet teruggestuurd worden zonder ons voorafgaand akkoord, en een terugzending houdt geen uitstel van betaling in.</p><p>Indien wij de gegrondheid van uw klacht schriftelijk bevestigen, vervangen wij zo snel mogelijk de beschadigde of defecte goederen van die levering. Onze verantwoordelijkheid geldt niet voor goederen die u reeds verkocht of gebruikt hebt.</p>',
+            ],
+            [
+                'title' => 'Promoties, uitverkoop en einde reeks',
+                'text' => '<p>Artikelen die in promotie, uitverkoop of als einde reeks worden aangeboden, kunnen afkomstig zijn uit oudere collecties of langdurige voorraad. Hun prijzen houden rekening met deze bijzondere omstandigheden.</p><p>Voor de betrokken artikelen is de eventuele vervanging van lege batterijen ten laste van de koper en vormt dit op zich geen fabricagefout.</p><p>De professionele koper moet de goederen onmiddellijk na ontvangst controleren en elke zichtbare afwijking, verkeerde referentie of verkeerde hoeveelheid schriftelijk melden binnen 8 kalenderdagen na levering. Een verborgen gebrek moet snel na de ontdekking ervan worden gemeld.</p><p>Er wordt geen bijkomende commerciële garantie verleend. Aantoonbare fabricagefouten blijven gedekt volgens de toepasselijke contractuele en wettelijke bepalingen.</p><p>Artikelen uit uitverkoop of einde reeks worden niet teruggenomen of omgeruild om commerciële redenen, tenzij vooraf schriftelijk overeengekomen of wettelijk verplicht. Hun beschikbaarheid is beperkt tot de bestaande voorraad, zonder garantie op herbevoorrading.</p>',
+            ],
+            [
+                'title' => 'Overmacht',
+                'text' => '<p>In geval van overmacht (oorlog, brand, wateroverlast, enz.) of onvoorziene omstandigheden (staking, gebrek aan grondstoffen, machinedefecten, enz.) in onze magazijnen of daar waar de goederen geproduceerd worden, kan een overeenkomst als nietig beschouwd worden of kunnen wij de levering zonder bijkomende kosten of vergoeding uitstellen.</p>',
+            ],
+            [
+                'title' => 'Aanbiedingen en bestellingen',
+                'text' => '<p>Onze aanbiedingen zijn vrijblijvend en kunnen herroepen worden. Indien een model niet meer voorradig is of uit de verkoop werd genomen, behouden wij ons het recht voor af te zien van de overeenkomst en beperken wij ons tot de terugbetaling van het eventueel gestorte voorschot. Elke overeenkomst aangegaan door een van onze vertegenwoordigers wordt pas bindend na goedkeuring door het hoofdkantoor.</p>',
+            ],
+            [
+                'title' => 'Betaling',
+                'text' => '<p>Elk verschuldigd bedrag is betaalbaar op onze maatschappelijke zetel. Bij vooruitbetaling wordt geen korting toegestaan, tenzij uitdrukkelijk anders overeengekomen. Onze vertegenwoordigers zijn niet bevoegd om betalingen, voorschotten of facturen te innen.</p><p>Elke laattijdige betaling leidt van rechtswege en zonder voorafgaande ingebrekestelling tot een nalatigheidsinterest van 1 % per maand. Indien een factuur 8 dagen na ingebrekestelling nog steeds onbetaald is, wordt bovendien een vergoeding van 20 % aangerekend, met een minimum van € 24,79. Het niet betalen van een factuur maakt alle andere openstaande facturen onmiddellijk opeisbaar, ongeacht de afgesproken betalingstermijn.</p>',
+            ],
+            [
+                'title' => 'Eigendomsvoorbehoud en overdracht van schuldvordering',
+                'text' => '<p>De goederen blijven eigendom van de verkoper tot de volledige betaling van de prijs. Alle risico’s zijn ten laste van de koper, en betaalde voorschotten blijven verworven door de verkoper ter vergoeding van mogelijke verliezen bij wederverkoop.</p><p>In geval van herverkoop van de goederen, zelfs verwerkt, draagt de koper vanaf heden alle vorderingen uit deze herverkoop over aan de verkoper.</p>',
+            ],
+            [
+                'title' => 'Geschillen',
+                'text' => '<p>In geval van geschil zijn enkel de rechtbanken van Brussel bevoegd.</p>',
+            ],
+        ],
+    ],
 ];

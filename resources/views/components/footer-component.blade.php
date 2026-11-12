@@ -27,6 +27,7 @@
                         <div class="footer-title">{{ __('home.footer.column3.title') }}</div>
                         <p><a class="text-decoration-none" href="{{ route('legal.privacy') }}">{{ ucfirst(__('home.footer.column3.confidentality')) }}</a></p>
                         <p><a class="text-decoration-none" href="{{ route('legal.terms') }}">{{ ucfirst(__('home.footer.column3.conditions')) }}</a></p>
+                        <p><a class="text-decoration-none" href="{{ route('legal.sales') }}">{{ ucfirst(__('home.footer.column3.sales')) }}</a></p>
                         <p><a class="text-decoration-none" href="{{ route('legal.after_sales') }}">{{ ucfirst(__('home.footer.column3.cgv')) }}</a></p>
                     </div>
                 </div>

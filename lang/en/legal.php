@@ -102,4 +102,46 @@ return [
             ],
         ],
     ],
+    'sales' => [
+        'title' => 'General terms of sale',
+        'intro' => 'These terms apply to all our sales. They are also printed on the back of our invoices.',
+        'sections' => [
+            [
+                'title' => 'Acceptance of the terms',
+                'text' => '<p>Every order implies acceptance of these general terms of sale, which the buyer is deemed to know and accept. They alone apply, even where they conflict with the customer’s general or specific purchase conditions, unless we formally agree otherwise.</p>',
+            ],
+            [
+                'title' => 'Carriage and delivery times',
+                'text' => '<p>Goods travel at the buyer’s risk, even when sold carriage paid. The details on delivery notes, consignment notes or receipts are proof of the quantities shipped. We are not responsible for any shortfall found on arrival: the recipient should therefore check the goods on delivery to preserve their rights against the carrier.</p><p>Delivery times are given for information only. A delay cannot lead to cancellation of the sale, refusal of the goods or any claim for damages.</p>',
+            ],
+            [
+                'title' => 'Claims',
+                'text' => '<p>Any claim must reach us by registered letter within eight days of receipt of the goods and before they are altered, failing which it will be time-barred. It must state the references and date of the invoice or, failing that, of the shipping document. Goods may not be returned to us without our formal agreement, and a claim never allows the buyer to delay a payment.</p><p>If we formally acknowledge that a claim is justified, our only obligation is to replace, as soon as possible, the part of the supply found to be defective. We accept no liability for the consequences of using the goods sold.</p>',
+            ],
+            [
+                'title' => 'Promotions, clearance and discontinued items',
+                'text' => '<p>Products offered under promotions, clearance sales or as discontinued items may originate from previous collections or extended stock storage. Their prices reflect these specific conditions.</p><p>For the products concerned, any replacement of depleted batteries is the buyer’s responsibility and does not, in itself, constitute a manufacturing defect.</p><p>The professional buyer must inspect the goods immediately upon receipt and report any visible defects, incorrect references or quantity discrepancies in writing within 8 calendar days of delivery. Hidden defects must be reported promptly after discovery.</p><p>No additional commercial warranty is provided. Confirmed manufacturing defects remain covered in accordance with applicable contractual and legal provisions.</p><p>Clearance and discontinued items cannot be returned or exchanged for commercial convenience, unless previously agreed in writing or required by applicable law. Availability is limited to existing stock, with no guarantee of replenishment.</p>',
+            ],
+            [
+                'title' => 'Force majeure',
+                'text' => '<p>Any case of force majeure (war, flood, fire, etc.) or unforeseen event (strike, shortage of raw materials, machine breakdown, etc.) affecting us or the businesses carrying out the order entitles us to terminate the contract, even if partly performed, or to suspend its performance, at our discretion and without compensation to the buyer.</p>',
+            ],
+            [
+                'title' => 'Offers and orders',
+                'text' => '<p>Our offers are not binding and may be withdrawn. If a model is sold out or discontinued, we may decline to proceed with an order and limit ourselves to refunding any deposit received. Any commitment made by our agents or representatives is only valid once we have confirmed it.</p>',
+            ],
+            [
+                'title' => 'Payment',
+                'text' => '<p>All amounts due are payable at our registered office. No discount is granted for early payment unless expressly agreed. Our agents and representatives are not authorised to collect deposits or invoices.</p><p>Any late payment of all or part of an invoice automatically and without notice bears interest at 1% per month. If an invoice remains unpaid eight days after formal notice by registered letter, an additional fixed indemnity of 20% of the outstanding amount is also due, with a minimum of €24.79. Failure to pay one invoice makes all other invoices immediately payable, whatever the agreed terms.</p>',
+            ],
+            [
+                'title' => 'Retention of title and assignment of claims',
+                'text' => '<p>The seller retains ownership of the goods until full payment. The risks are borne by the buyer, and deposits may be kept to cover any losses on resale.</p><p>If goods belonging to the seller are resold, even after processing, the buyer hereby assigns to the seller all claims arising from that resale.</p>',
+            ],
+            [
+                'title' => 'Disputes',
+                'text' => '<p>The courts of Brussels have sole jurisdiction over any dispute.</p>',
+            ],
+        ],
+    ],
 ];

@@ -338,3 +338,40 @@
         transition: none;
     }
 }
+
+/* ---- Promotions page intro (conditions for promotions, clearance and discontinued items) ---- */
+.promo-intro {
+    margin: 0 0 32px;
+    padding: 24px 28px;
+    background: #fbece2;
+    border-left: 3px solid #b3261e;
+    font-family: 'Poppins', sans-serif;
+    color: #4d4d4d;
+}
+
+.promo-intro_title {
+    margin: 0 0 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #1d1d1b;
+    text-transform: none;
+}
+
+.promo-intro_text {
+    max-width: 90ch;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.promo-intro_text p {
+    margin: 0 0 8px;
+}
+
+.promo-intro_link {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 14px;
+    color: #356273;
+}

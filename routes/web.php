@@ -112,6 +112,7 @@ Route::group(
         Route::view('privacy', 'front.pages.legal', ['page' => 'privacy'])->name('legal.privacy');
         Route::view('terms', 'front.pages.legal', ['page' => 'terms'])->name('legal.terms');
         Route::view('after-sales', 'front.pages.legal', ['page' => 'after_sales'])->name('legal.after_sales');
+        Route::view('terms-of-sale', 'front.pages.legal', ['page' => 'sales'])->name('legal.sales');
         Route::post('help-send', SendHelpController::class)->name('help.send');
         Route::get('cart', [CartController::class, 'index'])->name('cart');
         Route::get('item/{item:slug}', fn(Item $item) => view('front.pages.item', ['item' => $item]))->name('item');

@@ -4,6 +4,7 @@
         $pages = [
             'privacy' => 'legal.privacy',
             'terms' => 'legal.terms',
+            'sales' => 'legal.sales',
             'after_sales' => 'legal.after_sales',
         ];
     @endphp

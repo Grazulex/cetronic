@@ -17,6 +17,14 @@
         <div class="container">
             <div class="row">
                 <div style="float:left;width:100%;">
+                    @if ($type == 'promo')
+                        {{-- Conditions specific to promotions, clearance and discontinued items (client text). --}}
+                        <aside class="promo-intro">
+                            <h2 class="promo-intro_title">{{ __('listing.promo.title') }}</h2>
+                            <div class="promo-intro_text">{!! __('listing.promo.text') !!}</div>
+                            <a class="promo-intro_link" href="{{ route('legal.sales') }}">{{ __('listing.promo.link') }}</a>
+                        </aside>
+                    @endif
                     @if ($description)
                         <div class="listing-description">
                             {!! $description !!}

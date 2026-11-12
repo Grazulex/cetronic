@@ -102,4 +102,46 @@ return [
             ],
         ],
     ],
+    'sales' => [
+        'title' => 'Conditions générales de vente',
+        'intro' => 'Ces conditions s’appliquent à toutes nos ventes. Elles figurent également au verso de nos factures.',
+        'sections' => [
+            [
+                'title' => 'Acceptation des conditions',
+                'text' => '<p>Toute commande entraîne l’acceptation des présentes conditions générales de vente, qui sont censées être connues et admises par l’acheteur. Elles sont seules valables, même si elles sont en contradiction avec les conditions générales ou particulières d’achat du client, sauf accord formel de notre part.</p>',
+            ],
+            [
+                'title' => 'Transport et délais de livraison',
+                'text' => '<p>Les marchandises voyagent aux risques et périls de l’acheteur, même lorsqu’elles sont vendues franco. Les indications des notes d’envoi, lettres de voiture ou récépissés font foi des quantités expédiées. Nous ne sommes pas responsables des manquants constatés à l’arrivée : le destinataire a donc intérêt à vérifier les marchandises à la livraison pour réserver ses droits contre le transporteur.</p><p>Les délais de livraison sont donnés à titre indicatif. Un retard ne peut donner lieu ni à la résiliation de la vente, ni au refus de la marchandise, ni à des dommages et intérêts.</p>',
+            ],
+            [
+                'title' => 'Réclamations',
+                'text' => '<p>Toute réclamation doit nous parvenir, sous peine de déchéance, par lettre recommandée dans les huit jours de la réception de la marchandise et avant toute transformation. Elle doit préciser les références et la date de la facture ou, à défaut, du document d’expédition. Les marchandises ne peuvent en aucun cas nous être renvoyées sans notre accord formel, et une réclamation n’autorise jamais l’acheteur à retarder une échéance.</p><p>Si nous reconnaissons formellement le bien-fondé d’une réclamation, nous nous engageons uniquement à remplacer, dans le plus bref délai possible, la partie de la fourniture reconnue défectueuse. Notre responsabilité n’est pas engagée pour les conséquences de l’utilisation des marchandises vendues.</p>',
+            ],
+            [
+                'title' => 'Promotions, liquidations et fins de série',
+                'text' => '<p>Les articles proposés en promotion, liquidation ou fin de série peuvent provenir d’anciennes collections ou de stocks prolongés. Leurs prix tiennent compte de ces conditions particulières.</p><p>Pour les articles concernés, le remplacement éventuel des piles déchargées est à la charge de l’acheteur et ne constitue pas, à lui seul, un défaut de fabrication.</p><p>L’acheteur professionnel est tenu de contrôler les marchandises dès réception et de signaler par écrit toute anomalie apparente, erreur de référence ou de quantité dans un délai de 8 jours calendrier suivant la livraison. Tout défaut non apparent doit être signalé rapidement après sa découverte.</p><p>Aucune garantie commerciale supplémentaire n’est accordée. Les défauts de fabrication avérés restent couverts conformément aux dispositions contractuelles et légales applicables.</p><p>Les articles en liquidation ou en fin de série ne sont ni repris ni échangés pour convenance commerciale, sauf accord écrit préalable ou obligation légale applicable. Leur disponibilité est limitée aux stocks existants, sans garantie de réapprovisionnement.</p>',
+            ],
+            [
+                'title' => 'Force majeure',
+                'text' => '<p>Tout cas de force majeure (guerre, inondation, incendie, etc.) ou tout cas fortuit (grève, manque de matières premières, bris de machines, etc.) dans notre chef ou dans celui des établissements chargés de l’exécution de la commande nous autorise à dénoncer le contrat, même s’il est exécuté partiellement, ou à en suspendre l’exécution, à notre choix, sans indemnité pour l’acheteur.</p>',
+            ],
+            [
+                'title' => 'Offres et commandes',
+                'text' => '<p>Nos offres sont sans engagement et peuvent être révoquées. Si un modèle est épuisé ou supprimé, nous conservons la faculté de ne pas donner suite à une commande et de nous limiter au remboursement des acomptes reçus. Tout engagement pris par nos agents ou représentants n’est valable qu’après ratification de notre part.</p>',
+            ],
+            [
+                'title' => 'Paiement',
+                'text' => '<p>Toutes les sommes dues sont payables à notre siège social. Aucun escompte n’est accordé pour un paiement anticipé, sauf convention expresse. Nos agents et représentants ne sont pas habilités à encaisser des acomptes ou des factures.</p><p>Tout retard de paiement de tout ou partie d’une facture entraîne de plein droit et sans sommation un intérêt moratoire de 1 % par mois. Si une facture reste impayée huit jours après une mise en demeure par lettre recommandée, une indemnité complémentaire de 20 % du montant restant dû est en outre exigible, avec un minimum de 24,79 €. Le défaut de paiement d’une facture rend exigibles toutes les autres factures, quel que soit le terme convenu.</p>',
+            ],
+            [
+                'title' => 'Réserve de propriété et cession de créance',
+                'text' => '<p>Le vendeur se réserve la propriété des marchandises jusqu’à leur complet paiement. Les risques sont à charge de l’acheteur, et les acomptes peuvent être conservés pour couvrir les pertes éventuelles à la revente.</p><p>En cas de revente des marchandises, même transformées, appartenant au vendeur, l’acheteur lui cède dès à présent toutes les créances résultant de cette revente.</p>',
+            ],
+            [
+                'title' => 'Litiges',
+                'text' => '<p>Les tribunaux de Bruxelles sont seuls compétents pour connaître de tout litige.</p>',
+            ],
+        ],
+    ],
 ];

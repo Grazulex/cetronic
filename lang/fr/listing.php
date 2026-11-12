@@ -26,4 +26,9 @@ return [
         'remove' => 'Retirer le filtre :name',
         'apply' => 'Appliquer',
     ],
+    'promo' => [
+        'title' => 'Promotions, liquidations & fins de série',
+        'text' => '<p>Découvrez notre sélection d’articles à prix réduits : promotions, déstockages et fins de série, dans la limite des stocks disponibles.</p><p>Certains produits peuvent provenir d’anciennes collections ou avoir été stockés pendant une période prolongée. Il est donc possible que leur pile doive être remplacée par l’acheteur.</p><p>Nous invitons nos clients à vérifier les articles dès réception et à signaler rapidement toute anomalie. Les défauts de fabrication avérés restent couverts conformément à nos conditions générales de vente, mais aucune garantie commerciale supplémentaire n’est accordée.</p><p>Les articles en liquidation ou en fin de série ne sont ni repris ni échangés, sauf accord préalable ou obligation légale applicable.</p>',
+        'link' => 'Voir nos conditions générales de vente',
+    ],
 ];

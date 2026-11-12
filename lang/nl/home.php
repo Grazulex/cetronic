@@ -47,6 +47,7 @@ return [
             'confidentality' => 'privacy',
             'conditions' => 'Gebruiksvoorwaarden',
             'cgv' => 'dienst na verkoop',
+            'sales' => 'Algemene verkoopsvoorwaarden',
         ],
         'column4' => [
             'title' => 'contacten',

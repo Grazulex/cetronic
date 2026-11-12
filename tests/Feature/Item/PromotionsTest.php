@@ -151,3 +151,20 @@ it('adds best seller to the same ribbon, promotion on its own line when there ar
         ->not->toContain('item-ribbon--new')
         ->not->toContain('if-best-seller');
 });
+
+it('explains promotions and links the terms of sale on the promotions page', function (): void {
+    actingAs($this->customer);
+
+    $this->get(route('promo', ['cat' => 'watches']))
+        ->assertOk()
+        ->assertSee(__('listing.promo.title'))
+        ->assertSee('href="' . route('legal.sales') . '"', false);
+});
+
+it('does not show the promotions text on a regular category page', function (): void {
+    actingAs($this->customer);
+
+    $this->get(route('list', ['cat' => 'watches', 'type' => 'category', 'slug' => 'watches']))
+        ->assertOk()
+        ->assertDontSee(__('listing.promo.title'));
+});

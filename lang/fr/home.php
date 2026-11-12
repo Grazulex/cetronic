@@ -47,6 +47,7 @@ return [
             'confidentality' => 'confidentialité',
             'conditions' => 'conditions d\'utilisation',
             'cgv' => 'sav',
+            'sales' => 'Conditions générales de vente',
         ],
         'column4' => [
             'title' => 'contacts',

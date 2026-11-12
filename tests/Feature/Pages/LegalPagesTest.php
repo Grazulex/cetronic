@@ -18,6 +18,7 @@ it('serves each legal page with its sections', function (string $route, string $
     'privacy' => ['legal.privacy', 'privacy'],
     'terms' => ['legal.terms', 'terms'],
     'after-sales' => ['legal.after_sales', 'after_sales'],
+    'terms of sale' => ['legal.sales', 'sales'],
 ]);
 
 it('has the same sections in every language', function (string $page): void {
@@ -25,14 +26,15 @@ it('has the same sections in every language', function (string $page): void {
 
     expect(array_unique($counts))->toHaveCount(1)
         ->and($counts[0])->toBeGreaterThan(3);
-})->with(['privacy', 'terms', 'after_sales']);
+})->with(['privacy', 'terms', 'after_sales', 'sales']);
 
 it('links the legal pages from the footer', function (): void {
     $this->get(route('home'))
         ->assertOk()
         ->assertSee('href="' . route('legal.privacy') . '"', false)
         ->assertSee('href="' . route('legal.terms') . '"', false)
-        ->assertSee('href="' . route('legal.after_sales') . '"', false);
+        ->assertSee('href="' . route('legal.after_sales') . '"', false)
+        ->assertSee('href="' . route('legal.sales') . '"', false);
 });
 
 it('renders the french privacy page in french', function (): void {
