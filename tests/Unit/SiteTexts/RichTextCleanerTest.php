@@ -51,3 +51,18 @@ it('unwraps a text made of a single paragraph, shown inside a <p> by the site', 
     expect(app(RichTextCleaner::class)->clean('<div>Merci pour votre <strong>commande</strong>.<br>À bientôt</div>'))
         ->toBe('Merci pour votre <strong>commande</strong>.<br>À bientôt');
 });
+
+it('keeps relative links', function (): void {
+    expect(app(RichTextCleaner::class)->clean('<p><a href="/fr/contact">contact</a></p><p>x</p>'))
+        ->toContain('<a href="/fr/contact">contact</a>');
+});
+
+it('completes links that start with www', function (): void {
+    expect(app(RichTextCleaner::class)->clean('<p><a href="www.cetronic.be">site</a></p><p>x</p>'))
+        ->toContain('<a href="https://www.cetronic.be">site</a>');
+});
+
+it('does not encode apostrophes and at signs in the text', function (): void {
+    expect(app(RichTextCleaner::class)->clean("<p>L'équipe : info@cetronicbenelux.com + 2 = 3</p><p>x</p>"))
+        ->toBe("<p>L'équipe : info@cetronicbenelux.com + 2 = 3</p><p>x</p>");
+});

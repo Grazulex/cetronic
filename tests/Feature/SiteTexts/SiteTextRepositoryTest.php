@@ -109,3 +109,21 @@ it('keeps an empty string', function (): void {
 
     expect($repository->save($repository->all()->sole(), ['nl' => ''])->values['nl'])->toBe('');
 });
+
+it('updates every duplicate row of a language, so the shown value changes', function (): void {
+    ltuPhrase('en', 'home', 'slide1.route', 'watches');
+    ltuPhrase('fr', 'home', 'slide1.route', 'watches');
+    ltuPhrase('fr', 'home', 'slide1.route', 'Montres');
+    $repository = app(SiteTextRepository::class);
+
+    $repository->save($repository->all()->sole(), ['fr' => 'Nos montres']);
+
+    expect($repository->all()->sole()->values['fr'])->toBe('Nos montres')
+        ->and(DB::table('ltu_phrases')->where('value', 'Nos montres')->count())->toBe(2);
+});
+
+it('treats the texts printed as raw html by the site as long', function (): void {
+    ltuPhrase('en', 'order', 'thanks', 'Thank you for your order!');
+
+    expect(app(SiteTextRepository::class)->all()->sole()->long)->toBeTrue();
+});

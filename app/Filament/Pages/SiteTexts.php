@@ -40,8 +40,11 @@ final class SiteTexts extends Page
     /** @var list<string> */
     public array $openZones = [];
 
-    /** @var array<string, array<string, ?string>> SiteText::id() => locale => value */
+    /** @var array<string, array<string, ?string>> SiteText::id() => locale => value being edited */
     public array $drafts = [];
+
+    /** @var array<string, array<string, ?string>> SiteText::id() => locale => value when the row was loaded */
+    public array $loaded = [];
 
     protected static ?string $navigationIcon = 'heroicon-o-language';
 
@@ -69,18 +72,26 @@ final class SiteTexts extends Page
         }
 
         $this->openZones[] = $zone;
-        $this->fillDrafts($this->filteredTexts()->where('zone', $zone));
+        $this->syncDrafts();
     }
 
     public function updatedSearch(): void
     {
-        if ('' === Str::of($this->search)->trim()->value()) {
-            return;
+        if ('' !== Str::of($this->search)->trim()->value()) {
+            $this->openZones = $this->filteredTexts()->pluck('zone')->unique()->values()->all();
         }
 
-        $texts = $this->filteredTexts();
-        $this->openZones = $texts->pluck('zone')->unique()->values()->all();
-        $this->fillDrafts($texts);
+        $this->syncDrafts();
+    }
+
+    /**
+     * Any filter change can show rows that were hidden: load them.
+     */
+    public function updated(string $property): void
+    {
+        if (in_array($property, ['zone', 'show', 'technical'], true)) {
+            $this->syncDrafts();
+        }
     }
 
     public function saveRow(string $id): void
@@ -93,7 +104,29 @@ final class SiteTexts extends Page
             return;
         }
 
-        $this->saveAndNotify($text, $this->drafts[$id] ?? []);
+        if ($text->long) {
+            Notification::make()->title('Ce texte se modifie avec le bouton « Modifier le texte ».')->warning()->send();
+
+            return;
+        }
+
+        $loaded = $this->loaded[$id] ?? $text->values;
+        $cleaner = app(RichTextCleaner::class);
+        $changes = [];
+
+        foreach (SiteText::LOCALES as $locale) {
+            $value = $this->drafts[$id][$locale] ?? null;
+
+            if (null !== $value && str_contains($value, '<')) {
+                $value = $cleaner->clean($value);
+            }
+
+            if ($this->isChange($loaded[$locale] ?? null, $value)) {
+                $changes[$locale] = $value;
+            }
+        }
+
+        $this->saveChanges($text, $loaded, $changes);
     }
 
     /**
@@ -130,13 +163,21 @@ final class SiteTexts extends Page
                     return;
                 }
 
+                // The editor rewrites the html it opens: compare cleaned values,
+                // so a language left untouched is not rewritten.
                 $cleaner = app(RichTextCleaner::class);
-                $values = [];
+                $changes = [];
                 foreach (SiteText::LOCALES as $locale) {
-                    $values[$locale] = $cleaner->clean((string) ($data[$locale] ?? ''));
+                    $original = $text->values[$locale];
+                    $before = null === $original ? null : $cleaner->clean($cleaner->toEditor($original));
+                    $after = $cleaner->clean((string) ($data[$locale] ?? ''));
+
+                    if ($this->isChange($before, $after)) {
+                        $changes[$locale] = $after;
+                    }
                 }
 
-                $this->saveAndNotify($text, $values);
+                $this->saveChanges($text, $text->values, $changes);
             });
     }
 
@@ -174,12 +215,39 @@ final class SiteTexts extends Page
     }
 
     /**
-     * @param  array<string, ?string>  $values
+     * Writes only the changed languages, after checking that nobody changed
+     * them since the row was loaded (another tab, another admin).
+     *
+     * @param  array<string, ?string>  $loaded  values when the row was loaded
+     * @param  array<string, ?string>  $changes  locale => new value
      */
-    private function saveAndNotify(SiteText $text, array $values): void
+    private function saveChanges(SiteText $text, array $loaded, array $changes): void
     {
-        $result = app(SaveSiteTextAction::class)->handle($text, $values);
-        $this->drafts[$text->id()] = $result->text->values;
+        $id = $text->id();
+
+        if ([] === $changes) {
+            Notification::make()->title('Aucune modification à enregistrer.')->info()->send();
+
+            return;
+        }
+
+        foreach (array_keys($changes) as $locale) {
+            if ($text->values[$locale] !== ($loaded[$locale] ?? null)) {
+                $this->remember($text);
+
+                Notification::make()
+                    ->title('Ce texte a été modifié entre-temps')
+                    ->body('La version actuelle est rechargée : vérifiez-la, puis refaites votre modification.')
+                    ->danger()
+                    ->persistent()
+                    ->send();
+
+                return;
+            }
+        }
+
+        $result = app(SaveSiteTextAction::class)->handle($text, $changes);
+        $this->remember($result->text);
 
         if ($result->published) {
             Notification::make()->title('Texte enregistré et publié')->success()->send();
@@ -193,6 +261,31 @@ final class SiteTexts extends Page
             ->warning()
             ->persistent()
             ->send();
+    }
+
+    /**
+     * An empty field for a language that has no text yet is not a change:
+     * writing '' would hide the French fallback on the site.
+     */
+    private function isChange(?string $before, ?string $after): bool
+    {
+        if (null === $before && (null === $after || '' === $after)) {
+            return false;
+        }
+
+        return $before !== $after;
+    }
+
+    private function remember(SiteText $text): void
+    {
+        if ($text->long) {
+            unset($this->drafts[$text->id()], $this->loaded[$text->id()]);
+
+            return;
+        }
+
+        $this->drafts[$text->id()] = $text->values;
+        $this->loaded[$text->id()] = $text->values;
     }
 
     private function longTextHeading(string $id): string
@@ -239,12 +332,17 @@ final class SiteTexts extends Page
     }
 
     /**
-     * @param  Collection<int, SiteText>  $texts
+     * Loads the short texts shown in the open zones that are not loaded yet.
+     * Long texts are edited in the rich editor and never kept in the drafts.
      */
-    private function fillDrafts(Collection $texts): void
+    private function syncDrafts(): void
     {
-        foreach ($texts as $text) {
-            $this->drafts[$text->id()] ??= $text->values;
+        foreach ($this->filteredTexts() as $text) {
+            if ($text->long || ! in_array($text->zone, $this->openZones, true) || isset($this->loaded[$text->id()])) {
+                continue;
+            }
+
+            $this->remember($text);
         }
     }
 }

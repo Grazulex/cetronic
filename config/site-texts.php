@@ -149,7 +149,21 @@ return [
         'emails.user_welcome.body' => 'Bienvenue · Message',
     ],
 
-    'long' => [],
+    // Printed as raw html by the site ({!! __(...) !!}): always in the rich editor.
+    'long' => [
+        'about.section1.description',
+        'emails.cart_add.body',
+        'emails.cart_remove.body',
+        'emails.cart_update.body',
+        'emails.order_new.body',
+        'emails.user_actif.body',
+        'emails.user_welcome.body',
+        'listing.promo.text',
+        'order.thanks',
+        'order.title.thanks',
+        'user.auth.registered.waiting',
+        'user.title.thanks',
+    ],
 
-    'untranslated_exceptions' => ['Cetronic', 'Best Seller'],
+    'untranslated_exceptions' => ['Cetronic', 'Best Seller', 'Contact', 'Promo', 'Total', 'Disclaimer'],
 ];

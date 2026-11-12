@@ -29,7 +29,8 @@ final class RichTextCleaner
             ->allowElement('ol')
             ->allowElement('li')
             ->allowElement('a', ['href'])
-            ->allowLinkSchemes(['http', 'https', 'mailto']);
+            ->allowLinkSchemes(['http', 'https', 'mailto'])
+            ->allowRelativeLinks();
 
         // Blocked elements disappear but their text stays.
         foreach (self::BLOCKED as $element) {
@@ -45,7 +46,13 @@ final class RichTextCleaner
         $html = (string) preg_replace(['#<div(\s[^>]*)?>#i', '#</div>#i'], ['<p>', '</p>'], $html);
         $html = (string) preg_replace(['#<b(\s[^>]*)?>#i', '#</b>#i', '#<i(\s[^>]*)?>#i', '#</i>#i'], ['<strong>', '</strong>', '<em>', '</em>'], $html);
 
+        // "www.site.be" would be read as a relative path: make it a web address.
+        $html = (string) preg_replace('#(<a\s[^>]*href=")(www\.)#i', '$1https://$2', $html);
+
         $clean = $this->sanitizer->sanitize($html);
+
+        // The sanitizer encodes harmless characters; keep the text readable.
+        $clean = str_replace(['&#039;', '&#39;', '&#64;', '&#61;', '&#43;'], ["'", "'", '@', '=', '+'], $clean);
 
         $clean = (string) preg_replace(['#<br\s*/?>#i', '#<p>\s*</p>#'], ['<br>', ''], $clean);
 

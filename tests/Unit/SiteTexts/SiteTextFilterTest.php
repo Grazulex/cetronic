@@ -98,3 +98,15 @@ it('matches nothing for an empty search', function (): void {
     expect(app(SiteTextFilter::class)->matches(siteText(), ''))
         ->toBe(['label' => false, 'fr' => false, 'nl' => false, 'en' => false]);
 });
+
+it('does not ask to translate e-mail addresses, phone numbers and urls', function (): void {
+    expect(filterTexts([
+        siteText(fr: 'info@cetronicbenelux.com', nl: 'info@cetronicbenelux.com', en: 'info@cetronicbenelux.com'),
+        siteText(fr: '+32 2 424 18 20', nl: '+32 2 424 18 20', en: '+32 2 424 18 20', key: 'phone'),
+        siteText(fr: 'https://cetronic.be', nl: 'https://cetronic.be', en: 'https://cetronic.be', key: 'url'),
+    ], show: 'untranslated'))->toBeEmpty();
+});
+
+it('does not ask to translate the words configured as identical in every language', function (): void {
+    expect(filterTexts([siteText(fr: 'Contact', nl: 'Contact', en: 'Contact')], show: 'untranslated'))->toBeEmpty();
+});

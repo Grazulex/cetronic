@@ -62,11 +62,14 @@ final class SiteTextFilter
 
         $french = (string) $text->values['fr'];
 
-        if (is_numeric(Str::of($french)->trim()->value()) || in_array(Str::of($french)->trim()->value(), $this->config->untranslatedExceptions(), true)) {
+        $french = Str::of($french)->trim()->value();
+
+        if (is_numeric($french) || $this->isContactData($french) || in_array($french, $this->config->untranslatedExceptions(), true)) {
             return false;
         }
 
-        return $text->values['nl'] === $french || $text->values['en'] === $french;
+        return Str::of((string) $text->values['nl'])->trim()->value() === $french
+            || Str::of((string) $text->values['en'])->trim()->value() === $french;
     }
 
     /**
@@ -84,5 +87,16 @@ final class SiteTextFilter
             'nl' => $hit($text->values['nl']),
             'en' => $hit($text->values['en']),
         ];
+    }
+
+    /**
+     * E-mail addresses, phone numbers and web addresses are the same in
+     * every language.
+     */
+    private function isContactData(string $value): bool
+    {
+        return false !== filter_var($value, FILTER_VALIDATE_EMAIL)
+            || 1 === preg_match('/^\+?[\d\s().\/-]{6,}$/', $value)
+            || 1 === preg_match('#^(https?://|www\.)\S+$#i', $value);
     }
 }

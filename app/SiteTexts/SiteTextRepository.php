@@ -70,15 +70,15 @@ final class SiteTextRepository
             ->where('extension', 'php')
             ->value('id');
 
-        $existing = DB::table('ltu_phrases')
+        // Legacy data has duplicate rows for some keys: update them all, so the
+        // value shown and exported (the last row) really changes.
+        $updated = DB::table('ltu_phrases')
             ->where('translation_id', $translationId)
             ->where('translation_file_id', $fileId)
             ->where('key', $text->key)
-            ->value('id');
+            ->update(['value' => $value, 'updated_at' => now()]);
 
-        if (null !== $existing) {
-            DB::table('ltu_phrases')->where('id', $existing)->update(['value' => $value, 'updated_at' => now()]);
-
+        if ($updated > 0) {
             return;
         }
 

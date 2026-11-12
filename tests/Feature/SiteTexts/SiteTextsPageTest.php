@@ -141,7 +141,7 @@ it('edits a long text in the rich editor, not in a plain field', function (): vo
     expect(app(SiteTextRepository::class)->find($id)->values)->toBe([
         'fr' => '<p><strong>Toute</strong> réclamation</p><p>Par écrit</p>',
         'nl' => 'Elke klacht',
-        'en' => 'Any claim',
+        'en' => '<p>Any claim</p>', // untouched in the editor: not rewritten
     ]);
 });
 
@@ -154,4 +154,131 @@ it('opens the rich editor with paragraphs instead of double line breaks', functi
         ->call('toggleZone', 'emails')
         ->mountAction('editLongText', ['id' => $id])
         ->assertActionDataSet(['en' => '<p>Hello,</p><p>Thanks</p>']);
+});
+
+// --- Final review fixes -----------------------------------------------------
+
+it('fills every row of a zone left open after the search is cleared', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'cart', 'shipping.title', 'Total shipping');
+    ltuPhrase('en', 'cart', 'title', 'Cart');
+    $other = SiteText::idFor('cart', 'title');
+
+    livewire(SiteTexts::class)
+        ->set('search', 'shipping')
+        ->set('search', '')
+        ->assertSet("drafts.{$other}", ['fr' => null, 'nl' => null, 'en' => 'Cart']);
+});
+
+it('fills the rows shown after switching back to all texts', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'cart', 'title', 'Cart');
+    ltuPhrase('fr', 'cart', 'title', 'Panier');
+    ltuPhrase('nl', 'cart', 'title', 'Winkelwagen');
+    ltuPhrase('en', 'cart', 'empty', 'Empty');
+    $translated = SiteText::idFor('cart', 'title');
+
+    livewire(SiteTexts::class)
+        ->set('show', 'untranslated')
+        ->call('toggleZone', 'cart')
+        ->set('show', 'all')
+        ->assertSet("drafts.{$translated}.nl", 'Winkelwagen');
+});
+
+it('does not overwrite a language changed elsewhere since the zone was opened', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'cart', 'title', 'Cart');
+    ltuPhrase('fr', 'cart', 'title', 'Panier');
+    $nl = ltuPhrase('nl', 'cart', 'title', 'Wagen');
+    $id = SiteText::idFor('cart', 'title');
+
+    $page = livewire(SiteTexts::class)->call('toggleZone', 'cart');
+    DB::table('ltu_phrases')->where('id', $nl)->update(['value' => 'Winkelwagen']);
+
+    $page->set("drafts.{$id}.fr", 'Votre panier')->call('saveRow', $id);
+
+    expect(app(SiteTextRepository::class)->find($id)->values)
+        ->toBe(['fr' => 'Votre panier', 'nl' => 'Winkelwagen', 'en' => 'Cart']);
+});
+
+it('refuses to save a language that was changed elsewhere meanwhile', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'cart', 'title', 'Cart');
+    $fr = ltuPhrase('fr', 'cart', 'title', 'Panier');
+    $id = SiteText::idFor('cart', 'title');
+
+    $page = livewire(SiteTexts::class)->call('toggleZone', 'cart');
+    DB::table('ltu_phrases')->where('id', $fr)->update(['value' => 'Mon panier']);
+
+    $page->set("drafts.{$id}.fr", 'Votre panier')
+        ->call('saveRow', $id)
+        ->assertNotified('Ce texte a été modifié entre-temps')
+        ->assertSet("drafts.{$id}.fr", 'Mon panier');
+
+    expect(app(SiteTextRepository::class)->find($id)->values['fr'])->toBe('Mon panier');
+});
+
+it('does not create an empty translation for an untouched missing language', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'cart', 'title', 'Cart');
+    $id = SiteText::idFor('cart', 'title');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'cart')
+        ->set("drafts.{$id}.nl", '')
+        ->set("drafts.{$id}.fr", 'Panier')
+        ->call('saveRow', $id);
+
+    expect(app(SiteTextRepository::class)->find($id)->values['nl'])->toBeNull();
+});
+
+it('does not create an empty translation from the rich editor', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'emails', 'user_welcome.body', '<p>Welcome :name</p><p>Team</p>');
+    $id = SiteText::idFor('emails', 'user_welcome.body');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'emails')
+        ->callAction('editLongText', ['fr' => '<p>Bienvenue :name</p><p>L’équipe</p>', 'nl' => '', 'en' => '<p>Welcome :name</p><p>Team</p>'], arguments: ['id' => $id]);
+
+    expect(app(SiteTextRepository::class)->find($id)->values['nl'])->toBeNull();
+});
+
+it('only rewrites the languages changed in the rich editor', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'emails', 'user_welcome.body', 'Welcome,<br><br>Team');
+    DB::table('ltu_phrases')->update(['updated_at' => '2026-01-01 00:00:00']);
+    $id = SiteText::idFor('emails', 'user_welcome.body');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'emails')
+        ->callAction('editLongText', ['fr' => '<p>Bienvenue</p><p>L’équipe</p>', 'nl' => '', 'en' => '<p>Welcome,</p><p>Team</p>'], arguments: ['id' => $id]);
+
+    expect(DB::table('ltu_phrases')->where('value', 'Welcome,<br><br>Team')->value('updated_at'))->toBe('2026-01-01 00:00:00');
+});
+
+it('never saves a long text through the plain row save', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'listing', 'promo.text', '<p>Promo</p><p>Now</p>');
+    $id = SiteText::idFor('listing', 'promo.text');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'listing')
+        ->set("drafts.{$id}.en", '<p>Promo</p><script>alert(1)</script>')
+        ->call('saveRow', $id);
+
+    expect(app(SiteTextRepository::class)->find($id)->values['en'])->toBe('<p>Promo</p><p>Now</p>');
+});
+
+it('cleans html typed in a short text', function (): void {
+    loginAsAdmin();
+    ltuPhrase('en', 'cart', 'title', 'Cart');
+    $id = SiteText::idFor('cart', 'title');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'cart')
+        ->set("drafts.{$id}.fr", 'Panier<script>alert(1)</script>')
+        ->call('saveRow', $id);
+
+    expect(app(SiteTextRepository::class)->find($id)->values['fr'])->toBe('Panier');
 });
