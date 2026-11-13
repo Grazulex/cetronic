@@ -102,11 +102,21 @@
                                         <x-filament::input.wrapper
                                             :style="$empty ? 'box-shadow: 0 0 0 2px rgb(245 158 11);' : ($row['matches'][$locale] ? 'box-shadow: 0 0 0 2px rgb(250 204 21);' : null)"
                                         >
-                                            <x-filament::input
-                                                type="text"
-                                                wire:model="drafts.{{ $id }}.{{ $locale }}"
-                                                wire:keydown.enter="saveRow('{{ $id }}')"
-                                            />
+                                            @if ($text->multiline())
+                                                {{-- Too long for one line: Enter adds a line, the button saves --}}
+                                                <textarea
+                                                    class="fi-input"
+                                                    style="display: block; width: 100%; resize: vertical; border: none; background: transparent; padding: .375rem .75rem; font-size: .875rem; line-height: 1.5;"
+                                                    rows="5"
+                                                    wire:model="drafts.{{ $id }}.{{ $locale }}"
+                                                ></textarea>
+                                            @else
+                                                <x-filament::input
+                                                    type="text"
+                                                    wire:model="drafts.{{ $id }}.{{ $locale }}"
+                                                    wire:keydown.enter="saveRow('{{ $id }}')"
+                                                />
+                                            @endif
                                         </x-filament::input.wrapper>
                                         @if ($empty)
                                             <span class="text-xs" style="color: rgb(180 83 9);">À traduire</span>

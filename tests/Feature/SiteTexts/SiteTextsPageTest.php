@@ -121,6 +121,31 @@ it('hides the technical texts until asked', function (): void {
         ->assertSee('Messages d’erreur des formulaires (1)');
 });
 
+it('edits a plain text longer than 150 characters in a multi-line field', function (): void {
+    loginAsAdmin();
+    $notice = str_repeat('Votre compte doit être validé. ', 6);
+    ltuPhrase('fr', 'order', 'location.notice', $notice);
+    ltuPhrase('en', 'order', 'location.invoice', 'Invoice address');
+    $longId = SiteText::idFor('order', 'location.notice');
+    $shortId = SiteText::idFor('order', 'location.invoice');
+
+    $html = livewire(SiteTexts::class)->call('toggleZone', 'order')->html();
+
+    expect($html)
+        ->toMatch('#<textarea[^>]*wire:model="drafts\.' . $longId . '\.fr"#')
+        ->toMatch('#<textarea[^>]*wire:model="drafts\.' . $longId . '\.nl"#')
+        ->toMatch('#<input[^>]*wire:model="drafts\.' . $shortId . '\.fr"#')
+        ->not->toMatch('#<input[^>]*wire:model="drafts\.' . $longId . '\.fr"#');
+
+    livewire(SiteTexts::class)
+        ->call('toggleZone', 'order')
+        ->set("drafts.{$longId}.nl", 'Uw account moet worden gevalideerd.')
+        ->call('saveRow', $longId)
+        ->assertNotified('Texte enregistré et publié');
+
+    expect(app(SiteTextRepository::class)->find($longId)->values['nl'])->toBe('Uw account moet worden gevalideerd.');
+});
+
 it('edits a long text in the rich editor, not in a plain field', function (): void {
     loginAsAdmin();
     ltuPhrase('en', 'about', 'section1.description', '<p>Any claim</p>');
