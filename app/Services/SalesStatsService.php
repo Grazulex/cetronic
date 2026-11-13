@@ -86,6 +86,58 @@ final class SalesStatsService
     }
 
     /**
+     * Revenue cumulated day by day over [from, to] (both required), days
+     * without sales carrying the previous total. `day` is the day of month.
+     *
+     * @return array<int, array{day: int, revenue: float}>
+     */
+    public function dailyCumulative(SalesFilters $filters): array
+    {
+        if (null === $filters->from || null === $filters->to) {
+            return [];
+        }
+
+        $date = $this->dateExpression();
+
+        $perDay = $this->baseQuery($filters)
+            ->selectRaw("{$date} as day")
+            ->selectRaw('SUM(order_items.price_paid * order_items.quantity) as revenue')
+            ->groupByRaw($date)
+            ->toBase()
+            ->pluck('revenue', 'day');
+
+        $days = [];
+        $total = 0;
+        for ($cursor = $filters->from->copy()->startOfDay(); $cursor->lte($filters->to); $cursor->addDay()) {
+            $total += (int) ($perDay[$cursor->toDateString()] ?? 0);
+            $days[] = ['day' => $cursor->day, 'revenue' => $this->euros($total)];
+        }
+
+        return $days;
+    }
+
+    /**
+     * Customers whose first ever (non-deleted) order falls in [from, to].
+     */
+    public function newCustomers(SalesFilters $filters): int
+    {
+        if (null === $filters->from || null === $filters->to) {
+            return 0;
+        }
+
+        $firstOrders = DB::table('orders')
+            ->whereNull('deleted_at')
+            ->select('user_id')
+            ->groupBy('user_id')
+            ->havingRaw('MIN(created_at) >= ? AND MIN(created_at) <= ?', [
+                $filters->from->copy()->startOfDay(),
+                $filters->to->copy()->endOfDay(),
+            ]);
+
+        return DB::query()->fromSub($firstOrders, 'first_orders')->count();
+    }
+
+    /**
      * One row per product, brand or category. Each row exposes `id`, `label`,
      * `quantity`, `revenue` (in cents), `orders_count`, `customers_count`,
      * `products_count` and `last_sold_at`; product rows also expose `slug` (route key), `brand_name` and
@@ -179,6 +231,13 @@ final class SalesStatsService
                     ->where('items.reference', 'like', $like)
                     ->orWhere('order_items.name', 'like', $like));
             });
+    }
+
+    private function dateExpression(): string
+    {
+        return 'sqlite' === DB::connection()->getDriverName()
+            ? 'date(orders.created_at)'
+            : 'DATE(orders.created_at)';
     }
 
     private function monthExpression(): string
