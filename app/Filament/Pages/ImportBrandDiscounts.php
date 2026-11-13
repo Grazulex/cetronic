@@ -14,7 +14,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Livewire\TemporaryUploadedFile;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 /**
  * Re-imports the spreadsheet produced by the "Export remises marque" action:
@@ -34,7 +34,7 @@ final class ImportBrandDiscounts extends Page implements HasForms
     /** @var array{errors: array<int, array{row: int, column: string, message: string}>, summary: array<int, string>}|null */
     public ?array $report = null;
 
-    protected static ?string $navigationIcon = 'heroicon-o-upload';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
 
     protected static ?string $navigationGroup = 'Users';
 
@@ -92,7 +92,7 @@ final class ImportBrandDiscounts extends Page implements HasForms
         $this->reset(['file', 'report']);
     }
 
-    protected static function shouldRegisterNavigation(): bool
+    public static function shouldRegisterNavigation(): bool
     {
         return UserRoleEnum::ADMIN === auth()->user()?->role;
     }

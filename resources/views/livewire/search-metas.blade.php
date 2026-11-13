@@ -16,13 +16,13 @@
                             @foreach ($meta['values'] as $value)
                                 <li class="d-flex align-items-center">
                                     @if ($meta['is_color'])
-                                        <input type="checkbox" class="listing-checkbox" wire:model="selected"
+                                        <input type="checkbox" class="listing-checkbox" wire:model.live="selected"
                                             id="{{ $meta['id'].$value['value'] }}" value="{{ $meta['id'] . '|' . $value['value'] }}" ><span
                                             class="select-bg"
                                             style="background-color: {{ $value['value'] }}; width: 20px; height: 20px; display: inline-block; border: 1px solid #000;"></span>
                                         ({{ $value['count'] }} items)
                                     @else
-                                        <input type="checkbox" class="listing-checkbox" wire:model="selected"
+                                        <input type="checkbox" class="listing-checkbox" wire:model.live="selected"
                                             id="{{ $meta['id'].$value['value'] }}" value="{{ $meta['id'] . '|' . $value['value'] }}" >
                                         <span class="select-bg">{{ ucfirst($value['value']) }} ({{ $value['count'] }}
                                             items)</span>

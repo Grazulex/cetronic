@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Filament\Resources\ItemResource\Pages\CreateItem;
 use App\Filament\Resources\ItemResource\Pages\EditItem;
-use App\Http\Livewire\Admin\ItemSales;
+use App\Livewire\Admin\ItemSales;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;

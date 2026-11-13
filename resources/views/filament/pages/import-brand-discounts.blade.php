@@ -1,5 +1,5 @@
-<x-filament::page>
-    <form wire:submit.prevent="analyse" class="space-y-6">
+<x-filament-panels::page>
+    <form wire:submit="analyse" class="space-y-6">
         {{ $this->form }}
 
         <p class="text-sm text-gray-500">
@@ -12,7 +12,7 @@
     </form>
 
     @if ($report)
-        <x-filament::card>
+        <x-filament::section>
             <div class="space-y-4">
                 <ul class="text-sm list-disc list-inside">
                     @foreach ($report['summary'] as $line)
@@ -50,6 +50,6 @@
                     </x-filament::button>
                 @endif
             </div>
-        </x-filament::card>
+        </x-filament::section>
     @endif
-</x-filament::page>
+</x-filament-panels::page>

@@ -10,8 +10,8 @@ use App\Filament\Resources\UserResource;
 use App\Models\Brand;
 use Carbon\Carbon;
 use Filament\Forms\Components\Select;
-use Filament\Pages\Actions;
-use Filament\Pages\Actions\Action;
+use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -25,7 +25,7 @@ final class ListUsers extends ListRecords
         return Excel::download(new UsersExport(), 'Users_' . Carbon::now() . '.xlsx');
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
@@ -34,7 +34,7 @@ final class ListUsers extends ListRecords
                 ->action('exportXLSX'),
             Action::make('exportBrandDiscounts')
                 ->label('Export remises marque')
-                ->icon('heroicon-o-download')
+                ->icon('heroicon-o-arrow-down-tray')
                 ->form([
                     Select::make('brand_id')
                         ->label('Marque')

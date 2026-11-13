@@ -20,9 +20,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -75,7 +75,7 @@ final class BrandResource extends Resource
                             ->default(false),
                     ])
                     ->tooltip(__('Export'))
-                    ->icon('heroicon-s-download')
+                    ->icon('heroicon-s-arrow-down-tray')
                     ->color('primary'),
             ])
             ->bulkActions([DeleteBulkAction::make()]);
@@ -123,7 +123,7 @@ final class BrandResource extends Resource
         ];
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return (string) static::getModel()::count();
     }

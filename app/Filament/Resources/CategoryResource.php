@@ -17,9 +17,9 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -32,7 +32,7 @@ final class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-archive';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     protected static ?string $navigationGroup = 'Items';
 
@@ -97,7 +97,7 @@ final class CategoryResource extends Resource
                             ->default(false),
                     ])
                     ->tooltip(__('Export'))
-                    ->icon('heroicon-s-download')
+                    ->icon('heroicon-s-arrow-down-tray')
                     ->color('primary'),
             ])
             ->bulkActions([DeleteBulkAction::make()]);
@@ -120,7 +120,7 @@ final class CategoryResource extends Resource
         ];
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return (string) static::getModel()::count();
     }

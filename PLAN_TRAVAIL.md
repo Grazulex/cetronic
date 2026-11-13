@@ -122,6 +122,14 @@ La page « Textes du site » (`docs/specs/2026-11-12-textes-du-site.md`) sera co
 
 **Ordre retenu :** 1) migration Filament v3 + Livewire 3 (sans Laravel 11), 2) page « Textes du site » en v3, 3) Laravel 11.
 
+**Avancement (12/11/2026) :**
+- [x] Migration Filament 3.3 + Livewire 3.8 — branche `feat/filament-v3-livewire-3` (non fusionnée).
+- [x] `translations:export` réécrite dans l'app (remplace la commande du paquet retiré, même résultat vérifié).
+- [x] Page « Textes du site », étapes 1 à 3 de la spec — branche `feat/site-texts-editor` (basée sur la migration).
+- [ ] Ajouter `$FORGE_PHP artisan translations:import-missing` dans le script Forge, **avant** `translations:export`.
+- [ ] Fusionner les deux branches ensemble dans `main` (la migration retire `/translations`, la page la remplace).
+- [ ] Étapes 4 et 5 de la spec (bouton « Traduire cette page », garde-fous et historique) : plan séparé.
+
 ---
 
 ## Phase 3 — Frontend responsive

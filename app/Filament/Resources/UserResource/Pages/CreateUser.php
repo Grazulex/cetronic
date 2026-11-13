@@ -15,7 +15,8 @@ final class CreateUser extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $user =  static::getModel()::create($data);
+        /** @var \App\Models\User $user */
+        $user = static::getModel()::create($data);
 
         foreach ($data['brands'] as $brands) {
             foreach ($brands['brand_id'] as $brand) {

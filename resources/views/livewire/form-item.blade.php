@@ -5,7 +5,7 @@
                 <div class="step-down-upp">
                     <span wire:click="down({{ $item->id }})"
                         class="border-0 bg-body">-</span>
-                    <input class="text-center border-0 w-100" wire:model="quantity.{{ $item->id }}" type="number"
+                    <input class="text-center border-0 w-100" wire:model.live="quantity.{{ $item->id }}" type="number"
                         step="{{ $item->multiple_quantity }}" min="{{ $item->multiple_quantity }}">
                     <span wire:click="up({{ $item->id }})"
                         class="border-0 bg-body plus">+</span>

@@ -15,6 +15,7 @@ final class CreateItem extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
+        /** @var \App\Models\Item $record */
         $record = static::getModel()::create($data);
 
         // Log si is_published est différent de la valeur par défaut (true)

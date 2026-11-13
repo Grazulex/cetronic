@@ -42,6 +42,9 @@
                 "PKSA-xf4x-p5c1-z9xq",
                 "PKSA-fwj1-r2kg-bmxd"
             ]
+        },
+        "platform": {
+            "php": "8.3.0"
         }
     },
     "description": "The Laravel Framework.",
@@ -61,10 +64,12 @@
     "require": {
         "php": "^8.3.0",
         "ext-zip": "*",
+        "akaunting/laravel-money": "^4.0",
         "barryvdh/laravel-dompdf": "^2.0",
+        "brick/varexporter": "^0.7",
         "doctrine/dbal": "^3.6",
-        "filament/filament": "^2.0",
-        "filament/spatie-laravel-media-library-plugin": "^2.0",
+        "filament/filament": "^3.2",
+        "filament/spatie-laravel-media-library-plugin": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
         "laravel/framework": "^10.0",
@@ -73,11 +78,12 @@
         "laravel/scout": "^10.0",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.12",
+        "livewire/livewire": "^3.0",
         "maatwebsite/excel": "^3.1",
         "mcamara/laravel-localization": "^1.8",
         "meilisearch/meilisearch-php": "^1.0",
         "moneyphp/money": "^4.0",
-        "outhebox/laravel-translations": "^0.0.6",
+        "symfony/html-sanitizer": "^7.4",
         "whitecube/laravel-cookie-consent": "^1.2"
     },
     "require-dev": {
@@ -100,7 +106,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",

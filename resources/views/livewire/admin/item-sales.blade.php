@@ -1,7 +1,7 @@
 <div class="space-y-6">
     <div class="flex items-center justify-end gap-2">
         <label for="item-sales-period" class="text-sm font-medium text-gray-700">Période</label>
-        <select id="item-sales-period" wire:model="period"
+        <select id="item-sales-period" wire:model.live="period"
             class="block h-10 rounded-lg border-gray-300 text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500">
             @foreach ($periods as $value => $label)
                 <option value="{{ $value }}">{{ $label }}</option>
@@ -11,10 +11,10 @@
 
     @include('filament.partials.sales-summary', ['summary' => $summary])
 
-    @livewire(\App\Http\Livewire\Admin\SalesChart::class, ['filters' => $chartFilters], key('item-sales-chart-' . $itemId . '-' . $period))
+    @livewire(\App\Livewire\Admin\SalesChart::class, ['filters' => $chartFilters], key('item-sales-chart-' . $itemId . '-' . $period))
 
-    <x-filament::card>
-        <x-filament::card.heading>Meilleurs clients</x-filament::card.heading>
+    <x-filament::section>
+        <h2 class="text-base font-semibold leading-6 text-gray-950">Meilleurs clients</h2>
 
         @if ($topCustomers->isEmpty())
             <p class="text-sm text-gray-500">Aucune vente sur cette période.</p>
@@ -47,5 +47,5 @@
                 </tbody>
             </table>
         @endif
-    </x-filament::card>
+    </x-filament::section>
 </div>

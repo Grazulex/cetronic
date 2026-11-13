@@ -26,3 +26,7 @@ yarn-error.log
 .flaskenv*
 !.env.project
 !.env.vault
+# Filament v3 assets, published by "php artisan filament:upgrade" (composer post-autoload-dump)
+/public/css/filament
+/public/Css/filament
+/public/js/filament

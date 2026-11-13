@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use App\Filament\Resources\ItemResource;
 use App\Enum\UserRoleEnum;
 use App\Imports\ItemsImport;
 use App\Models\Category;
@@ -12,7 +13,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Illuminate\Http\RedirectResponse;
-use Livewire\Redirector;
+use Livewire\Features\SupportRedirects\Redirector;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
 
@@ -26,7 +27,7 @@ final class ImportCSV extends Page implements HasForms
 
     public int $category_id;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cloud-upload';
+    protected static ?string $navigationIcon = 'heroicon-o-cloud-arrow-up';
 
     protected static ?string $navigationGroup = 'Upload';
 
@@ -46,10 +47,10 @@ final class ImportCSV extends Page implements HasForms
             Excel::import(new ItemsImport($this->category_id, $headings), $file);
         }
 
-        return redirect()->route(route: 'filament.resources.items.index')->with(key: 'success', value: 'CSV imported successfully!');
+        return redirect(ItemResource::getUrl('index'))->with(key: 'success', value: 'CSV imported successfully!');
     }
 
-    protected static function shouldRegisterNavigation(): bool
+    public static function shouldRegisterNavigation(): bool
     {
         return UserRoleEnum::ADMIN === auth()->user()?->role;
     }

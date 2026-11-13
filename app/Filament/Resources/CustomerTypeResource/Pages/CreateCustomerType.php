@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\CustomerTypeResource\Pages;
 
 use App\Filament\Resources\CustomerTypeResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateCustomerType extends CreateRecord

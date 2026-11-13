@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Resources\CartResource;
 use App\Enum\CartStatusEnum;
 use App\Enum\UserRoleEnum;
 use App\Models\Cart;
@@ -29,7 +30,7 @@ final class LatestCartsOpen extends BaseWidget
 
     protected function getTableRecordUrlUsing(): Closure
     {
-        return fn(Model $record): string => route('filament.resources.carts.edit', ['record' => $record]);
+        return fn(Model $record): string => CartResource::getUrl('edit', ['record' => $record]);
     }
 
     protected function getTableColumns(): array

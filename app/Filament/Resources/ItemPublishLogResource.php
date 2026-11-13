@@ -8,7 +8,7 @@ use App\Enum\UserRoleEnum;
 use App\Filament\Resources\ItemPublishLogResource\Pages\ListItemPublishLogs;
 use App\Models\ItemPublishLog;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -20,7 +20,7 @@ final class ItemPublishLogResource extends Resource
 {
     protected static ?string $model = ItemPublishLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-list';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $navigationGroup = 'Items';
 
@@ -129,7 +129,7 @@ final class ItemPublishLogResource extends Resource
         ];
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return (string) self::getModel()::count();
     }

@@ -7,9 +7,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CustomerTypeResource\Pages;
 use App\Models\CustomerType;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 class CustomerTypeResource extends Resource

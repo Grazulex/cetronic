@@ -10,9 +10,9 @@ use App\Filament\Resources\CategoryMetaResource\Pages\ListCategoryMetas;
 use App\Filament\Resources\CategoryMetaResource\RelationManagers\TranslationsRelationManager;
 use App\Models\CategoryMeta;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\BadgeColumn;
@@ -22,7 +22,7 @@ final class CategoryMetaResource extends Resource
 {
     protected static ?string $model = CategoryMeta::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-translate';
+    protected static ?string $navigationIcon = 'heroicon-o-language';
 
     protected static ?string $label = 'Metas translation';
 

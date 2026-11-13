@@ -1,6 +1,6 @@
 # Cahier des charges — « Textes du site » (édition des traductions par le client)
 
-> Date : 12 novembre 2026 · Statut : proposition, rien n'est développé
+> Date : 12 novembre 2026 · Statut : étapes 1 à 3 développées (branche `feat/site-texts-editor`), étapes 4 et 5 à faire
 > Périmètre : points 1 et 2 de la réflexion du 12/11 + bouton « Traduire cette page » (remplace l'idée d'édition directe sur le site)
 
 ## 1. Contexte et problème
@@ -25,7 +25,9 @@ Le client et le développeur trouvent l'outil très difficile, pour six raisons 
 - Les **traductions manquantes** sont visibles.
 - Le développeur n'intervient plus que pour **créer** de nouveaux textes (nouvelles fonctionnalités).
 
-Hors périmètre : la traduction automatique, l'édition directe sur le site (cliquer sur un texte dans la page), la suppression de `/translations` (gardé pour le développeur).
+Hors périmètre : la traduction automatique, l'édition directe sur le site (cliquer sur un texte dans la page).
+
+> **Mise à jour du 12/11/2026 :** `/translations` n'existe plus. Le paquet `outhebox/laravel-translations` a été retiré avec la migration Filament v3 (incompatible avec Livewire 3). Ses deux commandes sont remplacées dans l'application : `translations:export` (même nom, même résultat, vérifié) et `translations:import-missing`. Le développeur **crée** un nouveau texte en l'ajoutant dans `lang/{fr,nl,en}/*.php` ; au déploiement, `translations:import-missing` l'ajoute en base sans jamais écraser une valeur existante, puis `translations:export` régénère les fichiers.
 
 ## 3. Utilisateurs et accès
 
@@ -39,7 +41,7 @@ Hors périmètre : la traduction automatique, l'édition directe sur le site (cl
 
 ### 4.1 Emplacement
 
-Nouvelle page Filament dans le groupe de navigation **« Contenu »** (à créer), libellée « Textes du site ». Elle lit et écrit les mêmes tables que le package (`ltu_phrases`, `ltu_translations`, `ltu_translation_files`) : aucune migration de données, les deux outils restent compatibles.
+Nouvelle page Filament dans le groupe de navigation **« Contenu »** (à créer), libellée « Textes du site ». Elle lit et écrit les mêmes tables que le package (`ltu_phrases`, `ltu_translations`, `ltu_translation_files`) : aucune migration de données. La migration de ces tables est recopiée dans l'application sous son nom d'origine (les bases existantes l'ignorent).
 
 ### 4.2 Écran principal
 
@@ -184,6 +186,6 @@ Chaque étape est livrable seule. Les étapes 1 à 3 répondent à l'essentiel d
 ## 10. Questions ouvertes
 
 1. ~~Construire en Filament v2 maintenant, ou attendre la migration v3 ?~~ **Décidé (12/11/2026) : après la migration v3** (`PLAN_TRAVAIL.md` § 2.7).
-2. Garder `/translations` accessible au client, ou le réserver au développeur une fois la nouvelle page en place ?
+2. ~~Garder `/translations` accessible au client, ou le réserver au développeur ?~~ **Sans objet** : `/translations` a disparu avec le paquet (voir § 2).
 3. Faut-il un bouton « Textes de ce PDF » dans la fiche commande de l'admin (cf. § 6.3) ?
 4. Liste d'exceptions du filtre « À traduire » (marques, références, « Best Seller »…) : à valider avec le client.

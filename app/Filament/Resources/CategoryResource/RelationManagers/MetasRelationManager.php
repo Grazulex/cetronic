@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 final class MetasRelationManager extends RelationManager
@@ -16,7 +16,7 @@ final class MetasRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -30,7 +30,7 @@ final class MetasRelationManager extends RelationManager
             ])->columns(4);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

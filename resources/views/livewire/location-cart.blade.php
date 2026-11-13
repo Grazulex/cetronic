@@ -1,7 +1,7 @@
 <div class="container">
 
     <h3 class="cart-location-title mb-2">{{ __('cart.comment.title') }}</h3>
-    <textarea class="form-control" name="comment" wire:model.lazy="comment" rows="3"></textarea>
+    <textarea class="form-control" name="comment" wire:model.blur="comment" rows="3"></textarea>
 
     <h3 class="cart-location-title mb-2">{{ __('cart.location.title') }}</h3>
 
@@ -15,7 +15,7 @@
         <label class="champ-form-commande" for="">{{ __('cart.location.invoice.name') }}</label>
         @if (count($locationsInvoice) > 0)
             @foreach ($locationsInvoice as $locationInvoice)
-                <input class="form-radio" type="radio" name="locationInvoice" wire:model="locationInvoice"
+                <input class="form-radio" type="radio" name="locationInvoice" wire:model.live="locationInvoice"
                        value="{{ $locationInvoice->id }}" /> {{ $locationInvoice->full_name }}
                 <a class="icon-action px-2"
                    href="{{ route('user_location.edit', ['location' => $locationInvoice->id]) }}">
@@ -38,7 +38,7 @@
         <label class="champ-form-commande" for="">{{ __('cart.location.shipping.name') }}</label>
         @if (count($locationsShipping) > 0)
             @foreach ($locationsShipping as $locationShipping)
-                <input class="form-radio" type="radio" name="locationShipping" wire:model="locationShipping"
+                <input class="form-radio" type="radio" name="locationShipping" wire:model.live="locationShipping"
                        value="{{ $locationShipping->id }}" /> {{ $locationShipping->full_name }}
                 <a class="icon-action px-2"
                    href="{{ route('user_location.edit', ['location' => $locationShipping->id]) }}">

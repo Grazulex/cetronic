@@ -10,9 +10,9 @@ use App\Models\Category;
 use App\Models\CategoryMeta;
 use App\Models\ItemMeta;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 
 final class BrandsRelationManager extends RelationManager
@@ -22,7 +22,7 @@ final class BrandsRelationManager extends RelationManager
     protected static ?string $recordTitleAttribute = 'name';
 
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -89,7 +89,7 @@ final class BrandsRelationManager extends RelationManager
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

@@ -10,11 +10,11 @@
     ];
 @endphp
 
-<div class="grid grid-cols-2 gap-4 md:grid-cols-5">
+<div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));">
     @foreach ($cards as $label => $value)
-        <x-filament::card>
+        <x-filament::section>
             <div class="text-sm font-medium text-gray-500">{{ $label }}</div>
             <div class="whitespace-nowrap text-xl font-semibold tracking-tight">{{ $value }}</div>
-        </x-filament::card>
+        </x-filament::section>
     @endforeach
 </div>

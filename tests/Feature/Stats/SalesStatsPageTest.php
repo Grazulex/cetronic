@@ -102,10 +102,10 @@ it('refreshes the table headers as soon as the grouping changes', function (): v
     createSale($this->itemA, 1, 10, '2026-02-01');
 
     livewire(SalesStats::class)
-        ->assertSeeHtml('filament-table-header-cell-brand-name')
+        ->assertSeeHtml('fi-table-header-cell-brand-name')
         ->set('filters.group_by', 'brand')
-        ->assertDontSeeHtml('filament-table-header-cell-brand-name')
-        ->assertDontSeeHtml('filament-table-header-cell-category-name');
+        ->assertDontSeeHtml('fi-table-header-cell-brand-name')
+        ->assertDontSeeHtml('fi-table-header-cell-category-name');
 });
 
 it('keeps the period shortcut when the date pickers echo its dates back', function (): void {
@@ -128,11 +128,20 @@ it('exports the filtered rows to Excel', function (): void {
 
     livewire(SalesStats::class)
         ->set('filters.brands', [$this->brandB->id])
-        ->callPageAction('export');
+        ->callAction('export');
 
     Excel::assertDownloaded('ventes-2026-01-01-2026-11-09.xlsx', function (SalesExport $export): bool {
         $rows = $export->collection();
 
         return 1 === $rows->count() && 'REF-B' === $rows->first()['Référence'] && 60.0 === $rows->first()['CA HT (€)'];
     });
+});
+
+it('lays the key figures out in a grid that does not depend on missing css classes', function (): void {
+    loginAsAdmin();
+
+    // Filament v3 ships no grid-cols-* utilities for custom views: the grid is inline.
+    $this->get(SalesStats::getUrl())
+        ->assertOk()
+        ->assertSee('grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr))', false);
 });
