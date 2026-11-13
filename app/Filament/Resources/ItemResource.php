@@ -13,6 +13,10 @@ use App\Filament\Resources\ItemResource\RelationManagers\MetasRelationManager;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Tabs;
@@ -75,107 +79,144 @@ final class ItemResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Tabs::make('Heading')
-                ->tabs([
-                    Tab::make('Brand & category')
+            Grid::make(3)->schema([
+                Tabs::make('Fiche')
+                    ->tabs([
+                        Tab::make('Général')
+                            ->schema([
+                                Select::make('brand_id')
+                                    ->label('Marque')
+                                    ->options(Brand::pluck('name', 'id'))
+                                    ->searchable()
+                                    ->required(),
+                                Select::make('category_id')
+                                    ->label('Catégorie')
+                                    ->options(Category::pluck('name', 'id'))
+                                    ->searchable(),
+                                TextInput::make('reference')
+                                    ->label('Référence')
+                                    ->required()
+                                    ->maxLength(255),
+                                Select::make('master_id')
+                                    ->label('Produit maître')
+                                    ->options(Item::pluck('reference', 'id'))
+                                    ->searchable(),
+                                TextInput::make('multiple_quantity')
+                                    ->label('Quantité multiple')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(1),
+                                TextInput::make('catalog_group')
+                                    ->label('Groupe catalogue'),
+                                Textarea::make('description')
+                                    ->label('Description')
+                                    ->rows(4)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(3),
+                        Tab::make('Prix')
+                            ->schema([
+                                TextInput::make('price')
+                                    ->label('Prix')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('price_b2b')
+                                    ->label('Prix B2B')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('price_promo')
+                                    ->label('Prix promo')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('price_special1')
+                                    ->label('Prix spécial 1')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('price_special2')
+                                    ->label('Prix spécial 2')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('price_special3')
+                                    ->label('Prix spécial 3')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('price_fix')
+                                    ->label('Prix fixe')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('sale_price')
+                                    ->label('Prix de vente conseillé')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                                TextInput::make('reseller_price')
+                                    ->label('Prix revendeur')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0)
+                                    ->suffix('€'),
+                            ])
+                            ->columns(3),
+                        Tab::make('Photos')
+                            ->schema([
+                                SpatieMediaLibraryFileUpload::make('pictures')
+                                    ->label('Photos')
+                                    ->disk('items')
+                                    ->enableReordering()
+                                    ->image()
+                                    ->appendFiles()
+                                    ->preserveFilenames()
+                                    ->multiple(),
+                            ]),
+                        Tab::make('Ventes')
+                            ->schema([
+                                View::make('filament.resources.item-resource.sales-tab'),
+                            ])
+                            ->visible(fn (?Item $record): bool => null !== $record),
+                    ])
+                    ->columnSpan(2),
+                Group::make([
+                    Section::make('Publication')
                         ->schema([
-                            Select::make('brand_id')
-                                ->options(Brand::pluck('name', 'id'))
-                                ->searchable()
-                                ->required(),
-                            Select::make('category_id')
-                                ->options(Category::pluck('name', 'id'))
-                                ->searchable(),
+                            Toggle::make('is_published')->label('En ligne')->required(),
+                            Toggle::make('is_new')->label('Nouveauté')->required(),
+                            Toggle::make('is_best_seller')->label('Best-seller'),
                         ]),
-                    Tab::make('Master data')
+                    Section::make('En bref')
                         ->schema([
-                            TextInput::make('reference')
-                                ->required()
-                                ->maxLength(255),
-                            Select::make('master_id')
-                                ->options(Item::pluck('reference', 'id'))
-                                ->searchable(),
-                            TextInput::make('multiple_quantity')
-                                ->required()
-                                ->numeric()
-                                ->default(1),
-                            Textarea::make('description')
-                                ->columns(2),
-                            TextInput::make('catalog_group'),
+                            Placeholder::make('summary_price_b2b')
+                                ->label('Prix B2B')
+                                ->content(fn (Item $record): string => Number::currency((float) $record->price_b2b, 'EUR', 'fr')),
+                            Placeholder::make('summary_sold')
+                                ->label('Vendus')
+                                ->content(fn (Item $record): string => (string) $record->orders()->count()),
+                            Placeholder::make('summary_pictures')
+                                ->label('Photos')
+                                ->content(fn (Item $record): string => (string) $record->getMedia()->count()),
+                            Placeholder::make('summary_updated')
+                                ->label('Modifié le')
+                                ->content(fn (Item $record): string => $record->updated_at?->format('d/m/Y') ?? '—'),
                         ])
-                        ->columns(2),
-                    Tab::make('Activations')
-                        ->schema([
-                            Toggle::make('is_new')->required(),
-                            Toggle::make('is_best_seller'),
-                            Toggle::make('is_published')->required(),
-                        ])
-                        ->columns(3),
-                    Tab::make('Pictures')
-                        ->schema([
-                            SpatieMediaLibraryFileUpload::make('pictures')
-                                ->disk('items')
-                                ->enableReordering()
-                                ->image()
-                                ->appendFiles()
-                                ->preserveFilenames()
-                                ->multiple(),
-                        ]),
-                    Tab::make('Prices')
-                        ->schema([
-                            TextInput::make('price')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('price_b2b')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('price_promo')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('price_special1')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('price_special2')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('price_special3')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('price_fix')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('sale_price')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                            TextInput::make('reseller_price')
-                                ->required()
-                                ->numeric()
-                                ->default(0)
-                                ->suffix('€'),
-                        ])
-                        ->columns(4),
-                    Tab::make('Ventes')
-                        ->schema([
-                            View::make('filament.resources.item-resource.sales-tab'),
-                        ])
+                        ->columns(2)
                         ->visible(fn (?Item $record): bool => null !== $record),
-                ])->columnSpan('full'),
+                ])
+                    ->columnSpan(1),
+            ]),
         ]);
     }
 
