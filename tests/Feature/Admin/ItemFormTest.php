@@ -50,3 +50,13 @@ it('still saves every field', function (): void {
 it('opens the create form without the summary failing', function (): void {
     livewire(CreateItem::class)->assertOk()->assertSee(['Général', 'Publication'])->assertDontSee('En bref');
 });
+
+it('keeps the product form in one column below the large breakpoint', function (): void {
+    $item = Item::factory()->create();
+    $grid = livewire(EditItem::class, ['record' => $item->getRouteKey()])->instance()->form->getComponents()[0];
+
+    [$tabs, $side] = $grid->getChildComponents();
+
+    expect($tabs->getColumnSpan())->toMatchArray(['default' => 1, 'lg' => 2])
+        ->and($side->getColumnSpan())->toMatchArray(['default' => 1, 'lg' => 1]);
+});

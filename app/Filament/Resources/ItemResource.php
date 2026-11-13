@@ -189,7 +189,7 @@ final class ItemResource extends Resource
                             ])
                             ->visible(fn (?Item $record): bool => null !== $record),
                     ])
-                    ->columnSpan(2),
+                    ->columnSpan(['lg' => 2]),
                 Group::make([
                     Section::make('Publication')
                         ->schema([
@@ -203,7 +203,7 @@ final class ItemResource extends Resource
                                 ->label('Prix B2B')
                                 ->content(fn (Item $record): string => Number::currency((float) $record->price_b2b, 'EUR', 'fr')),
                             Placeholder::make('summary_sold')
-                                ->label('Vendus')
+                                ->label('Commandes')
                                 ->content(fn (Item $record): string => (string) $record->orders()->count()),
                             Placeholder::make('summary_pictures')
                                 ->label('Photos')
@@ -215,7 +215,7 @@ final class ItemResource extends Resource
                         ->columns(2)
                         ->visible(fn (?Item $record): bool => null !== $record),
                 ])
-                    ->columnSpan(1),
+                    ->columnSpan(['lg' => 1]),
             ]),
         ]);
     }
@@ -274,7 +274,7 @@ final class ItemResource extends Resource
                     ->alignRight()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('orders_count')
-                    ->label('Vendus')
+                    ->label('Commandes')
                     ->counts('orders')
                     ->alignRight()
                     ->sortable(),

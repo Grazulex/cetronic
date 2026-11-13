@@ -47,7 +47,7 @@ it('shows only the useful columns by default', function (): void {
 });
 
 it('shows French column headers', function (): void {
-    livewire(ListItems::class)->assertSee(['Référence', 'Marque', 'Catégorie', 'Prix B2B', 'Promo', 'Statut', 'Vendus']);
+    livewire(ListItems::class)->assertSee(['Référence', 'Marque', 'Catégorie', 'Prix B2B', 'Promo', 'Statut', 'Commandes']);
 });
 
 it('keeps every filter, action and bulk action', function (): void {
@@ -89,4 +89,10 @@ it('labels the publication bulk actions in French', function (): void {
 
     expect($table->getBulkAction('published')->getLabel())->toBe('Mettre en ligne')
         ->and($table->getBulkAction('unpublished')->getLabel())->toBe('Retirer du site');
+});
+
+it('labels the order count "Commandes", not units sold', function (): void {
+    $table = livewire(ListItems::class)->instance()->getTable();
+
+    expect($table->getColumn('orders_count')->getLabel())->toBe('Commandes');
 });

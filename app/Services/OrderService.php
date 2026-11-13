@@ -84,9 +84,15 @@ final class OrderService
 
     public function getPdf(Order $order): string
     {
+        // Render in the customer's language, then restore the caller's (the admin runs in French).
+        $previous = App::getLocale();
         App::setLocale($order->user->language);
-        $pdf = Pdf::loadView('pdf/order', ['order' => $order]);
-        App::setLocale('en');
+
+        try {
+            $pdf = Pdf::loadView('pdf/order', ['order' => $order]);
+        } finally {
+            App::setLocale($previous);
+        }
 
         return $pdf->output();
     }

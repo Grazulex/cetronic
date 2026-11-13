@@ -61,3 +61,12 @@ it('shows the order form in French and still saves the tracking', function (): v
 
     expect($this->open->fresh()->tracking_number)->toBe('BE123');
 });
+
+it('keeps the admin in French after exporting an order PDF', function (): void {
+    app()->setLocale('fr');
+    $this->open->user->update(['language' => 'nl']);
+
+    app(App\Services\OrderService::class)->getPdf($this->open->fresh());
+
+    expect(app()->getLocale())->toBe('fr');
+});
