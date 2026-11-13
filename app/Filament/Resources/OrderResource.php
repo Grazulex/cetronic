@@ -44,20 +44,24 @@ final class OrderResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\Section::make('Main fields')
+            Forms\Components\Section::make('Commande')
                 ->schema([
                     Forms\Components\TextInput::make('reference')
+                        ->label('Référence')
                         ->required()
                         ->maxLength(255),
                     Forms\Components\Radio::make('status')
+                        ->label('Statut')
                         ->options(OrderStatusEnum::class)
                         ->required(),
                 ])->columns(2),
-            Forms\Components\Section::make('Tracking')
+            Forms\Components\Section::make('Suivi')
                 ->schema([
                     Forms\Components\TextInput::make('tracking_number')
+                        ->label('Numéro de suivi')
                         ->maxLength(255),
                     Forms\Components\TextInput::make('tracking_url')
+                        ->label('Lien de suivi')
                         ->maxLength(255),
                 ])->columns(2),
         ]);
@@ -68,19 +72,35 @@ final class OrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Date')
                     ->sortable()
-                    ->dateTime(),
+                    ->dateTime('d/m/Y H:i'),
                 Tables\Columns\TextColumn::make('reference')
+                    ->label('Référence')
+                    ->weight(\Filament\Support\Enums\FontWeight::SemiBold)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Client')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')->sortable(),
-                Tables\Columns\TextColumn::make('total_price')->suffix('€')->alignRight(),
-                Tables\Columns\BadgeColumn::make('items_count')->counts(
-                    'items',
-                )->alignRight(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Statut')
+                    ->badge()
+                    ->color(fn(OrderStatusEnum $state): string => match ($state) {
+                        OrderStatusEnum::OPEN => 'warning',
+                        OrderStatusEnum::IN_PREPARATION => 'info',
+                        OrderStatusEnum::SHIPPED => 'success',
+                    })
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('total_price')
+                    ->label('Total HT')
+                    ->money('EUR', locale: 'fr')
+                    ->alignRight(),
+                Tables\Columns\TextColumn::make('items_count')
+                    ->label('Articles')
+                    ->counts('items')
+                    ->alignRight(),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -108,7 +128,7 @@ final class OrderResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('exportPDF')
-                    ->label(__('Export PDF'))
+                    ->label('PDF')
                     ->action(function ($record) {
                         return response()->streamDownload(
                             function () use (
@@ -120,7 +140,7 @@ final class OrderResource extends Resource
                             'order_' . $record->reference . '.pdf',
                         );
                     })
-                    ->tooltip(__('Export'))
+                    ->tooltip('Télécharger le bon de commande')
                     ->icon('heroicon-s-arrow-down-tray')
                     ->color('primary'),
             ])
@@ -128,7 +148,7 @@ final class OrderResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
                 Tables\Actions\ForceDeleteBulkAction::make(),
                 Tables\Actions\BulkAction::make('shippend')
-                    ->label(__('Shipped selection'))
+                    ->label('Marquer comme expédiées')
                     ->icon('heroicon-s-check-circle')
                     ->action(function (Collection $records): void {
                         foreach ($records as $record) {
