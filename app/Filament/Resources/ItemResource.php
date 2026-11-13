@@ -32,16 +32,16 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
-use Filament\Tables\Columns\BadgeColumn;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Number;
 
 final class ItemResource extends Resource
 {
@@ -182,60 +182,77 @@ final class ItemResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query): Builder => $query->with('media'))
             ->columns([
-                Split::make([
-                    Stack::make([
-                        TextColumn::make('brand.name')
-                            ->searchable()
-                            ->sortable(),
-                        TextColumn::make('category.name')
-                            ->searchable()
-                            ->sortable(),
-                    ]),
-                    Stack::make([
-                        TextColumn::make('reference')
-                            ->searchable()
-                            ->sortable(),
-                        TextColumn::make('master.reference')
-                            ->prefix('master: ')
-                            ->sortable(),
-                    ]),
-                    Stack::make([
-                        IconColumn::make('is_published')->boolean(),
-                        IconColumn::make('is_best_seller')->boolean(),
-                    ]),
-                    Stack::make([
-                        TextColumn::make('price_b2b')->prefix('b2b: ')->suffix('€')->alignRight(),
-                        TextColumn::make('price_promo')->prefix('promo: ')->suffix('€')->alignRight(),
-                        TextColumn::make('multiple_quantity')->prefix('multi: ')->alignRight(),
-                    ]),
-                    Stack::make([
-                        BadgeColumn::make('orders_count')
-                            ->counts(
-                                'orders',
-                            )
-                            ->suffix(' orders')
-                            ->color('gray')
-                            ->sortable(),
-                        BadgeColumn::make('media_count')
-                            ->counts(
-                                'media',
-                            )
-                            ->suffix(' pictures')
-                            ->color('primary')
-                            ->sortable(),
-                    ]),
-                    Stack::make([
-                        TextColumn::make('created_at')
-                            ->prefix('created: ')
-                            ->date('d/m/Y')
-                            ->sortable(),
-                        TextColumn::make('updated_at')
-                            ->prefix('updated: ')
-                            ->date('d/m/Y')
-                            ->sortable(),
-                    ]),
-                ]),
+                SpatieMediaLibraryImageColumn::make('pictures')
+                    ->label('')
+                    ->conversion('thumb')
+                    ->limit(1)
+                    ->square()
+                    ->size(32),
+                TextColumn::make('reference')
+                    ->label('Référence')
+                    ->weight(FontWeight::SemiBold)
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('brand.name')
+                    ->label('Marque')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('category.name')
+                    ->label('Catégorie')
+                    ->color('gray')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('master.reference')
+                    ->label('Produit maître')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('price_b2b')
+                    ->label('Prix B2B')
+                    ->money('EUR', locale: 'fr')
+                    ->alignRight()
+                    ->sortable(),
+                TextColumn::make('price_promo')
+                    ->label('Promo')
+                    ->formatStateUsing(fn($state): string => $state > 0 ? Number::currency((float) $state, 'EUR', 'fr') : '—')
+                    ->color(fn($state): string => $state > 0 ? 'danger' : 'gray')
+                    ->alignRight()
+                    ->sortable(),
+                IconColumn::make('is_published')
+                    ->label('Statut')
+                    ->boolean()
+                    ->tooltip(fn($state): string => $state ? 'En ligne' : 'Hors ligne')
+                    ->sortable(),
+                IconColumn::make('is_best_seller')
+                    ->label('Best-seller')
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('multiple_quantity')
+                    ->label('Quantité multiple')
+                    ->alignRight()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('orders_count')
+                    ->label('Vendus')
+                    ->counts('orders')
+                    ->alignRight()
+                    ->sortable(),
+                TextColumn::make('media_count')
+                    ->label('Photos')
+                    ->counts('media')
+                    ->alignRight()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('created_at')
+                    ->label('Créé le')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->label('Modifié le')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('brand')->relationship('brand', 'name'),
@@ -248,12 +265,12 @@ final class ItemResource extends Resource
                 TernaryFilter::make('is_best_seller'),
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->filtersLayout(FiltersLayout::AboveContent)
+            ->filtersLayout(FiltersLayout::AboveContentCollapsible)
             ->actions([
                 EditAction::make(),
                 RestoreAction::make(),
                 Action::make('Duplicate')
-                    ->label(__('Duplicate'))
+                    ->label('Dupliquer')
                     ->action(function ($record): void {
                         $new_item = $record->replicate();
                         $new_item->reference = $new_item->reference . '_copy';
@@ -263,7 +280,7 @@ final class ItemResource extends Resource
                         );
                     })
                     ->requiresConfirmation()
-                    ->tooltip(__('Duplicate'))
+                    ->tooltip('Dupliquer')
                     ->icon('heroicon-s-document-duplicate')
                     ->color('primary'),
             ])
@@ -271,7 +288,7 @@ final class ItemResource extends Resource
                 DeleteBulkAction::make(),
                 RestoreBulkAction::make(),
                 BulkAction::make('published')
-                    ->label(__('Published selection'))
+                    ->label('Mettre en ligne')
                     ->icon('heroicon-s-check-circle')
                     ->action(function (Collection $records): void {
                         $logAction = app(LogItemPublishChangeAction::class);
@@ -292,7 +309,7 @@ final class ItemResource extends Resource
                     })
                     ->deselectRecordsAfterCompletion(),
                 BulkAction::make('unpublished')
-                    ->label(__('Unpublished selection'))
+                    ->label('Retirer du site')
                     ->icon('heroicon-s-x-mark')
                     ->action(function (Collection $records): void {
                         $logAction = app(LogItemPublishChangeAction::class);
