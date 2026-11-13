@@ -113,3 +113,9 @@ it('replaces the old dashboard widgets', function (): void {
         ->and(class_exists(App\Filament\Widgets\LatestCartsOpen::class))->toBeFalse()
         ->and(class_exists(App\Filament\Widgets\LatestCustomersToActived::class))->toBeFalse();
 });
+
+it('falls back to the current month for an array in the query string', function (): void {
+    loginAsAdmin();
+
+    $this->get('/admin?mois[]=2026-10')->assertOk()->assertSee('Novembre 2026');
+});

@@ -22,8 +22,9 @@ use Livewire\Attributes\Url;
  */
 final class Dashboard extends BaseDashboard
 {
+    /** 'Y-m' from ?mois=; mixed because the query string can carry anything (e.g. an array). */
     #[Url(as: 'mois')]
-    public ?string $month = null;
+    public mixed $month = null;
 
     protected static string $view = 'filament.pages.dashboard';
 
@@ -86,7 +87,7 @@ final class Dashboard extends BaseDashboard
 
     private function period(): DashboardPeriod
     {
-        return DashboardPeriod::for($this->month, Carbon::now());
+        return DashboardPeriod::for(is_string($this->month) ? $this->month : null, Carbon::now());
     }
 
     private function isAdmin(): bool

@@ -204,7 +204,7 @@ final class ItemResource extends Resource
                                 ->content(fn (Item $record): string => Number::currency((float) $record->price_b2b, 'EUR', 'fr')),
                             Placeholder::make('summary_sold')
                                 ->label('Commandes')
-                                ->content(fn (Item $record): string => (string) $record->orders()->count()),
+                                ->content(fn (Item $record): string => (string) $record->orders()->whereHas('order')->count()),
                             Placeholder::make('summary_pictures')
                                 ->label('Photos')
                                 ->content(fn (Item $record): string => (string) $record->getMedia()->count()),
@@ -275,7 +275,8 @@ final class ItemResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('orders_count')
                     ->label('Commandes')
-                    ->counts('orders')
+                    // Like the sales statistics: lines of non-deleted orders only.
+                    ->counts(['orders' => fn (Builder $query): Builder => $query->whereHas('order')])
                     ->alignRight()
                     ->sortable(),
                 TextColumn::make('media_count')

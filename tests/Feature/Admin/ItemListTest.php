@@ -96,3 +96,13 @@ it('labels the order count "Commandes", not units sold', function (): void {
 
     expect($table->getColumn('orders_count')->getLabel())->toBe('Commandes');
 });
+
+it('counts the orders of a product like the sales statistics do, deleted orders excluded', function (): void {
+    createSale($this->online, 1, 10, '2026-11-02');
+    createSale($this->online, 2, 10, '2026-11-03');
+    createSale($this->online, 1, 10, '2026-11-04')->delete();
+
+    $row = livewire(ListItems::class)->instance()->getTableRecords()->firstWhere('id', $this->online->id);
+
+    expect((int) $row->orders_count)->toBe(2);
+});
