@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\ItemResource\Pages;
 
 use App\Filament\Resources\ItemResource;
+use App\Models\Item;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
@@ -22,7 +23,7 @@ final class ListItems extends ListRecords
     public function getTabs(): array
     {
         // Counts follow the list default, which hides deleted products.
-        $count = fn(callable $scope): int => $scope(ItemResource::getEloquentQuery()->withoutTrashed())->count();
+        $count = fn(callable $scope): int => $scope(Item::query())->count();
 
         $published = fn(Builder $query): Builder => $query->where('is_published', true);
         $unpublished = fn(Builder $query): Builder => $query->where('is_published', false);

@@ -8,6 +8,7 @@ use App\Exports\BrandDiscounts\BrandDiscountsExport;
 use App\Exports\UsersExport;
 use App\Filament\Resources\UserResource;
 use App\Models\Brand;
+use App\Models\User;
 use Carbon\Carbon;
 use Closure;
 use Filament\Actions;
@@ -45,7 +46,7 @@ final class ListUsers extends ListRecords
             'administrateurs' => Tab::make('Administrateurs')->modifyQueryUsing($role('admin')),
             'a-activer' => Tab::make('À activer')
                 ->modifyQueryUsing($waiting)
-                ->badge(UserResource::getEloquentQuery()->withoutTrashed()->where('role', 'customer')->where('is_actif', false)->count()),
+                ->badge(User::query()->where('role', 'customer')->where('is_actif', false)->count()),
         ];
     }
 
