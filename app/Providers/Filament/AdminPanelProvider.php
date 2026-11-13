@@ -34,6 +34,7 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->darkMode(false)
             ->font('DM Sans')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->maxContentWidth(MaxWidth::Full)
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups()
