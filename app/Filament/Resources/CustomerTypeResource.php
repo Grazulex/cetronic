@@ -18,7 +18,15 @@ class CustomerTypeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationGroup = 'Users';
+    protected static ?string $navigationGroup = 'Clients';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationLabel = 'Types de client';
+
+    protected static ?string $modelLabel = 'type de client';
+
+    protected static ?string $pluralModelLabel = 'types de client';
 
     public static function form(Form $form): Form
     {

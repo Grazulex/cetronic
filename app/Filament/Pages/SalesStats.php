@@ -41,11 +41,11 @@ final class SalesStats extends Page implements HasTable
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static ?string $navigationGroup = 'Orders';
+    protected static ?string $navigationGroup = 'Ventes';
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Statistiques ventes';
-
-    protected static ?int $navigationSort = 50;
 
     protected static ?string $title = 'Statistiques des ventes';
 

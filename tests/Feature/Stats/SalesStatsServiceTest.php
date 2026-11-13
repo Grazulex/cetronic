@@ -168,3 +168,39 @@ it('builds filters from the page form state', function (): void {
         ->and($filters->userId)->toBe(7)
         ->and($filters->agentId)->toBeNull();
 });
+
+it('cumulates the revenue day by day, days without sales included', function (): void {
+    createSale($this->itemA, 1, 100, '2026-11-02 10:00:00');
+    createSale($this->itemA, 1, 999, '2026-11-03 10:00:00')->delete();
+    createSale($this->itemB, 2, 25, '2026-11-05 16:00:00');
+    createSale($this->itemA, 1, 7, '2026-11-07 09:00:00');
+
+    $days = $this->service->dailyCumulative(new SalesFilters(from: Carbon::parse('2026-11-01'), to: Carbon::parse('2026-11-06')));
+
+    expect($days)->toBe([
+        ['day' => 1, 'revenue' => 0.0],
+        ['day' => 2, 'revenue' => 100.0],
+        ['day' => 3, 'revenue' => 100.0],
+        ['day' => 4, 'revenue' => 100.0],
+        ['day' => 5, 'revenue' => 150.0],
+        ['day' => 6, 'revenue' => 150.0],
+    ]);
+});
+
+it('counts the customers whose first order falls in the period', function (): void {
+    $returning = User::factory()->create(['role' => 'customer']);
+    $new = User::factory()->create(['role' => 'customer']);
+    $onlyDeleted = User::factory()->create(['role' => 'customer']);
+    $deletedBefore = User::factory()->create(['role' => 'customer']);
+
+    createSale($this->itemA, 1, 10, '2026-10-10', ['user_id' => $returning->id]);
+    createSale($this->itemA, 1, 10, '2026-11-02', ['user_id' => $returning->id]);
+    createSale($this->itemA, 1, 10, '2026-11-05', ['user_id' => $new->id]);
+    createSale($this->itemA, 1, 10, '2026-11-06', ['user_id' => $onlyDeleted->id])->delete();
+    createSale($this->itemA, 1, 10, '2026-09-01', ['user_id' => $deletedBefore->id])->delete();
+    createSale($this->itemA, 1, 10, '2026-11-08', ['user_id' => $deletedBefore->id]);
+
+    $november = new SalesFilters(from: Carbon::parse('2026-11-01'), to: Carbon::parse('2026-11-30'));
+
+    expect($this->service->newCustomers($november))->toBe(2); // $new and $deletedBefore (its earlier order is deleted)
+});

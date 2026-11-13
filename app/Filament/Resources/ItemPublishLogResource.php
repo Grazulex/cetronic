@@ -22,11 +22,15 @@ final class ItemPublishLogResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationGroup = 'Items';
+    protected static ?string $navigationGroup = 'Catalogue';
 
-    protected static ?string $navigationLabel = 'Logs Publication';
+    protected static ?int $navigationSort = 6;
 
-    protected static ?int $navigationSort = 10;
+    protected static ?string $navigationLabel = 'Journal de publication';
+
+    protected static ?string $modelLabel = 'entrée du journal';
+
+    protected static ?string $pluralModelLabel = 'journal de publication';
 
     public static function canViewAny(): bool
     {

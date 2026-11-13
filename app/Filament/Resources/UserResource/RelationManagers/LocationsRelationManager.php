@@ -16,6 +16,8 @@ final class LocationsRelationManager extends RelationManager
 {
     protected static string $relationship = 'locations';
 
+    protected static ?string $title = 'Adresses';
+
     //protected static ?string $recordTitleAttribute = 'street';
 
     public function form(Form $form): Form

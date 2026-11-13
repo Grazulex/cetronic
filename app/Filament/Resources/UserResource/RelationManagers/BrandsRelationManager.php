@@ -19,6 +19,8 @@ final class BrandsRelationManager extends RelationManager
 {
     protected static string $relationship = 'brands';
 
+    protected static ?string $title = 'Marques et remises';
+
     protected static ?string $recordTitleAttribute = 'name';
 
 

@@ -34,9 +34,17 @@ final class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-bookmark';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Items';
+    protected static ?string $navigationGroup = 'Catalogue';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationLabel = 'Marques';
+
+    protected static ?string $modelLabel = 'marque';
+
+    protected static ?string $pluralModelLabel = 'marques';
 
     public static function canViewAny(): bool
     {

@@ -28,6 +28,8 @@ final class MetasRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'value';
 
+    protected static ?string $title = 'Caractéristiques';
+
     public function form(Form $form): Form
     {
         return $form

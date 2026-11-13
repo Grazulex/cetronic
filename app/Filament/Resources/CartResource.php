@@ -25,7 +25,15 @@ final class CartResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
-    protected static ?string $navigationGroup = 'Orders';
+    protected static ?string $navigationGroup = 'Ventes';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationLabel = 'Paniers';
+
+    protected static ?string $modelLabel = 'panier';
+
+    protected static ?string $pluralModelLabel = 'paniers';
 
     public static function canViewAny(): bool
     {
@@ -37,7 +45,7 @@ final class CartResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
-                    ->label('User')
+                    ->label('Client')
                     ->options(
                         User::all()
                             ->pluck('name', 'id')
@@ -51,7 +59,7 @@ final class CartResource extends Resource
                     )
                     ->required(),
                 Forms\Components\Select::make('shipping_location_id')
-                    ->label('Shipping location')
+                    ->label('Adresse de livraison')
                     ->options(function (callable $get) {
                         $user = User::find($get('user_id'));
                         if ( ! $user) {
@@ -64,7 +72,7 @@ final class CartResource extends Resource
                             ->toArray();
                     }),
                 Forms\Components\Select::make('invoice_location_id')
-                    ->label('Invoice location')
+                    ->label('Adresse de facturation')
                     ->options(function (callable $get) {
                         $user = User::find($get('user_id'));
                         if ( ! $user) {
@@ -85,15 +93,23 @@ final class CartResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Client')
+                    ->weight(\Filament\Support\Enums\FontWeight::SemiBold)
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Statut')
+                    ->badge()
+                    ->color(fn(CartStatusEnum $state): string => CartStatusEnum::OPEN === $state ? 'warning' : 'success')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Créé le')
                     ->sortable()
-                    ->dateTime(),
+                    ->dateTime('d/m/Y H:i'),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifié le')
                     ->sortable()
-                    ->dateTime(),
+                    ->dateTime('d/m/Y H:i'),
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([
@@ -103,8 +119,7 @@ final class CartResource extends Resource
                             'status',
                             CartStatusEnum::OPEN->value,
                         ),
-                    )
-                    ->default(),
+                    ),
                 Filter::make('close')->query(
                     fn(Builder $query): Builder => $query->where(
                         'status',

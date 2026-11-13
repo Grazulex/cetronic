@@ -32,9 +32,17 @@ final class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static ?string $navigationGroup = 'Items';
+    protected static ?string $navigationGroup = 'Catalogue';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationLabel = 'Catégories';
+
+    protected static ?string $modelLabel = 'catégorie';
+
+    protected static ?string $pluralModelLabel = 'catégories';
 
     public static function canViewAny(): bool
     {

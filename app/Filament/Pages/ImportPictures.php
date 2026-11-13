@@ -31,7 +31,11 @@ final class ImportPictures extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-photo';
 
-    protected static ?string $navigationGroup = 'Upload';
+    protected static ?string $navigationGroup = 'Imports';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationLabel = 'Import photos';
 
     protected static string $view = 'filament.pages.import-pictures';
 
@@ -40,7 +44,6 @@ final class ImportPictures extends Page implements HasForms
         'category_id' => 'required',
         'pictures' => 'required',
     ];
-
 
     public function submit(): Redirector|RedirectResponse
     {

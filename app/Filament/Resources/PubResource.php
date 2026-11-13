@@ -22,9 +22,17 @@ class PubResource extends Resource
 {
     protected static ?string $model = Pub::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
 
-    protected static ?string $navigationGroup = 'Items';
+    protected static ?string $navigationGroup = 'Catalogue';
+
+    protected static ?int $navigationSort = 4;
+
+    protected static ?string $navigationLabel = 'Pubs';
+
+    protected static ?string $modelLabel = 'pub';
+
+    protected static ?string $pluralModelLabel = 'pubs';
 
     public static function canViewAny(): bool
     {
