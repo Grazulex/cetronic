@@ -46,9 +46,11 @@ final class SiteTexts extends Page
     /** @var array<string, array<string, ?string>> SiteText::id() => locale => value when the row was loaded */
     public array $loaded = [];
 
-    protected static ?string $navigationIcon = 'heroicon-o-language';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
 
     protected static ?string $navigationGroup = 'Contenu';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Textes du site';
 

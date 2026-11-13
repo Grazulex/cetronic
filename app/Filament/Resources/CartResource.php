@@ -25,7 +25,15 @@ final class CartResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
-    protected static ?string $navigationGroup = 'Orders';
+    protected static ?string $navigationGroup = 'Ventes';
+
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationLabel = 'Paniers';
+
+    protected static ?string $modelLabel = 'panier';
+
+    protected static ?string $pluralModelLabel = 'paniers';
 
     public static function canViewAny(): bool
     {

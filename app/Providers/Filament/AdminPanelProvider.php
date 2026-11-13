@@ -44,6 +44,7 @@ final class AdminPanelProvider extends PanelProvider
             ->maxContentWidth(MaxWidth::Full)
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups()
+            ->navigationGroups(['Ventes', 'Catalogue', 'Clients', 'Contenu', 'Imports'])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

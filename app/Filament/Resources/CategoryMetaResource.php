@@ -26,9 +26,15 @@ final class CategoryMetaResource extends Resource
 
     protected static ?string $label = 'Metas translation';
 
-    protected static ?string $navigationGroup = 'Items';
+    protected static ?string $navigationGroup = 'Catalogue';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string $navigationLabel = 'Traductions des métas';
+
+    protected static ?string $modelLabel = 'traduction de méta';
+
+    protected static ?string $pluralModelLabel = 'traductions des métas';
 
     public static function canViewAny(): bool
     {
@@ -63,7 +69,6 @@ final class CategoryMetaResource extends Resource
                 DeleteBulkAction::make(),
             ]);
     }
-
 
     public static function getRelations(): array
     {

@@ -29,9 +29,17 @@ final class PdfCatalogResource extends Resource
 {
     protected static ?string $model = PdfCatalog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-bookmark';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = 'PDF CATALOG';
+    protected static ?string $navigationGroup = 'Contenu';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationLabel = 'Catalogues PDF';
+
+    protected static ?string $modelLabel = 'catalogue PDF';
+
+    protected static ?string $pluralModelLabel = 'catalogues PDF';
 
     public static function form(Form $form): Form
     {

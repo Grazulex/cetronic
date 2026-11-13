@@ -27,9 +27,13 @@ final class ImportCSV extends Page implements HasForms
 
     public int $category_id;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cloud-arrow-up';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
 
-    protected static ?string $navigationGroup = 'Upload';
+    protected static ?string $navigationGroup = 'Imports';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationLabel = 'Import CSV';
 
     protected static string $view = 'filament.pages.import-c-s-v';
 

@@ -34,9 +34,11 @@ final class ImportBrandDiscounts extends Page implements HasForms
     /** @var array{errors: array<int, array{row: int, column: string, message: string}>, summary: array<int, string>}|null */
     public ?array $report = null;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
+    protected static ?string $navigationIcon = 'heroicon-o-receipt-percent';
 
-    protected static ?string $navigationGroup = 'Users';
+    protected static ?string $navigationGroup = 'Clients';
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Import remises marque';
 

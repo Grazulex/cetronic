@@ -26,7 +26,15 @@ final class OrderResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
-    protected static ?string $navigationGroup = 'Orders';
+    protected static ?string $navigationGroup = 'Ventes';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationLabel = 'Commandes';
+
+    protected static ?string $modelLabel = 'commande';
+
+    protected static ?string $pluralModelLabel = 'commandes';
 
     public static function canViewAny(): bool
     {

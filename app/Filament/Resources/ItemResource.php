@@ -47,9 +47,17 @@ final class ItemResource extends Resource
 {
     protected static ?string $model = Item::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationGroup = 'Items';
+    protected static ?string $navigationGroup = 'Catalogue';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationLabel = 'Produits';
+
+    protected static ?string $modelLabel = 'produit';
+
+    protected static ?string $pluralModelLabel = 'produits';
 
     public static function canViewAny(): bool
     {
