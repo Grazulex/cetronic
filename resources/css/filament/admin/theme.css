@@ -1,3 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap');
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
 
 @config 'tailwind.config.js';
+
+/*
+ * "Boutique" look: the public site's identity (cream, black, serif titles).
+ * Tokens from docs/superpowers/specs/2026-11-13-admin-redesign-design.md.
+ */
+:root {
+    --boutique-cream: #f6efe6;
+    --boutique-surface: #faf6f0;
+    --boutique-border: #eee5da;
+    --boutique-border-strong: #e3dbd0;
+    --boutique-ink: #111;
+    --boutique-muted: #8a8178;
+}
+
+/* Page background and text */
+.fi-body {
+    background-color: #fff;
+    color: var(--boutique-ink);
+}
+
+/* Serif titles, like "NOS MONTRES" on the public site */
+.fi-header-heading,
+.fi-simple-header-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: .01em;
+}
+
+/* Sidebar: cream, black active entry */
+.fi-sidebar,
+.fi-sidebar-header {
+    background-color: var(--boutique-cream);
+}
+
+.fi-sidebar-header {
+    box-shadow: none;
+    border-bottom: 1px solid var(--boutique-border);
+}
+
+.fi-sidebar-group-label {
+    color: var(--boutique-muted);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.fi-sidebar-item-button {
+    padding-block: .375rem;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-button {
+    background-color: var(--boutique-ink);
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-button .fi-sidebar-item-label,
+.fi-sidebar-item-active .fi-sidebar-item-button .fi-sidebar-item-icon {
+    color: #fff;
+}
+
+/* Top bar */
+.fi-topbar > nav {
+    box-shadow: none;
+    border-bottom: 1px solid var(--boutique-border);
+}
+
+/* Cards and sections on the warm surface */
+.fi-section,
+.fi-ta-ctn {
+    box-shadow: none;
+    border: 1px solid var(--boutique-border);
+    --tw-ring-shadow: 0 0 #0000;
+}
+
+/* Tables: black rule above small uppercase headers, dense rows */
+.fi-ta-ctn table thead tr {
+    border-top: 1px solid var(--boutique-ink);
+}
+
+.fi-ta-header-cell {
+    padding-block: .5rem;
+}
+
+.fi-ta-header-cell-label {
+    color: var(--boutique-muted);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.fi-ta-cell > * > .fi-ta-text,
+.fi-ta-cell > * > .fi-ta-icon,
+.fi-ta-cell > * > .fi-ta-image,
+.fi-ta-text.py-4,
+.fi-ta-icon.py-4,
+.fi-ta-image.py-4 {
+    padding-block: .4rem;
+}
+
+.fi-ta-row:hover {
+    background-color: var(--boutique-surface);
+}
+
+/* Forms: tighter */
+.fi-fo-component-ctn {
+    gap: 1rem;
+}

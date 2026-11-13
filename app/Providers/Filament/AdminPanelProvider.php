@@ -30,10 +30,15 @@ final class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#111111'),
+                'gray' => Color::Stone,
             ])
+            ->brandName('Cetronic Benelux')
+            ->brandLogo(asset('logo.svg'))
+            ->brandLogoHeight('2.25rem')
+            ->favicon(asset('favicon.ico'))
             ->darkMode(false)
-            ->font('DM Sans')
+            ->font('Inter')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->maxContentWidth(MaxWidth::Full)
             ->sidebarCollapsibleOnDesktop()
