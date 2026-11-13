@@ -284,85 +284,112 @@ final class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informations')
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->label('Nom')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('email')
-                            ->label('E-mail')
-                            ->email()
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('external_reference')
-                            ->label('Référence externe')
-                            ->maxLength(255),
-                        Forms\Components\Radio::make('role')
-                            ->label('Type de compte')
-                            ->options(UserRoleEnum::class)
-                            ->required(),
-                        Forms\Components\Select::make('language')
-                            ->label('Langue')
-                            ->options(['fr' => 'Français', 'en' => 'English', 'nl' => 'Nederlands'])
-                            ->searchable(),
-                        Forms\Components\Select::make('customer_type_id')
-                            ->label('Type de client')
-                            ->options(CustomerType::where('is_active', true)->pluck('name', 'id'))
-                            ->searchable()
-                            ->nullable(),
-                    ])->columns(2),
-                Forms\Components\Section::make('Livraison')->schema([
-                    Forms\Components\TextInput::make('franco')
-                        ->label('Franco de port')
-                        ->helperText('Montant de commande à partir duquel la livraison est gratuite')
-                        ->numeric()
-                        ->suffix('€'),
-                    Forms\Components\TextInput::make('shipping_price')
-                        ->label('Frais de port')
-                        ->helperText('Frais de port fixes pour chaque commande')
-                        ->numeric()
-                        ->suffix('€'),
-                ])->columns(2),
-                Forms\Components\Section::make('Activation')->schema([
-                    Forms\Components\Select::make('agent_id')
-                        ->label('Agent')
-                        ->options(User::where('role', 'agent')->pluck('name', 'id'))
-                        ->searchable(),
-                    Forms\Components\Toggle::make('is_actif')
-                        ->label('Compte actif')
-                        ->required(),
-                    Forms\Components\Toggle::make('is_blocked')
-                        ->label('Compte bloqué')
-                        ->required(),
-                    Forms\Components\Toggle::make('receive_cart_notification')
-                        ->label('Reçoit les notifications de panier')
-                        ->required(),
-                    Forms\Components\Textarea::make('divers')
-                        ->label('Remarques'),
-                ])->columns(2),
-                Forms\Components\Section::make('Remises par marque')->schema([
-                    Forms\Components\Repeater::make('brands')
-                        ->label('Création rapide')
-                        ->schema([
-                            Forms\Components\Select::make('brand_id')
-                                ->label('Marques')
-                                ->options(Brand::pluck('name', 'id'))
-                                ->multiple(true)
-                                ->searchable(),
-                            Forms\Components\Select::make('category_id')
-                                ->label('Catégorie')
-                                ->options(Category::pluck('name', 'id'))
-                                ->searchable(),
-                            Forms\Components\TextInput::make('discount')
-                                ->label('Remise')
-                                ->numeric(),
-                            Forms\Components\Toggle::make('is_excluded')
-                                ->label('Exclue')
+                Forms\Components\Grid::make(['default' => 1, 'lg' => 3])->schema([
+                    Forms\Components\Group::make([
+                        Forms\Components\Section::make('Informations')
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Nom')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('email')
+                                    ->label('E-mail')
+                                    ->email()
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('external_reference')
+                                    ->label('Référence externe')
+                                    ->maxLength(255),
+                                Forms\Components\Select::make('language')
+                                    ->label('Langue')
+                                    ->options(['fr' => 'Français', 'en' => 'English', 'nl' => 'Nederlands'])
+                                    ->searchable(),
+                                Forms\Components\Select::make('customer_type_id')
+                                    ->label('Type de client')
+                                    ->options(CustomerType::where('is_active', true)->pluck('name', 'id'))
+                                    ->searchable()
+                                    ->nullable(),
+                                Forms\Components\Select::make('agent_id')
+                                    ->label('Agent')
+                                    ->options(User::where('role', 'agent')->pluck('name', 'id'))
+                                    ->searchable(),
+                            ])->columns(3),
+                        Forms\Components\Section::make('Livraison')->schema([
+                            Forms\Components\TextInput::make('franco')
+                                ->label('Franco de port')
+                                ->helperText('Montant de commande à partir duquel la livraison est gratuite')
+                                ->numeric()
+                                ->suffix('€'),
+                            Forms\Components\TextInput::make('shipping_price')
+                                ->label('Frais de port')
+                                ->helperText('Frais de port fixes pour chaque commande')
+                                ->numeric()
+                                ->suffix('€'),
+                        ])->columns(2),
+                        Forms\Components\Section::make('Remises par marque')
+                            ->description('Création rapide de plusieurs remises en une fois')
+                            ->collapsible()
+                            ->schema([
+                                Forms\Components\Repeater::make('brands')
+                                    ->hiddenLabel()
+                                    ->schema([
+                                        Forms\Components\Select::make('brand_id')
+                                            ->label('Marques')
+                                            ->options(Brand::pluck('name', 'id'))
+                                            ->multiple(true)
+                                            ->searchable(),
+                                        Forms\Components\Select::make('category_id')
+                                            ->label('Catégorie')
+                                            ->options(Category::pluck('name', 'id'))
+                                            ->searchable(),
+                                        Forms\Components\TextInput::make('discount')
+                                            ->label('Remise')
+                                            ->numeric(),
+                                        Forms\Components\Toggle::make('is_excluded')
+                                            ->label('Exclue')
+                                            ->required(),
+                                    ])
+                                    ->columns(4),
+                            ]),
+                    ])->columnSpan(['lg' => 2]),
+                    Forms\Components\Group::make([
+                        Forms\Components\Section::make('Compte')->schema([
+                            Forms\Components\ToggleButtons::make('role')
+                                ->label('Type de compte')
+                                ->options(UserRoleEnum::class)
+                                ->inline()
                                 ->required(),
-                        ])
-                        ->columns(4),
-                ])->columns(1),
+                            Forms\Components\Toggle::make('is_actif')
+                                ->label('Compte actif')
+                                ->required(),
+                            Forms\Components\Toggle::make('is_blocked')
+                                ->label('Compte bloqué')
+                                ->required(),
+                            Forms\Components\Toggle::make('receive_cart_notification')
+                                ->label('Notifications de panier')
+                                ->required(),
+                        ]),
+                        Forms\Components\Section::make('En bref')
+                            ->schema([
+                                Forms\Components\Placeholder::make('summary_orders')
+                                    ->label('Commandes')
+                                    ->content(fn (User $record): string => (string) $record->orders()->count()),
+                                Forms\Components\Placeholder::make('summary_logged_at')
+                                    ->label('Dernière connexion')
+                                    ->content(fn (User $record): string => $record->logged_at ? \Illuminate\Support\Carbon::parse($record->logged_at)->format('d/m/Y') : 'Jamais'),
+                                Forms\Components\Placeholder::make('summary_created_at')
+                                    ->label('Client depuis')
+                                    ->content(fn (User $record): string => $record->created_at?->format('d/m/Y') ?? '—'),
+                            ])
+                            ->columns(2)
+                            ->visible(fn (?User $record): bool => null !== $record),
+                        Forms\Components\Section::make('Remarques')->schema([
+                            Forms\Components\Textarea::make('divers')
+                                ->hiddenLabel()
+                                ->rows(4),
+                        ]),
+                    ])->columnSpan(['lg' => 1]),
+                ]),
             ]);
     }
 

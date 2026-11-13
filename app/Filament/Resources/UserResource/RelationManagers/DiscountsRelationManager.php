@@ -16,6 +16,8 @@ final class DiscountsRelationManager extends RelationManager
 {
     protected static string $relationship = 'discounts';
 
+    protected static ?string $title = 'Remises par quantité';
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public function form(Form $form): Form

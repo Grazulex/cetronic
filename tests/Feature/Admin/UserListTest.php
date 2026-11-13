@@ -63,7 +63,7 @@ it('keeps every filter, action and bulk action', function (): void {
 
 it('shows the customer form in French and still saves it', function (): void {
     livewire(EditUser::class, ['record' => $this->active->getRouteKey()])
-        ->assertSee(['Informations', 'Livraison', 'Activation', 'Remises par marque', 'Nom', 'Langue', 'Compte actif'])
+        ->assertSee(['Informations', 'Livraison', 'Compte', 'Remises par marque', 'Nom', 'Langue', 'Compte actif'])
         ->fillForm(['name' => 'Bijouterie Dupont'])
         ->call('save')
         ->assertHasNoFormErrors();
@@ -97,4 +97,39 @@ it('shows the e-mail under the name and still finds a user by e-mail', function 
         ->searchTable('dupont@bijouterie')
         ->assertCanSeeTableRecords([$this->active])
         ->assertCanNotSeeTableRecords([$this->waiting, $this->agent]);
+});
+
+it('lays the customer form out with a side panel', function (): void {
+    livewire(EditUser::class, ['record' => $this->active->getRouteKey()])
+        ->assertSee(['Informations', 'Livraison', 'Remises par marque', 'Compte', 'En bref', 'Commandes', 'Dernière connexion', 'Remarques']);
+
+    $grid = livewire(EditUser::class, ['record' => $this->active->getRouteKey()])->instance()->form->getComponents()[0];
+
+    expect($grid)->toBeInstanceOf(Filament\Forms\Components\Grid::class)
+        ->and($grid->getColumns('lg'))->toBe(3);
+});
+
+it('saves the account switches from the side panel', function (): void {
+    livewire(EditUser::class, ['record' => $this->waiting->getRouteKey()])
+        ->fillForm(['is_actif' => true, 'is_blocked' => true, 'role' => 'customer'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($this->waiting->fresh())->is_actif->toBeTrue()->is_blocked->toBeTrue();
+});
+
+it('opens the create form without the summary failing', function (): void {
+    livewire(App\Filament\Resources\UserResource\Pages\CreateUser::class)
+        ->assertOk()->assertSee(['Informations', 'Compte'])->assertDontSee('En bref');
+});
+
+it('titles the customer sub-lists in French', function (): void {
+    $titles = collect([
+        App\Filament\Resources\UserResource\RelationManagers\LocationsRelationManager::class,
+        App\Filament\Resources\UserResource\RelationManagers\BrandsRelationManager::class,
+        App\Filament\Resources\UserResource\RelationManagers\DiscountsRelationManager::class,
+        App\Filament\Resources\UserResource\RelationManagers\DisablesRelationManager::class,
+    ])->map(fn(string $manager): string => $manager::getTitle($this->active, EditUser::class))->all();
+
+    expect($titles)->toBe(['Adresses', 'Marques et remises', 'Remises par quantité', 'Exceptions produits']);
 });

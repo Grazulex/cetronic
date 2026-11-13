@@ -14,6 +14,8 @@ final class DisablesRelationManager extends RelationManager
 {
     protected static string $relationship = 'disables';
 
+    protected static ?string $title = 'Exceptions produits';
+
     protected static ?string $recordTitleAttribute = 'name';
 
 
