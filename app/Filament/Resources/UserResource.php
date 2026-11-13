@@ -20,10 +20,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -64,60 +61,58 @@ final class UserResource extends Resource
     {
         return $table
             ->columns([
-                Split::make([
-                    Stack::make([
-                        TextColumn::make('external_reference')
-                            ->prefix('#: ')
-                            ->searchable()
-                            ->sortable(),
-                    ]),
-                    Stack::make([
-                        TextColumn::make('name')
-                            ->searchable()
-                            ->sortable(),
-                        TextColumn::make('email')
-                            ->searchable()
-                            ->sortable(),
-                        TextColumn::make('role')
-                            ->label('Type de compte')
-                            ->searchable()
-                            ->sortable(),
-                        TextColumn::make('customerType.name')
-                            ->label('Type de client')
-                            ->searchable()
-                            ->sortable(),
-                    ]),
-                    Stack::make([
-                        IconColumn::make('is_actif')
-                            ->boolean(),
-                    ]),
-                    Stack::make([
-                        BadgeColumn::make('orders_count')
-                            ->counts(
-                                'orders',
-                            )
-                            ->suffix(' orders')
-                            ->color('primary')
-                            ->sortable(),
-                    ]),
-                    Stack::make([
-                        TextColumn::make('created_at')
-                            ->prefix('created: ')
-                            ->date('d/m/Y')
-                            ->sortable()
-                            ->searchable(),
-                        TextColumn::make('updated_at')
-                            ->prefix('updated: ')
-                            ->date('d/m/Y')
-                            ->sortable()
-                            ->searchable(),
-                        TextColumn::make('logged_at')
-                            ->prefix('logged: ')
-                            ->date('d/m/Y')
-                            ->sortable()
-                            ->searchable(),
-                    ]),
-                ]),
+                TextColumn::make('external_reference')
+                    ->label('Réf. externe')
+                    ->color('gray')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('name')
+                    ->label('Nom')
+                    ->weight(\Filament\Support\Enums\FontWeight::SemiBold)
+                    ->description(fn(User $record): string => (string) $record->email)
+                    ->searchable(['name', 'email'])
+                    ->sortable(),
+                TextColumn::make('email')
+                    ->label('E-mail')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('role')
+                    ->label('Type de compte')
+                    ->badge()
+                    ->color(fn(UserRoleEnum $state): string => match ($state) {
+                        UserRoleEnum::ADMIN => 'gray',
+                        UserRoleEnum::AGENT => 'info',
+                        UserRoleEnum::CUSTOMER => 'success',
+                    })
+                    ->sortable(),
+                TextColumn::make('customerType.name')
+                    ->label('Type de client')
+                    ->searchable()
+                    ->sortable(),
+                IconColumn::make('is_actif')
+                    ->label('Actif')
+                    ->boolean()
+                    ->sortable(),
+                TextColumn::make('orders_count')
+                    ->label('Commandes')
+                    ->counts('orders')
+                    ->alignRight()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->label('Créé le')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->label('Modifié le')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('logged_at')
+                    ->label('Dernière connexion')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -221,9 +216,10 @@ final class UserResource extends Resource
                     ->query(fn (Builder $query): Builder => $query->whereNull('logged_at')),
             ])
             ->actions(actions: [
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->iconButton()->tooltip('Modifier'),
                 Tables\Actions\Action::make('stats')
                     ->label('Statistiques')
+                    ->iconButton()
                     ->icon('heroicon-s-chart-bar')
                     ->color(fn ($record) => ($record->role === UserRoleEnum::CUSTOMER && $record->orders_count > 0) ? 'success' : 'gray')
                     ->url(fn ($record) => ($record->role === UserRoleEnum::CUSTOMER && $record->orders_count > 0) 
@@ -233,8 +229,9 @@ final class UserResource extends Resource
                     ->tooltip(fn ($record) => $record->role !== UserRoleEnum::CUSTOMER 
                         ? 'Statistiques disponibles uniquement pour les clients' 
                         : ($record->orders_count == 0 ? 'Aucune commande trouvée' : 'Voir les statistiques')),
+                Tables\Actions\ActionGroup::make([
                 Tables\Actions\Action::make('Login')
-                    ->label(__('Login with this user'))
+                    ->label('Se connecter en tant que')
                     ->action(function ($record) {
                         $user = User::find($record->id);
                         auth()->login($user, $remember = true);
@@ -243,7 +240,7 @@ final class UserResource extends Resource
                     ->icon('heroicon-s-key')
                     ->color('primary'),
                 Tables\Actions\Action::make('Print')
-                    ->label(__('PDF'))
+                    ->label('Fiche PDF')
                     ->action(function ($record) {
                         return response()->streamDownload(
                             function () use (
@@ -260,6 +257,7 @@ final class UserResource extends Resource
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
+                ]),
             ])
             ->bulkActions(actions: [
                 Tables\Actions\DeleteBulkAction::make(),
@@ -286,21 +284,26 @@ final class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Main fields')
+                Forms\Components\Section::make('Informations')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label('Nom')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('email')
+                            ->label('E-mail')
                             ->email()
                             ->required()
                             ->maxLength(255),
                         Forms\Components\TextInput::make('external_reference')
+                            ->label('Référence externe')
                             ->maxLength(255),
                         Forms\Components\Radio::make('role')
+                            ->label('Type de compte')
                             ->options(UserRoleEnum::class)
                             ->required(),
                         Forms\Components\Select::make('language')
+                            ->label('Langue')
                             ->options(['fr' => 'Français', 'en' => 'English', 'nl' => 'Nederlands'])
                             ->searchable(),
                         Forms\Components\Select::make('customer_type_id')
@@ -309,42 +312,53 @@ final class UserResource extends Resource
                             ->searchable()
                             ->nullable(),
                     ])->columns(2),
-                Forms\Components\Section::make('Shipping')->schema([
+                Forms\Components\Section::make('Livraison')->schema([
                     Forms\Components\TextInput::make('franco')
-                        ->helperText('Minimum order total price that set delivery price to free')
+                        ->label('Franco de port')
+                        ->helperText('Montant de commande à partir duquel la livraison est gratuite')
                         ->numeric()
                         ->suffix('€'),
                     Forms\Components\TextInput::make('shipping_price')
-                        ->helperText('Fixed shipping price for each order')
+                        ->label('Frais de port')
+                        ->helperText('Frais de port fixes pour chaque commande')
                         ->numeric()
                         ->suffix('€'),
                 ])->columns(2),
-                Forms\Components\Section::make('Activations')->schema([
+                Forms\Components\Section::make('Activation')->schema([
                     Forms\Components\Select::make('agent_id')
                         ->label('Agent')
                         ->options(User::where('role', 'agent')->pluck('name', 'id'))
                         ->searchable(),
                     Forms\Components\Toggle::make('is_actif')
+                        ->label('Compte actif')
                         ->required(),
                     Forms\Components\Toggle::make('is_blocked')
+                        ->label('Compte bloqué')
                         ->required(),
                     Forms\Components\Toggle::make('receive_cart_notification')
+                        ->label('Reçoit les notifications de panier')
                         ->required(),
-                    Forms\Components\Textarea::make('divers'),
+                    Forms\Components\Textarea::make('divers')
+                        ->label('Remarques'),
                 ])->columns(2),
-                Forms\Components\Section::make('Shortcut creation')->schema([
+                Forms\Components\Section::make('Remises par marque')->schema([
                     Forms\Components\Repeater::make('brands')
+                        ->label('Création rapide')
                         ->schema([
                             Forms\Components\Select::make('brand_id')
+                                ->label('Marques')
                                 ->options(Brand::pluck('name', 'id'))
                                 ->multiple(true)
                                 ->searchable(),
                             Forms\Components\Select::make('category_id')
+                                ->label('Catégorie')
                                 ->options(Category::pluck('name', 'id'))
                                 ->searchable(),
                             Forms\Components\TextInput::make('discount')
+                                ->label('Remise')
                                 ->numeric(),
                             Forms\Components\Toggle::make('is_excluded')
+                                ->label('Exclue')
                                 ->required(),
                         ])
                         ->columns(4),
