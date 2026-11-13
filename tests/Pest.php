@@ -105,7 +105,7 @@ function createSale(Item $item, int $quantity, float $unitPrice, string $date, a
     return $order;
 }
 
-uses(Tests\TestCase::class)->in('Unit/SiteTexts');
+uses(Tests\TestCase::class)->in('Unit/SiteTexts', 'Unit/Stats');
 
 /**
  * Inserts one phrase in the ltu_* translation tables (site texts), creating the
