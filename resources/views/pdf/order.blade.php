@@ -99,6 +99,14 @@
         }
         .strike {
             text-decoration: line-through !important;
+            color: #999;
+        }
+
+        .promo-tag {
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #356273;
         }
 
     </style>
@@ -192,14 +200,21 @@
                                         <td>{{ $item->name }}</td>
                                         <td style="text-align: right">
                                             @if ($item->price_old > 0)
-                                                @money($item->price_old)
+                                                @if ($item->promo_type)
+                                                    <span class="strike">@money($item->price_old)</span>
+                                                @else
+                                                    @money($item->price_old)
+                                                @endif
                                             @endif
                                             @if ($item->price_show > 0)
-                                                @money($item->price_show)
+                                                &nbsp;@money($item->price_show)
                                             @endif
                                         </td>
                                         <td style="text-align: right">
                                             @money($item->price_paid)
+                                            @if ($item->promo_type)
+                                                <br /><span class="promo-tag">{{ __('order.items.promo_type.' . $item->promo_type) }}</span>
+                                            @endif
                                         </td>
                                         <td style="text-align: center">{{ $item->quantity }}</td>
                                         <td style="text-align: right">@money($item->price_paid*$item->quantity)</td>

@@ -26,6 +26,11 @@ return [
         'unit' => 'eenheid prijs',
         'quantity' => 'hoeveelheid',
         'price' => 'prijs',
+        'old' => 'basisprijs',
+        'promo_type' => [
+            'fixed' => 'Vaste prijs',
+            'personal' => 'Promo',
+        ],
     ],
     'total' => [
         'title' => 'totaal',
