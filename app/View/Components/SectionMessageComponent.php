@@ -5,28 +5,31 @@ declare(strict_types=1);
 namespace App\View\Components;
 
 use App\Models\Message;
-use Closure;
+use Carbon\CarbonInterface;
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 final class SectionMessageComponent extends Component
 {
     /**
-     * Create a new component instance.
-     *
-     * @return void
+     * From mid-November to Epiphany (6 January) the homepage message gets a
+     * festive touch.
      */
-    public function __construct() {}
+    public static function isHolidaySeason(CarbonInterface $date): bool
+    {
+        $monthDay = (int) $date->format('md');
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|Closure|string
-     */
-    public function render()
+        return $monthDay >= 1115 || $monthDay <= 106;
+    }
+
+    public function render(): View
     {
         $messages = Message::active()->local(LaravelLocalization::getCurrentLocale())->get();
 
-        return view('components.section-message-component', compact('messages'));
+        return view('components.section-message-component', [
+            'messages' => $messages,
+            'festive' => self::isHolidaySeason(now()),
+        ]);
     }
 }
