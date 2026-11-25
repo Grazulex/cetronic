@@ -1,0 +1,144 @@
+/*
+ * Message de la page d'accueil (table « messages », géré dans l'admin).
+ * Carte bleu pétrole (accent du site) avec filet doré ; de mi-novembre à
+ * l'Épiphanie, la variante --festive ajoute une étoile et une neige discrète.
+ */
+.home-message {
+    --message-accent: #356273;
+    --message-gold: #c9a86a;
+
+    max-width: 1140px;
+    margin: 56px auto;
+    padding-inline: 24px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.home-message + .home-message {
+    margin-top: -32px;
+}
+
+.home-message_card {
+    position: relative;
+    overflow: hidden;
+    max-width: 820px;
+    margin-inline: auto;
+    padding: 40px 48px;
+    background: linear-gradient(160deg, #3d6f81 0%, var(--message-accent) 45%, #24444f 100%);
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px rgba(201, 168, 106, 0.45), inset 0 0 0 6px rgba(255, 255, 255, 0.04);
+    text-align: center;
+    color: rgba(243, 239, 233, 0.88);
+}
+
+.home-message_title {
+    position: relative;
+    margin: 0 0 16px;
+    font-family: 'CHAMAN ELEGANT FONT';
+    font-weight: 400;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #fbf7f1;
+}
+
+.home-message_title::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 1px;
+    margin: 16px auto 0;
+    background: var(--message-gold);
+}
+
+.home-message_body {
+    position: relative;
+    max-width: 60ch;
+    margin-inline: auto;
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.home-message_body p {
+    margin: 0 0 12px;
+}
+
+.home-message_body p:last-child {
+    margin-bottom: 0;
+}
+
+/* The admin editor often bolds whole paragraphs: keep it readable. */
+.home-message_body strong,
+.home-message_body b {
+    font-weight: 500;
+    color: #fbf7f1;
+}
+
+.home-message_body a {
+    color: var(--message-gold);
+}
+
+/* ---- Holiday season ---- */
+.home-message_ornament {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    color: var(--message-gold);
+}
+
+.home-message_ornament::before,
+.home-message_ornament::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--message-gold));
+}
+
+.home-message_ornament::after {
+    transform: scaleX(-1);
+}
+
+/* A few soft flakes drifting slowly behind the text. */
+.home-message_snow {
+    position: absolute;
+    inset: -200px 0 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1.5px 1.5px at 20px 30px, rgba(255, 255, 255, 0.55), transparent),
+        radial-gradient(1px 1px at 90px 120px, rgba(255, 255, 255, 0.45), transparent),
+        radial-gradient(2px 2px at 150px 60px, rgba(255, 255, 255, 0.35), transparent),
+        radial-gradient(1px 1px at 60px 170px, rgba(201, 168, 106, 0.6), transparent),
+        radial-gradient(1.5px 1.5px at 180px 150px, rgba(255, 255, 255, 0.4), transparent);
+    background-size: 200px 200px;
+    animation: home-message-snow 24s linear infinite;
+}
+
+@keyframes home-message-snow {
+    to {
+        transform: translateY(200px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-message_snow {
+        animation: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .home-message {
+        margin-block: 40px;
+        padding-inline: 16px;
+    }
+
+    .home-message_card {
+        padding: 32px 20px;
+    }
+
+    .home-message_body {
+        font-size: 14px;
+    }
+}
