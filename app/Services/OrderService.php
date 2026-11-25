@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use ZipArchive;
 
 final class OrderService
@@ -122,27 +123,25 @@ final class OrderService
         return $lastOrderReference;
     }
 
-    public function getPicturesZip(Order $order): string
+    /**
+     * Builds the zip of the order's product pictures in a private folder (the
+     * caller deletes it once sent). Returns null when there is no picture.
+     */
+    public function getPicturesZip(Order $order): ?string
     {
-        $items = $order->items;
-        $zip = new ZipArchive();
-        $filename = mb_strtoupper($order->reference . '.zip');
+        $folder = storage_path('app/order-zips');
+        File::ensureDirectoryExists($folder);
+        $path = $folder . '/' . Str::uuid() . '.zip';
 
-        $zip->open(
-            public_path('/storage/orders/' . $filename),
-            ZipArchive::CREATE | ZipArchive::OVERWRITE,
-        );
-        foreach ($items as $item) {
-            foreach ($item->item->getMedia()
-                     as $file) {
-                $zip->addFile(
-                    $file->getPath(),
-                    $file->file_name,
-                );
+        $zip = new ZipArchive();
+        $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        foreach ($order->items as $item) {
+            foreach ($item->item->getMedia() as $file) {
+                $zip->addFile($file->getPath(), $file->file_name);
             }
         }
         $zip->close();
 
-        return public_path('/storage/orders/' . $filename);
+        return is_file($path) ? $path : null;
     }
 }

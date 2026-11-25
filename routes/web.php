@@ -47,12 +47,15 @@ Route::get('imager/{src?}', function ($src) {
 
 
 Route::get('orders/zip/{order}', function (Order $order, OrderService $orderService) {
+    $zip = $orderService->getPicturesZip($order);
+    abort_if(null === $zip, 404);
+
     return Response()->download(
-        $orderService->getPicturesZip($order),
+        $zip,
         mb_strtoupper($order->reference) . '.zip',
         ['Content-type' => 'application/zip'],
-    );
-})->name('user_orders.zip');
+    )->deleteFileAfterSend();
+})->middleware(['auth', 'can:download-order,order'])->name('user_orders.zip');
 Route::get('items/zip/{item}', function (Item $item, ItemService $itemService) {
     return Response()->download(
         $itemService->getPicturesZip($item),
@@ -64,7 +67,7 @@ Route::get('orders/pdf/{order}', function (Order $order, OrderService $orderServ
     return response()->streamDownload(function () use ($order, $orderService): void {
         echo $orderService->getPdf($order);
     }, mb_strtoupper($order->reference) . '.pdf');
-})->name('user_orders.pdf');
+})->middleware(['auth', 'can:download-order,order'])->name('user_orders.pdf');
 Route::get('order/thanks', fn() => view('front.pages.order.thanks'))->name('order.thanks');
 Route::view('register/thanks', 'front.users.thanks')->name('user_thanks');
 
