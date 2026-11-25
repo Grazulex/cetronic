@@ -21,6 +21,7 @@ final class OrderItem extends Model
         'price_old',
         'price_paid',
         'price_show',
+        'promo_type',
     ];
 
     public function item(): BelongsTo

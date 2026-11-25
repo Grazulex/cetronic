@@ -26,6 +26,11 @@ return [
         'unit' => 'prix unitaire',
         'quantity' => 'quantité',
         'price' => 'prix',
+        'old' => 'prix de base',
+        'promo_type' => [
+            'fixed' => 'Prix fixe',
+            'personal' => 'Promo',
+        ],
     ],
     'total' => [
         'title' => 'total',
